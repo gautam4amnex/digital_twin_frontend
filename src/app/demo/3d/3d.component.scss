@@ -1,0 +1,51 @@
+html,
+body,
+div[appCesium] {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.layer-popup.resize-layer .side-layer-resize svg {
+  transform: rotate(180deg);
+}
+
+.layer-popup {
+  width: 320px;
+  position: absolute; /* Change to absolute */
+  bottom: 0; /* Position at the bottom */
+  right: 0; /* Position on the right side */
+  z-index: 10;
+  background: #fff;
+  transition: all .8s ease-in-out;
+  /**/
+  height: 450px;
+}
+
+.layer-popup.active {
+  right: 0;
+}
+
+.layer-popup.resize-layer {
+  height: 45px;
+}
+
+.layer-popup.resize-layer .side-layer-resize img {
+  transform: rotate(180deg);
+}
+
+.layer-title{
+  background-color: #3F4D67;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 620px) {
+  .layer-popup {
+    bottom: 0;
+    position: absolute; /* Change to absolute */
+    right: 0; /* Position on the right side */
+    height: calc(100vh - 150px);
+    z-index: 12;
+  }
+}
