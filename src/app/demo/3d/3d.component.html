@@ -1,40 +1,104 @@
- <div appCesium></div> 
+<div appCesium></div>
 
 
 
- <div class="row">
+<div class="row">
   <div class="col-sm-12">
 
     <div class="layer-popup resize-popup" id="layers">
       <div class="layers" id="layersheader">
-          <div class="layer-title-main w-100 align-items-center">
-              <h3 class="layer-title me-auto">
-                  <label id="total_layer_cnt" data-translate ="_layer_popup">Layer</label>
-              </h3>
+        <div class="layer-title-main w-100 align-items-center">
+          <h3 class="layer-title me-auto">
+            <label id="total_layer_cnt" data-translate="_layer_popup">Layer</label>
+          </h3>
 
-              <a class="layer-close side-layer-resize ms-2 me-2" href="javascript:void(0);">
-                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="16" height="16" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
-                      <g>
-                          <g>
+          <a class="layer-close side-layer-resize ms-2 me-2" href="javascript:void(0);">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+              id="Layer_1" x="0px" y="0px" width="16" height="16" viewBox="0 0 50 50" enable-background="new 0 0 50 50"
+              xml:space="preserve">
+              <g>
+                <g>
 
-                              <polyline fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="22.9256" points="    47.5,1.832 22.191,27.15 22.191,16.419   " />
+                  <polyline fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#FFFFFF" stroke-width="3.5"
+                    stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="22.9256"
+                    points="    47.5,1.832 22.191,27.15 22.191,16.419   " />
 
-                              <line fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="22.9256" x1="22.191" y1="27.15" x2="32.919" y2="27.15" />
-                          </g>
+                  <line fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#FFFFFF" stroke-width="3.5"
+                    stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="22.9256" x1="22.191" y1="27.15"
+                    x2="32.919" y2="27.15" />
+                </g>
 
-                          <polyline fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="22.9256" points="   44.878,18.451 44.878,48.168 2.5,48.168 2.5,5.802 31.722,5.802  " />
-                      </g>
-                  </svg>
-              </a>
+                <polyline fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#FFFFFF" stroke-width="3.5"
+                  stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="22.9256"
+                  points="   44.878,18.451 44.878,48.168 2.5,48.168 2.5,5.802 31.722,5.802  " />
+              </g>
+            </svg>
+          </a>
 
-          </div>
-          <div class="layer-content" id="layer_master">
-              <div class="accordion" id="accordionExample">
+        </div>
+        <div class="layer-content" id="layer_master">
+          <div class="accordion" id="accordionExample" *ngFor="let response of data; let i = index">
+            <div class='accordion-item'>
+              <h2 class='accordion-header' id='panelsStayOpen-heading0'>
+                <button class='accordion-button collapsed' type='button' data-bs-toggle='collapse'
+                [attr.data-bs-toggle]="'collapse'" 
+                [attr.data-bs-target]="'#panelsStayOpen-collapse' + i"                   
+                aria-controls='panelsStayOpen-collapse' + i> {{ response.parent_layer_name }} </button>
+              </h2>
+              <div [id]="'panelsStayOpen-collapse' + i" class='accordion-collapse collapse'
+                aria-labelledby='panelsStayOpen-heading'+i>
+                <div class='accordion-body' *ngFor="let child_layer of response[i].child_layer; let j = index">
+                  <div class="form-check">
+                    <input class="form-check-input" name="child_layer_name"
+                      mobile_service_ur=""
+                      parent_layer="Classified Satellite Image" defination="WMTS" layer_name="Classified Image 2000"
+                      is_info_popup="true" is_attribute_info="false" combined_service="true"
+                      service-url="https://re-gis.mcgm.gov.in/erdas-iws/ogc/wmts/Classified_Image_Reproj?"
+                      data-id="Image" type="checkbox" value="Classified_Image_Reproj_2000_Classified_Image.img"
+                      id="flexCheckDefaultClassified_Image_Reproj_2000_Classified_Image.img"
+                      layer_name="Classified Image 2000">
+                    <label class="form-check-label" for="flexCheckDefault4">{{response.parent_layer_name}}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" name="child_layer_name"
+                      mobile_service_url="https://re-gis.mcgm.gov.in:8443/common/MCGM/wms?"
+                      parent_layer="Classified Satellite Image" defination="WMTS" layer_name="Classified Image 2011"
+                      is_info_popup="true" is_attribute_info="false" combined_service="true"
+                      service-url="https://re-gis.mcgm.gov.in/erdas-iws/ogc/wmts/Classified_Image_Reproj?"
+                      data-id="Image" type="checkbox" value="Classified_Image_Reproj_2011_classified_Image.img"
+                      id="flexCheckDefaultClassified_Image_Reproj_2011_classified_Image.img"
+                      layer_name="Classified Image 2011">
+                    <label class="form-check-label" for="flexCheckDefault22">{{response.parent_layer_name}}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" name="child_layer_name"
+                      mobile_service_url="https://re-gis.mcgm.gov.in:8443/common/MCGM/wms?"
+                      parent_layer="Classified Satellite Image" defination="WMTS" layer_name="Classified Image 2020"
+                      is_info_popup="true" is_attribute_info="false" combined_service="true"
+                      service-url="https://re-gis.mcgm.gov.in/erdas-iws/ogc/wmts/Classified_Image_Reproj?"
+                      data-id="Image" type="checkbox" value="Classified_Image_Reproj_2020_Classified_Image.img"
+                      id="flexCheckDefaultClassified_Image_Reproj_2020_Classified_Image.img"
+                      layer_name="Classified Image 2020">
+                    <label class="form-check-label" for="flexCheckDefault23">{{response.parent_layer_name}}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" name="child_layer_name"
+                      mobile_service_url="https://re-gis.mcgm.gov.in:8443/common/MCGM/wms?"
+                      parent_layer="Classified Satellite Image" defination="WMTS" layer_name="Classified Image 2022"
+                      is_info_popup="true" is_attribute_info="false" combined_service="true"
+                      service-url="https://re-gis.mcgm.gov.in/erdas-iws/ogc/wmts/Classified_Image_Reproj?"
+                      data-id="Image" type="checkbox" value="Classified_Image_Reproj_2022_Classified_Image.img"
+                      id="flexCheckDefaultClassified_Image_Reproj_2022_Classified_Image.img"
+                      layer_name="Classified Image 2022">
+                    <label class="form-check-label" for="flexCheckDefault130">{{response.parent_layer_name}}</label>
+                  </div>
+                </div>
               </div>
+            </div>
           </div>
+        </div>
       </div>
-  </div>
+    </div>
 
   </div>
 </div>
- 
