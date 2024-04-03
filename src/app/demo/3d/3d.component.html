@@ -50,7 +50,7 @@
                 <div class='accordion-body' *ngFor="let child_layer of response[i].child_layer; let j = index">
                   <div class="form-check">
                     <input class="form-check-input" name="child_layer_name"
-                      mobile_service_ur=""
+                      [mobile_service_url]= "'d'"
                       parent_layer="Classified Satellite Image" defination="WMTS" layer_name="Classified Image 2000"
                       is_info_popup="true" is_attribute_info="false" combined_service="true"
                       service-url="https://re-gis.mcgm.gov.in/erdas-iws/ogc/wmts/Classified_Image_Reproj?"
