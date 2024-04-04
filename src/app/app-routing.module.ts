@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './theme/layout/admin/admin.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
+import { AuthorizationCheckService } from './services/authorization-check.service';
 
 const routes: Routes = [
   {
@@ -10,12 +11,15 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'dashboard',
+        //redirectTo: 'dashboard',
+        redirectTo: '/auth/signin',
         pathMatch: 'full',
       },
       {
         path: 'dashboard',
         loadComponent: () => import('./demo/dashboard/dashboard.component'),
+        canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
       },
       {
         path: 'basic',
@@ -23,6 +27,8 @@ const routes: Routes = [
           import('./demo/ui-elements/ui-basic/ui-basic.module').then(
             (m) => m.UiBasicModule,
           ),
+        canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
       },
       {
         path: 'forms',
@@ -30,6 +36,8 @@ const routes: Routes = [
           import('./demo/pages/form-elements/form-elements.module').then(
             (m) => m.FormElementsModule,
           ),
+        canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
       },
       {
         path: 'tables',
@@ -37,26 +45,35 @@ const routes: Routes = [
           import('./demo/pages/tables/tables.module').then(
             (m) => m.TablesModule,
           ),
+        canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
       },
       {
         path: 'apexchart',
         loadComponent: () =>
           import('./demo/chart/apex-chart/apex-chart.component'),
+        canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
       },
       {
         path: 'sample-page',
         loadComponent: () =>
           import('./demo/extra/sample-page/sample-page.component'),
+        canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
       },
       {
         path: '3d',
         loadComponent: () =>
           import('./demo/3d/3d.component'),
+        canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
       },
       {
         path: '2d',
-        loadComponent: () =>
-          import('./demo/2d/2d.component'),
+        loadComponent: () => import('./demo/2d/2d.component'),
+        canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
       },
     ],
   },

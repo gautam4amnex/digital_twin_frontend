@@ -27,8 +27,10 @@
               />
               <div class="flex-grow-1">
                 <p>
-                  <strong>John Doe</strong
-                  ><span class="n-time text-muted"
+                  @for (user of userdetails; track user) {
+                  <strong> {{user.username}}</strong>
+                  }
+                  <span class="n-time text-muted"
                     ><i class="icon feather icon-clock m-r-10"></i>now</span
                   >
                 </p>
@@ -97,8 +99,10 @@
             class="img-radius"
             alt="User-Profile-Image"
           />
-          <span>John Doe</span>
-          <a href="javascript:" class="dud-logout" title="Logout">
+          @for (user of userdetails; track user) {
+            <span> {{user.username}}</span>
+          }
+          <a [routerLink]="['']" class="dud-logout" title="Logout">
             <i class="feather icon-log-out"></i>
           </a>
         </div>

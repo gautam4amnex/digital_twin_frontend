@@ -23,6 +23,9 @@ import { NavItemComponent } from './theme/layout/admin/navigation/nav-content/na
 import { NavSearchComponent } from './theme/layout/admin/nav-bar/nav-left/nav-search/nav-search.component';
 import { NavigationItem } from './theme/layout/admin/navigation/navigation';
 import { ToggleFullScreenDirective } from './theme/shared/components/full-screen/toggle-full-screen';
+import { AuthorizationCheckService } from './services/authorization-check.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { UserService } from './services/user.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,7 @@ import { ToggleFullScreenDirective } from './theme/shared/components/full-screen
     NavGroupComponent,
     NavItemComponent,
     NavSearchComponent,
-    ToggleFullScreenDirective,
+    ToggleFullScreenDirective
   ],
   imports: [
     BrowserModule,
@@ -49,8 +52,15 @@ import { ToggleFullScreenDirective } from './theme/shared/components/full-screen
     ReactiveFormsModule,
     SharedModule,
     BrowserAnimationsModule,
+    HttpClientModule
   ],
-  providers: [NavigationItem],
+  providers: [
+    // {
+    //   deps: [HttpClient],
+    //   provide: UserService,
+    //   useFactory: (jsonp: HttpClient) => () => new UserService(jsonp)
+    // },
+    NavigationItem,AuthorizationCheckService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
