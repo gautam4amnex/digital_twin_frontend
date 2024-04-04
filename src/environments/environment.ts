@@ -6,7 +6,14 @@ import packageInfo from '../../package.json';
 
 export const environment = {
   appVersion: packageInfo.version,
-  production: true,
+  production: false,
+
+  // Local Server
+  // baseUrl:'http://localhost:8090/digitaltwin/',
+
+  // Staging Server
+  baseUrl:'https://apagri.infinium.management/digitaltwin/',
+
 };
 /*
  * For easier debugging in development mode, you can import the following file

@@ -14,6 +14,7 @@ const routes: Routes = [
         loadComponent: () => import('./auth-signup/auth-signup.component'),
       },
     ],
+
   },
 ];
 
