@@ -1,5 +1,6 @@
-<div appCesium></div>
+ <!-- <div appCesium></div>  -->
 
+<div id="cesiumContainer"></div>
 
 
 <div class="row">
@@ -37,66 +38,38 @@
 
         </div>
         <div class="layer-content" id="layer_master">
-          <div class="accordion" id="accordionExample" *ngFor="let response of data; let i = index">
-            <div class='accordion-item'>
-              <h2 class='accordion-header' id='panelsStayOpen-heading0'>
-                <button class='accordion-button collapsed' type='button' data-bs-toggle='collapse'
-                [attr.data-bs-toggle]="'collapse'" 
-                [attr.data-bs-target]="'#panelsStayOpen-collapse' + i"                   
-                aria-controls='panelsStayOpen-collapse' + i> {{ response.parent_layer_name }} </button>
-              </h2>
-              <div [id]="'panelsStayOpen-collapse' + i" class='accordion-collapse collapse'
-                aria-labelledby='panelsStayOpen-heading'+i>
-                <div class='accordion-body' *ngFor="let child_layer of response[i].child_layer; let j = index">
-                  <div class="form-check">
-                    <input class="form-check-input" name="child_layer_name"
-                      [mobile_service_url]= "'d'"
-                      parent_layer="Classified Satellite Image" defination="WMTS" layer_name="Classified Image 2000"
-                      is_info_popup="true" is_attribute_info="false" combined_service="true"
-                      service-url="https://re-gis.mcgm.gov.in/erdas-iws/ogc/wmts/Classified_Image_Reproj?"
-                      data-id="Image" type="checkbox" value="Classified_Image_Reproj_2000_Classified_Image.img"
-                      id="flexCheckDefaultClassified_Image_Reproj_2000_Classified_Image.img"
-                      layer_name="Classified Image 2000">
-                    <label class="form-check-label" for="flexCheckDefault4">{{response.parent_layer_name}}</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" name="child_layer_name"
-                      mobile_service_url="https://re-gis.mcgm.gov.in:8443/common/MCGM/wms?"
-                      parent_layer="Classified Satellite Image" defination="WMTS" layer_name="Classified Image 2011"
-                      is_info_popup="true" is_attribute_info="false" combined_service="true"
-                      service-url="https://re-gis.mcgm.gov.in/erdas-iws/ogc/wmts/Classified_Image_Reproj?"
-                      data-id="Image" type="checkbox" value="Classified_Image_Reproj_2011_classified_Image.img"
-                      id="flexCheckDefaultClassified_Image_Reproj_2011_classified_Image.img"
-                      layer_name="Classified Image 2011">
-                    <label class="form-check-label" for="flexCheckDefault22">{{response.parent_layer_name}}</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" name="child_layer_name"
-                      mobile_service_url="https://re-gis.mcgm.gov.in:8443/common/MCGM/wms?"
-                      parent_layer="Classified Satellite Image" defination="WMTS" layer_name="Classified Image 2020"
-                      is_info_popup="true" is_attribute_info="false" combined_service="true"
-                      service-url="https://re-gis.mcgm.gov.in/erdas-iws/ogc/wmts/Classified_Image_Reproj?"
-                      data-id="Image" type="checkbox" value="Classified_Image_Reproj_2020_Classified_Image.img"
-                      id="flexCheckDefaultClassified_Image_Reproj_2020_Classified_Image.img"
-                      layer_name="Classified Image 2020">
-                    <label class="form-check-label" for="flexCheckDefault23">{{response.parent_layer_name}}</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" name="child_layer_name"
-                      mobile_service_url="https://re-gis.mcgm.gov.in:8443/common/MCGM/wms?"
-                      parent_layer="Classified Satellite Image" defination="WMTS" layer_name="Classified Image 2022"
-                      is_info_popup="true" is_attribute_info="false" combined_service="true"
-                      service-url="https://re-gis.mcgm.gov.in/erdas-iws/ogc/wmts/Classified_Image_Reproj?"
-                      data-id="Image" type="checkbox" value="Classified_Image_Reproj_2022_Classified_Image.img"
-                      id="flexCheckDefaultClassified_Image_Reproj_2022_Classified_Image.img"
-                      layer_name="Classified Image 2022">
-                    <label class="form-check-label" for="flexCheckDefault130">{{response.parent_layer_name}}</label>
+            <div class="accordion" id="accordionExample">
+              <div *ngFor="let parentLayer of data">
+                <div class='accordion-item'>
+                  <h2 class='accordion-header'>
+                    <button class='accordion-button collapsed' type='button'
+                            (click)="toggleCollapse(parentLayer.parent_layer_id)">
+                      {{ parentLayer.parent_layer_name }}
+                    </button>
+                  </h2>
+                  <div [id]="'panelsStayOpen-collapse' + parentLayer.parent_layer_id" class='accordion-collapse collapse'>
+                    <div class='accordion-body'>
+                      <div *ngFor="let childLayer of parentLayer.child_layer">
+                        <div class="form-check">
+                          <input class="form-check-input" name="child_layer_name" (change)="showHideData($event)"
+                                [attr.mobile_service_url]= "childLayer.mobile_service_url"
+                                [attr.parent_layer]="childLayer.parent_layer" 
+                                [attr.defination]="childLayer.defination" [attr.layer_name]="childLayer.layer_name"
+                                [attr.combined_service]= "childLayer.is_combined_service"
+                                [attr.service-url]= "childLayer.service_url" [attr._id] = "childLayer.geometry_type"
+                                data-id="Image" type="checkbox" [attr.value]= "childLayer.layer_id"
+                                [attr.Id]="'flexCheckDefault' + childLayer.layer_id" 
+                                [attr.layer_name]= "childLayer.layer_name">
+                          <label class="form-check-label">{{ childLayer.layer_name }}</label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+          
       </div>
     </div>
 
