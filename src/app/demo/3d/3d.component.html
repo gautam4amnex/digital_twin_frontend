@@ -71,7 +71,7 @@
                 </h2>
                 <div [id]="'panelsStayOpen-collapse' + parentLayer.parent_layer_id" class='accordion-collapse collapse'>
                   <div class='accordion-body'>
-                    <div *ngFor="let childLayer of parentLayer.child_layer">
+                    <div *ngFor="let childLayer of parentLayer.child_layer">   
 
                       <div class="form-check">
                           <input class="form-check-input" name="child_layer_name" (change)="showHideData($event)"
