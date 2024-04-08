@@ -30,7 +30,6 @@ import { AuthorizationCheckService } from './services/authorization-check.servic
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,12 +58,8 @@ import { UserService } from './services/user.service';
     HttpClientModule
   ],
   providers: [
-    // {
-    //   deps: [HttpClient],
-    //   provide: UserService,
-    //   useFactory: (jsonp: HttpClient) => () => new UserService(jsonp)
-    // },
-    NavigationItem,AuthorizationCheckService],
+    NavigationItem,AuthorizationCheckService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

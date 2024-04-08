@@ -1,16 +1,38 @@
- <!-- <div appCesium></div>  -->
+<!-- <div appCesium></div>  -->
 
 <div id="cesiumContainer"></div>
 
+<!-- <mat-form-field>
+  <mat-label>Favorite food</mat-label>
+  <mat-select>
+    @for (food of foods; track food) {
+    <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field> -->
 
-<div class="row">
+
+<mat-form-field>
+  <mat-label>Favorite food</mat-label>
+  <mat-select (selectionChange)="get_layer_by_state_id($event)">
+
+    <ng-container *ngIf="dropDownData">
+      <mat-option [value]="data.state_id" *ngFor="let data of dropDownData.data" [attr.state_id]="data.state_id">{{data.city}}</mat-option>
+    </ng-container>
+
+
+  </mat-select>
+</mat-form-field>
+
+<button type="button" (click)="togglePanel()">Layer</button>
+<div class="row" [@widthGrow]="state">
   <div class="col-sm-12">
 
     <div class="layer-popup resize-popup" id="layers">
       <div class="layers" id="layersheader">
         <div class="layer-title-main w-100 align-items-center">
           <h3 class="layer-title me-auto">
-            <label id="total_layer_cnt" data-translate="_layer_popup">Layer</label>
+            <label id="total_layer_cnt" style="color: aliceblue;" data-translate="_layer_popup">Layer</label>
           </h3>
 
           <a class="layer-close side-layer-resize ms-2 me-2" href="javascript:void(0);">
@@ -38,19 +60,20 @@
 
         </div>
         <div class="layer-content" id="layer_master">
-            <div class="accordion" id="accordionExample">
-              <div *ngFor="let parentLayer of data">
-                <div class='accordion-item'>
-                  <h2 class='accordion-header'>
-                    <button class='accordion-button collapsed' type='button'
-                            (click)="toggleCollapse(parentLayer.parent_layer_id)">
-                      {{ parentLayer.parent_layer_name }}
-                    </button>
-                  </h2>
-                  <div [id]="'panelsStayOpen-collapse' + parentLayer.parent_layer_id" class='accordion-collapse collapse'>
-                    <div class='accordion-body'>
-                      <div *ngFor="let childLayer of parentLayer.child_layer">
-                        <div class="form-check">
+          <div class="accordion" id="accordionExample">
+            <div *ngFor="let parentLayer of data">
+              <div class='accordion-item'>
+                <h2 class='accordion-header'>
+                  <button class='accordion-button collapsed' type='button'
+                    (click)="toggleCollapse(parentLayer.parent_layer_id)">
+                    {{ parentLayer.parent_layer_name }}
+                  </button>
+                </h2>
+                <div [id]="'panelsStayOpen-collapse' + parentLayer.parent_layer_id" class='accordion-collapse collapse'>
+                  <div class='accordion-body'>
+                    <div *ngFor="let childLayer of parentLayer.child_layer">
+
+                      <div class="form-check">
                           <input class="form-check-input" name="child_layer_name" (change)="showHideData($event)"
                                 [attr.mobile_service_url]= "childLayer.mobile_service_url"
                                 [attr.parent_layer]="childLayer.parent_layer" 
@@ -62,14 +85,15 @@
                                 [attr.layer_name]= "childLayer.layer_name">
                           <label class="form-check-label">{{ childLayer.layer_name }}</label>
                         </div>
-                      </div>
+
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          
+        </div>
+
       </div>
     </div>
 

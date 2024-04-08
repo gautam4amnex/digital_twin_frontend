@@ -1,12 +1,4 @@
-html,
-body,
-div[appCesium] {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
+
 
 .layer-popup.resize-layer .side-layer-resize svg {
   transform: rotate(180deg);
@@ -15,7 +7,7 @@ div[appCesium] {
 .layer-popup {
   width: 320px;
   position: absolute; /* Change to absolute */
-  bottom: 0; /* Position at the bottom */
+  bottom: 33px;
   right: 0; /* Position on the right side */
   z-index: 10;
   background: #fff;
@@ -38,7 +30,24 @@ div[appCesium] {
 
 .layer-title{
   background-color: #3F4D67;
+  height: 38px;
 }
+
+.accordion-button{
+  height: 40px;
+}
+
+.layer-content {
+  width: 100%;
+  height: calc(100% - 45px);
+  overflow-y: auto;
+  padding: 10px;
+  position: absolute;
+  border-bottom: 1px solid #f3f3f3;
+  border-left: 1px solid #f3f3f3;
+  bottom: 1px;
+}
+
 
 @media only screen and (min-width: 320px) and (max-width: 620px) {
   .layer-popup {

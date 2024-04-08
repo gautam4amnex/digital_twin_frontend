@@ -1,0 +1,89 @@
+#VIEWER {
+    height: 100%;
+    position: relative;
+    transition: -webkit-filter .3s ease;
+    transition: filter .3s ease;
+    transition: filter .3s ease, -webkit-filter .3s ease;
+    width: 100%;
+}
+
+#VIEWER[is-zoned-out=false]>.content>.top {
+    padding-left: 50px;
+}
+
+.CursorBar>.content {
+    align-items: center;
+    background-color: var(--dn-sidebar-bg);
+    border-radius: 9px; 
+    display: flex;
+    pointer-events: auto;
+    width: -webkit-max-content;
+    width: max-content;
+}
+.CursorBar>.content>.control {
+    transition: width .3s ease;
+    width: 48px;
+}
+
+#VIEWER>.content>.top {
+    align-items: flex-start;
+    display: flex;
+    pointer-events: none;
+    width: 100%;
+}
+
+#VIEWER[is-zoned-out=false]>.content>.bottom, #VIEWER[is-zoned-out=false]>.content>.top {
+    padding-left: 50px;
+}
+
+.CursorBar>.content {
+    align-items: center;
+    background-color: var(--dn-sidebar-bg);
+    border-radius: 9px;
+    display: flex;
+    pointer-events: auto;
+    width: -webkit-max-content;
+    width: max-content;
+}
+
+#VIEWER>.content>.top>.top-left {
+    display: flex;
+    flex-direction: column;
+    margin-right: 8px;
+    overflow: hidden;
+}
+
+
+.CursorBar {
+    flex-shrink: 1;
+    overflow: auto;
+    pointer-events: none !important;
+    position: relative;
+}
+
+.CursorBarControl[is-selected=true] {
+    background: #33b1ff;
+}
+
+.top-left{
+    background-color: black;    
+    opacity: .5;    
+}
+
+#VIEWER>.content>.top>.top-left>.DisabledContent {
+    pointer-events: none !important;
+}
+
+#VIEWER>.content>.bottom {
+    align-items: flex-end;
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    margin-top: 8px;
+    padding-right: 0;
+    padding-right: var(--info-view-padding-right);
+    pointer-events: none;
+    transition: padding-right .3s ease;
+    width: 100%;
+}
