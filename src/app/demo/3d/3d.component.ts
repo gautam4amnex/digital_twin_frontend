@@ -93,7 +93,7 @@ export default class _3D implements OnInit {
           || parent_layer == "3D Metro Line" || parent_layer == "3D Metro Station" || parent_layer == "Vector Model") {
           this.add_remove_3d_data_new(table_name, true);
         }
-
+        
 
       } else {
         this.current_image = new Cesium.WebMapTileServiceImageryProvider({
@@ -174,7 +174,8 @@ export default class _3D implements OnInit {
 
 
   togglePanel() {
-    (this.state == "closed") ? this.state = "open" : this.state = "closed";
+    document.body.classList.toggle('closed-panel');
+  this.state = (this.state === "closed") ? "open" : "closed";
   }
   
   ngOnInit() {

@@ -13,7 +13,7 @@
 
 
 <mat-form-field>
-  <mat-label>Favorite food</mat-label>
+  <mat-label>Select State Name</mat-label>
   <mat-select (selectionChange)="get_layer_by_state_id($event)">
 
     <ng-container *ngIf="dropDownData">
@@ -25,7 +25,7 @@
 </mat-form-field>
 
 <button type="button" (click)="togglePanel()">Layer</button>
-<div class="row" [@widthGrow]="state">
+<div  class="row closed-panel" [@widthGrow]="state">
   <div class="col-sm-12">
 
     <div class="layer-popup resize-popup" id="layers">
