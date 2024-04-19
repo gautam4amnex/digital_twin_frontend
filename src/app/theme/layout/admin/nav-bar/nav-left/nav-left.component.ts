@@ -4,6 +4,7 @@ import * as glob from '../../../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgFor } from '@angular/common';
 import _3D from 'src/app/demo/3d/3d.component';
+import { CommonsService } from 'src/app/services/commons.service';
 
 
 @Component({
@@ -16,13 +17,17 @@ export class NavLeftComponent {
 
   //dropDownData: any [] = [];
   dropDownData: any;
+  measurementType: any;
 
   fun(){
     alert('Clicked');
   }
 
   private  baseUrl1 =  glob.environment.baseUrl;  
-  constructor(private http:HttpClient,private _3d: _3D) { }
+  constructor(private http:HttpClient,
+              private _3d: _3D , 
+              private commonService: CommonsService
+              ) { }
 
   get_state_name() {
     const headers = new HttpHeaders().set('Content-Type','application/json');
@@ -34,7 +39,29 @@ export class NavLeftComponent {
   });
   }
 
+  showSubMenu(){
+    
+   var submenu =  document.getElementsByClassName("SubCursorBar") as HTMLCollectionOf<HTMLElement>;
 
+   if(submenu[0].style.display == "none"){
+    submenu[0].style.display = 'block';
+   }
+   else{
+    submenu[0].style.display = 'none';
+   }
+   
+   
+
+  }
+
+  measurement(event){
+    this.commonService.measurementType(event.currentTarget.title)
+    this.measurementType = event.currentTarget.title;
+  }
+
+  measurement1(){
+    return this.measurementType;
+  }
   // get_layer_by_state_id(event){
   //   var state_id = event.target.getAttribute("state_id");
 
@@ -44,7 +71,7 @@ export class NavLeftComponent {
   // }
 
   ngOnInit(){
-    this.get_state_name()
+   // this.get_state_name()
   }
 
 }

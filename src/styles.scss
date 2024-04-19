@@ -20,8 +20,26 @@
 @import "scss/plugins/plugins";
 
 @import "scss/custom";
+/* styles.css or styles.scss */
+@import "~bootstrap/dist/css/bootstrap.min.css";
 
 
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.ol-attribution{
+    display: none !important;
+}
+
+.ol-rotate-reset{
+    display: none !important;
+}
+
+.ol-zoom-in{
+    display: none !important;
+}
+
+.ol-zoom-out{
+    display: none !important;
+}

@@ -6,6 +6,75 @@
 
 .closed-panel {
   overflow-y: hidden;
+} 
+
+
+// .CursorBarControl {
+//   background-color: #ffffff; /* Set the default background color */
+//   cursor: pointer; /* Change cursor to pointer on hover */
+//   padding: 10px;
+//   margin: 5px;
+//   border-radius: 5px;
+// }
+.CursorBarControl.clicked {
+  background-color: #ff0000; /* Set the background color when clicked */
+}
+
+#per_selection{
+  position: relative;
+  bottom: 2px;
+  right: 4px;
+}
+
+.mat-button-toggle{
+  background-color: #306cee;
+  color: #ffffff;
+}
+
+.mat-button-toggle:hover {
+  background-color: transparent;
+  color: #1dd9cd !important;    
+}
+
+
+.mat-button-toggle-checked {
+  background-color: #ec2c4c;
+  color: #1dd9cd !important;
+}
+
+
+.cesium-button{
+  top: -799px;
+  left: 8px;
+  border-radius: 3px;
+}
+
+.cesium-viewer-bottom{
+  display: none;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #3f4d67 !important;
+}
+
+.SubCursorBar{
+  position: relative;
+    top: -786px;
+    left: 10px;
+
+}
+
+.SubCursorBar>.content {
+  align-items: center;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  background: rgba(33, 39, 42, .8);
+  border-radius: 9px;
+  box-shadow: 0 0 1px rgba(18,22,25,.36), 0 18px 36px -4px rgba(18,22,25,.36);
+  display: flex;
+  pointer-events: auto;
+  width: -webkit-max-content;
+  width: max-content;
 }
 
 .layer-popup {

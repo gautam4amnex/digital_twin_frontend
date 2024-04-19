@@ -3,18 +3,28 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import * as glob from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class CommonsService extends BehaviorSubject<any[]> {
   private url = glob.environment.baseUrl;
+  private measurement_type: string;
 
   constructor(private http: HttpClient) {
     super([]);
   }
 
+  get measurementType(){
+    return this.measurement_type;
+ }
+ 
+ set measurementType(newValue: any){
+    this.measurement_type = newValue;
+ }
+
   getAccessToken() {
-    return new HttpHeaders().set("Authorization",localStorage.getItem("token3"));
+    return new HttpHeaders().set("Authorization",localStorage.getItem("token"));
   }
 
   public getWards() {
@@ -35,6 +45,14 @@ export class CommonsService extends BehaviorSubject<any[]> {
 
     let response = this.http.post(`${this.url}` + 'propertysurvey/get_view_details_data', { "gis_id": gisID });
     return response;
+  }
+
+  public getLayerAndImagePanel(jsonData){
+    return this.http.post("http://localhost:8090/digitaltwin/get_all_layer_and_image", jsonData, { headers: this.getAccessToken() });
+  }
+
+  public getStateName(){
+    
   }
 
 }
