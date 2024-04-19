@@ -8,6 +8,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
+
 import { trigger, transition, style, animate, state } from '@angular/animations';
 import * as glob from '../../../environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
@@ -26,6 +27,7 @@ import {  Modify,  Select} from 'ol/interaction.js';
 import { LineString, Point } from 'ol/geom';
 import Draw from 'ol/interaction/Draw.js';
 import VectorLayer from 'ol/layer/Vector.js';
+
 
 
 @Component({
@@ -47,6 +49,7 @@ import VectorLayer from 'ol/layer/Vector.js';
   ]
 })
 export default class _2D {
+
   data: any;
   state = "closed";
   map: Map;
@@ -375,6 +378,5 @@ add_layer_on_map(mobile_service_url, layer_name) {
   this.all_layer[layer_name] = this.current_layer;
   console.log(this.all_layer);
 }
-
 
 }
