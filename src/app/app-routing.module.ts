@@ -76,9 +76,16 @@ const routes: Routes = [
         pathMatch:'full'
       },
       {
+
         path: 'role-management',
         //loadComponent: () => import('./demo/role-management/role-management.component'),
         loadComponent: () => import('./demo/role-management/role-management.component').then(module => module.RoleManagementComponent),
+        canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
+      },
+      {
+        path: 'surveydetail',
+        loadComponent: () => import('./demo/surveydetail/surveydetail.component'),
         canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },

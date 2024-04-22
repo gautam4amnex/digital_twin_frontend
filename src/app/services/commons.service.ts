@@ -16,6 +16,10 @@ export class CommonsService extends BehaviorSubject<any[]> {
     super([]);
   }
 
+  get_verify_feature_data(jsonData){
+    return this.http.post(`${this.url}` + 'get_verify_feature_data', { jsonData }, {headers:this.getAccessToken()});
+  }
+
   getAccessToken() {
     return new HttpHeaders().set("Authorization",localStorage.getItem("token"));
   }
@@ -41,11 +45,12 @@ export class CommonsService extends BehaviorSubject<any[]> {
   }
 
   public getLayerAndImagePanel(jsonData){
-    return this.http.post("http://localhost:8090/digitaltwin/get_all_layer_and_image", jsonData, { headers: this.getAccessToken() });
+    debugger;
+    return this.http.post( this.url + "get_all_layer_and_image", jsonData, { headers: this.getAccessToken() });
   }
 
   public getStateName(){
-    
+    return this.http.get( this.url + "get_state_name", { headers: this.getAccessToken() });
   }
   public getRoleManagementTableData() {
     return this.http.get<Role[]>("http://localhost:8090/digitaltwin/get_all_role", {headers:this.getAccessToken()});

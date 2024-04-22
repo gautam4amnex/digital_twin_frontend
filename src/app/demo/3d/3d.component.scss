@@ -36,15 +36,14 @@
   color: #1dd9cd !important;    
 }
 
-
 .mat-button-toggle-checked {
-  background-color: #ec2c4c;
+  //background-color: #ec2c4c;
   color: #1dd9cd !important;
 }
 
 
 .cesium-button{
-  top: -799px;
+  top: -873px;
   left: 8px;
   border-radius: 3px;
 }
@@ -121,6 +120,18 @@
   bottom: 1px;
 }
 
+.cesium-infoBox{
+  display: none !important;
+}
+
+#property_tbl{
+  position: relative;
+  
+    // display: block;
+    // bottom: 836px;
+    // left: 1386px;
+
+}
 
 @media only screen and (min-width: 320px) and (max-width: 620px) {
   .layer-popup {

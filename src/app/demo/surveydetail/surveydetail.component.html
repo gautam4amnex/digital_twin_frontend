@@ -1,0 +1,26 @@
+<div class="row">
+
+  <kendo-grid [kendoGridBinding]="featureData" [style.height.%]="100" [pageSize]="10" filterable="menu" [skip]="0" [pageable]="true" [sortable]="true" >
+
+    <ng-template kendoGridToolbarTemplate>
+      <div class="export-template">
+          <button type="button" kendoGridExcelCommand icon="file-excel" class="export-new excel" (click)="exportExcel(excelexport)">Export to Excel</button>
+      </div>
+    </ng-template>
+
+    <ng-container *ngFor="let data of grid_fields">
+        <kendo-grid-column field="{{data.fields}}" title="{{data.title}}" [hidden]="data.hide" [width]="250"></kendo-grid-column>
+    </ng-container>                   
+  </kendo-grid>
+
+   <!-- Excel -->
+  <kendo-excelexport fileName="Reports.xlsx" [data]="featureData" #excelexport>
+    <ng-container *ngFor="let data of grid_fields">
+        <kendo-excelexport-column field="{{data.fields}}" title="{{data.title}}"></kendo-excelexport-column>
+    </ng-container>
+  </kendo-excelexport>
+
+
+</div>
+
+
