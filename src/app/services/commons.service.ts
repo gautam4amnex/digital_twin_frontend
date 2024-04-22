@@ -15,13 +15,9 @@ export class CommonsService extends BehaviorSubject<any[]> {
     super([]);
   }
 
-  get measurementType(){
-    return this.measurement_type;
- }
- 
- set measurementType(newValue: any){
-    this.measurement_type = newValue;
- }
+  get_verify_feature_data(jsonData){
+    return this.http.post(`${this.url}` + 'get_verify_feature_data', { jsonData }, {headers:this.getAccessToken()});
+  }
 
   getAccessToken() {
     return new HttpHeaders().set("Authorization",localStorage.getItem("token"));

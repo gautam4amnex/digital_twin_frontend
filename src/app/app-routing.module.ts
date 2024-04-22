@@ -75,6 +75,12 @@ const routes: Routes = [
         canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
+      {
+        path: 'surveydetail',
+        loadComponent: () => import('./demo/surveydetail/surveydetail.component'),
+        canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
+      },
     ],
   },
   {

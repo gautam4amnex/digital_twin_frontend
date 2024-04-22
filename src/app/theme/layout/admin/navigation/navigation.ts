@@ -61,10 +61,20 @@ const NavigationItems = [
         url: '/2d',
         icon: 'feather icon-home',
         classes: 'nav-item',
+      },
+      {
+        id: 'surveydetail',
+        title: 'Survey Detail',
+        type: 'item',
+        url: '/surveydetail',
+        icon: 'feather icon-home',
+        classes: 'nav-item',
       }
     ],
   },
   
+
+  /*
   {
     id: 'ui-element',
     title: 'UI ELEMENT',
@@ -216,6 +226,8 @@ const NavigationItems = [
       },
     ],
   },
+  */
+
 ];
 
 @Injectable()

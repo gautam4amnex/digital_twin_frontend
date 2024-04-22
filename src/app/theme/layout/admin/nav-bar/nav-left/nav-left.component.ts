@@ -49,26 +49,8 @@ export class NavLeftComponent {
    else{
     submenu[0].style.display = 'none';
    }
-   
-   
 
   }
-
-  measurement(event){
-    this.commonService.measurementType(event.currentTarget.title)
-    this.measurementType = event.currentTarget.title;
-  }
-
-  measurement1(){
-    return this.measurementType;
-  }
-  // get_layer_by_state_id(event){
-  //   var state_id = event.target.getAttribute("state_id");
-
-
-  //   this._3d.get_layer_panel_data("3D" , state_id);
-
-  // }
 
   ngOnInit(){
    // this.get_state_name()
