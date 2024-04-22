@@ -21,6 +21,24 @@
     </div>
   </div>
 </div>
+<table id="property_tbl" class="table table-striped" style="display: block;">
+  <thead>
+    <tr>
+      <th scope="col">Sr.no</th>
+      <th scope="col">Field</th>
+      <th scope="col">Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (property of property_data; track property_data.value; let i = $index) {
+    <tr>
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ property.value }}</td>
+      <td>{{ property.field }}</td>
+    </tr>
+    }
+  </tbody>
+</table>
 <button type="button" class="cesium-button">
   <label>
     <input type="checkbox" id="per_selection" (click)="per_selection()">Per-feature selection </label>

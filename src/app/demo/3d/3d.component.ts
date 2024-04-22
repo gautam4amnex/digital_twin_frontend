@@ -15,6 +15,7 @@ import { CommonsService } from 'src/app/services/commons.service';
 import * as turf from '@turf/turf';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
+import * as glob from '../../../environments/environment';
 
 
 
@@ -67,9 +68,11 @@ export default class _3D implements OnInit {
   measureEnabled = false;
   polygonMeasureEnabled = false;
   info_click = false;
-
   goto_click = false;
+  property_data: any;
 
+
+  private url = glob.environment.baseUrl;
 
   silhouetteGreen: any = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
   silhouetteBlue: any = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
@@ -169,13 +172,10 @@ export default class _3D implements OnInit {
 
   get_state_name() {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-    let url = "http://localhost:8085/get_state_name";
-    this.http.get(url, { headers: headers }).subscribe(
-      result => {
-        this.dropDownData = result;
+    this.commonService.getStateName().subscribe((data: any) => {
+      this.dropDownData = data;
         console.log(this.dropDownData);
-      });
+    });
   }
 
   get_layer_panel_data(pageName, stateId) {
@@ -513,7 +513,54 @@ export default class _3D implements OnInit {
 
         // Set feature infobox description
         var featureName = pickedFeature.getProperty("Prabhag");
-        console.log(featureName);
+
+        this.property_data = [
+          {
+            value: 'UID',
+            field: pickedFeature.getProperty("Prabhag"),
+          },
+          {
+            value: 'Area Sq.m',
+            field: pickedFeature.getProperty("Area_Sq_m"),
+          },
+          {
+            value: 'Height m',
+            field: pickedFeature.getProperty("Height_m"),
+          },
+          {
+            value: 'X',
+            field: pickedFeature.getProperty("X"),
+          },
+          {
+            value: 'Y',
+            field: pickedFeature.getProperty("Y"),
+          },
+          {
+            value: 'FUID',
+            field: pickedFeature.getProperty("FUID"),
+          },
+          {
+            value: 'Ward',
+            field: pickedFeature.getProperty("Ward"),
+          },
+          {
+            value: 'Prabhag',
+            field: pickedFeature.getProperty("Prabhag"),
+          },
+          {
+            value: 'Zone',
+            field: pickedFeature.getProperty("Zone"),
+          },
+          {
+            value: 'Sq Km.',
+            field: pickedFeature.getProperty("Sq_Km"),
+          },
+          {
+            value: 'Height Category',
+            field: pickedFeature.getProperty("B_Category"),
+          }
+
+        ]
 
       }
 
@@ -633,6 +680,7 @@ export default class _3D implements OnInit {
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
   }
+
 
   togglePanel() {
     document.body.classList.toggle('closed-panel');
