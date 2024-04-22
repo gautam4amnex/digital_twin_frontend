@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import * as glob from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
+import { Role } from '../models/role';
 
 
 @Injectable({
@@ -14,14 +15,6 @@ export class CommonsService extends BehaviorSubject<any[]> {
   constructor(private http: HttpClient) {
     super([]);
   }
-
-  get measurementType(){
-    return this.measurement_type;
- }
- 
- set measurementType(newValue: any){
-    this.measurement_type = newValue;
- }
 
   getAccessToken() {
     return new HttpHeaders().set("Authorization",localStorage.getItem("token"));
@@ -54,5 +47,16 @@ export class CommonsService extends BehaviorSubject<any[]> {
   public getStateName(){
     
   }
+  public getRoleManagementTableData() {
+    return this.http.get<Role[]>("http://localhost:8090/digitaltwin/get_all_role", {headers:this.getAccessToken()});
+  }
+  SaveRole(data:any){
+    console.log(data)
+    return this.http.post("http://localhost:3000/customer",data);
+  }
+  GetRoleById(id:any){
+    return this.http.get("http://localhost:3000/customer/"+id);
+  }
+ 
 
 }

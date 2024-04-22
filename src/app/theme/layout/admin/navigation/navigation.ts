@@ -61,7 +61,16 @@ const NavigationItems = [
         url: '/2d',
         icon: 'feather icon-home',
         classes: 'nav-item',
-      }
+      },
+      {
+        id: 'role-management',
+        title: 'Role Management',
+        type: 'item',
+        url: '/role-management',
+        icon: 'feather icon-home',
+        classes: 'nav-item',
+      },
+     
     ],
   },
   
