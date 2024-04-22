@@ -9,10 +9,10 @@ export const environment = {
   production: false,
 
   // Local Server
-  // baseUrl:'http://localhost:8090/digitaltwin/',
+  baseUrl:'http://localhost:8090/digitaltwin/',
 
   // Staging Server
-  baseUrl:'https://apagri.infinium.management/digitaltwin/',
+  //baseUrl:'https://apagri.infinium.management/digitaltwin/',
 
 };
 /*
