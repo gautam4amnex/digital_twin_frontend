@@ -31,6 +31,19 @@
 //   color: #ffffff;
 // }
 
+#slider{
+  position: relative;
+  bottom: 832px;
+  right: 163px;
+}
+
+
+.mat-slide-toggle:checked{
+
+  background-color: green;
+
+}
+
 .mat-button-toggle:hover {
   background-color: transparent;
   color: #1dd9cd !important;    
@@ -52,6 +65,20 @@
   display: none;
 }
 
+#mat-mdc-slide-toggle-1-label {
+  //color: black;
+  font-weight: 500;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: #76ee59 !important;
+}
+
+.dd_state{
+  position: relative;
+  bottom: 772px;
+  right: 287px;
+}
 .mdc-text-field--filled:not(.mdc-text-field--disabled) {
   background-color: #3f4d67 !important;
 }

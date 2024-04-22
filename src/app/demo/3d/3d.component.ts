@@ -4,7 +4,6 @@ import { Viewer } from 'cesium';
 import * as Cesium from 'cesium';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import axios from 'axios';
 import { trigger, transition, style, animate, state } from '@angular/animations';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -16,6 +15,8 @@ import * as turf from '@turf/turf';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import * as glob from '../../../environments/environment';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import html2canvas from 'html2canvas'; 
 
 
 
@@ -31,7 +32,7 @@ interface Food {
   templateUrl: './3d.component.html',
   styleUrls: ['./3d.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  imports: [RouterOutlet, CommonModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatButtonToggleModule, MatIconModule],
+  imports: [RouterOutlet, CommonModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatButtonToggleModule, MatIconModule ,MatSlideToggleModule],
   animations: [
     trigger('widthGrow', [
       state('closed', style({
@@ -71,8 +72,12 @@ export default class _3D implements OnInit {
   goto_click = false;
   property_data: any;
 
+  loadSatelliteImg: false;
 
   private url = glob.environment.baseUrl;
+
+  galleryImg: any = "Satellite Map";
+
 
   silhouetteGreen: any = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
   silhouetteBlue: any = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
@@ -174,7 +179,7 @@ export default class _3D implements OnInit {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     this.commonService.getStateName().subscribe((data: any) => {
       this.dropDownData = data;
-        console.log(this.dropDownData);
+       // console.log(this.dropDownData);
     });
   }
 
@@ -187,7 +192,7 @@ export default class _3D implements OnInit {
 
     this.commonService.getLayerAndImagePanel(formData).subscribe((data: any) => {
       this.data = data.data;
-      console.log(this.data);
+    //  console.log(this.data);
     });
 
 
@@ -660,14 +665,10 @@ export default class _3D implements OnInit {
             var longitude = Cesium.Math.toDegrees(cartographic.longitude);
             var latitude = Cesium.Math.toDegrees(cartographic.latitude);
 
-            console.log("Latitude:", latitude);
-            console.log("Longitude:", longitude);
-
             this.viewer.camera.flyTo({
               destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, 500),
               orientation: {
-                //heading: Cesium.Math.toRadians(60.0),
-                // pitch: Cesium.Math.toRadians(-45.0),
+
                 roll: 0.0,
               },
               duration: 3
@@ -681,6 +682,42 @@ export default class _3D implements OnInit {
 
   }
 
+  changeBaseLayer(){
+
+    this.viewer.scene.imageryLayers.removeAll();
+
+    if(this.galleryImg == "Satellite Map"){
+      this.galleryImg = "Default Map"
+      const imageryLayer = Cesium.ImageryLayer.fromWorldImagery(null);
+      this.viewer.scene.imageryLayers.add(imageryLayer);
+      
+    }
+    else{
+      this.galleryImg = "Satellite Map"
+      const imageryLayer = new Cesium.ImageryLayer(new Cesium.OpenStreetMapImageryProvider({
+      url: "https://tile.openstreetmap.org/"
+    }));
+    this.viewer.scene.imageryLayers.add(imageryLayer);
+  }
+    
+  }
+
+  takeSS(){
+
+    this.viewer.render();
+    var captureElement: any = document.querySelector("#cesiumContainer");
+
+    html2canvas(captureElement , {allowTaint: false, useCORS: true,}).then((canvas) => {
+   
+      const imageData = canvas.toDataURL("image/png");
+
+      const link = document.createElement("a");
+      link.setAttribute("download", "Cesium.png");
+      link.setAttribute("href", imageData);
+      link.click();
+    });
+  
+  }
 
   togglePanel() {
     document.body.classList.toggle('closed-panel');
@@ -737,13 +774,6 @@ export default class _3D implements OnInit {
     );
 
     this.imageryLayers = this.viewer.imageryLayers;
-
-    //   this.viewer.screenSpaceEventHandler.setInputAction((movement) => {
-    //     var pickedObject = this.viewer.scene.pick(movement.position);
-    //     if (Cesium.defined(pickedObject)) {
-    //         console.log(pickedObject);
-    //     }
-    // }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
     this.get_state_name();
 

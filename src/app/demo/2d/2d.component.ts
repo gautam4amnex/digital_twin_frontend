@@ -11,6 +11,7 @@ import { CommonsService } from 'src/app/services/commons.service';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import axios from 'axios';
+import html2canvas from 'html2canvas'; 
 
 
 @Component({
@@ -469,6 +470,22 @@ export default class _2D {
 
   /** INFO ENDS */
 
+
+  takeSS(){
+
+    var captureElement: any = document.querySelector("#map");
+
+    html2canvas(captureElement , {allowTaint: false, useCORS: true,}).then((canvas) => {
+   
+      const imageData = canvas.toDataURL("image/png");
+
+      const link = document.createElement("a");
+      link.setAttribute("download", "Map.png");
+      link.setAttribute("href", imageData);
+      link.click();
+    });
+  
+  }
 
   /** GOTO ENDS */
   ngOnInit(): void {

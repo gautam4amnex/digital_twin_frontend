@@ -15,6 +15,7 @@
           <mat-button-toggle (click)="measurementType($event)" title="Measure polyline"><mat-icon>timeline</mat-icon></mat-button-toggle>
           <mat-button-toggle title="Measure polygon" (click)="measurementType($event)"><i class="fas fa-draw-polygon fa-2x"></i></mat-button-toggle>
             <mat-button-toggle title="info" (click)="featureInfo()"><mat-icon>info</mat-icon></mat-button-toggle>
+            <mat-button-toggle title="Take Screenshot" (click)="takeSS()"><i class="fas fa-camera-retro fa-2x"></i></mat-button-toggle>
             <!-- <mat-button-toggle title="Download Image" ><i class="fas fa-camera fa-2x"></i></mat-button-toggle> -->
         </mat-button-toggle-group>
       </div>
@@ -52,8 +53,11 @@
   </mat-select>
 </mat-form-field> -->
 
+<mat-slide-toggle (change)="changeBaseLayer()" id="slider" color="#76ee59"> 
+  {{galleryImg}} 
+</mat-slide-toggle>
 
-<mat-form-field>
+<mat-form-field class="dd_state">
   <mat-label>Select State Name</mat-label>
   <mat-select (selectionChange)="get_layer_by_state_id($event)">
 
@@ -67,6 +71,7 @@
 </mat-form-field>
 
 <button type="button" (click)="togglePanel()">Layer</button>
+
 <div class="row closed-panel" [@widthGrow]="state">
   <div class="col-sm-12">
 
