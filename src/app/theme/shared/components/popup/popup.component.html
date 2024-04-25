@@ -1,0 +1,44 @@
+<div>
+  <div mat-dialog-title class="p-4 bg-white-200">
+    
+  </div>
+  <div mat-dialog-content pt-10>
+    <div class="">
+      <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Role Name</mat-label>
+          <input matInput formControlName="roleName" placeholder="Add your role">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Role Description</mat-label>
+          <input type="text" matInput formControlName="roleDescription" placeholder="Add description">
+        </mat-form-field>
+
+        <div class="row">
+          <mat-form-field class="col-md-6">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="active">Active</mat-option>
+              <mat-option value="inactive">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Assign Permission</mat-label>
+          <div *ngIf="module_data">
+            <mat-checkbox (change)="onchange($event)" *ngFor="let item of module_data"  formControlName="permissions" >
+              {{ item.module_name }}
+            </mat-checkbox>
+          </div>
+        </mat-form-field>
+
+        <div mat-dialog-actions>
+          <button mat-raised-button (click)="closepopup()" type="button" [mat-dialog-close]="false">Cancel</button>
+          <button mat-raised-button  color="primary" type="submit">{{ data ? 'Update' : 'Save' }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

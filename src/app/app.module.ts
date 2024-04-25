@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 
+
 // project import
 import { AppComponent } from './app.component';
 import { SharedModule } from './theme/shared/shared.module';
@@ -25,10 +26,10 @@ import { NavigationItem } from './theme/layout/admin/navigation/navigation';
 import { ToggleFullScreenDirective } from './theme/shared/components/full-screen/toggle-full-screen';
 
 //import { CesiumDirective } from './demo/3d/cesium.component';
-
 import { AuthorizationCheckService } from './services/authorization-check.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
+import { GridEditFormComponent } from './demo/surveydetail/edit-form.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { UserService } from './services/user.service';
     NavGroupComponent,
     NavItemComponent,
     NavSearchComponent,
-    ToggleFullScreenDirective
+    ToggleFullScreenDirective,
+    //GridEditFormComponent
   ],
   imports: [
     BrowserModule,
