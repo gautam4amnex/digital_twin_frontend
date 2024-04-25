@@ -33,7 +33,7 @@
 
 #slider{
   position: relative;
-  bottom: 832px;
+  bottom: 818px;
   right: 163px;
 }
 
@@ -43,6 +43,8 @@
   background-color: green;
 
 }
+
+
 
 .mat-button-toggle:hover {
   background-color: transparent;
@@ -56,7 +58,7 @@
 
 
 .cesium-button{
-  top: -873px;
+  top: -853px;
   left: 8px;
   border-radius: 3px;
 }
@@ -66,7 +68,7 @@
 }
 
 #mat-mdc-slide-toggle-1-label {
-  //color: black;
+  color: black;
   font-weight: 500;
 }
 
@@ -88,6 +90,13 @@
     top: -786px;
     left: 10px;
 
+}
+
+#popupBox {
+  background-color: #333;
+  border: 1px solid #fff;
+  padding: 10px;
+  color: #fff;
 }
 
 .SubCursorBar>.content {

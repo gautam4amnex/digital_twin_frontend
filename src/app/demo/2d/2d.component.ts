@@ -32,8 +32,9 @@ import html2canvas from 'html2canvas';
     ]),
   ]
 })
-export default class _2D {
 
+export default class _2D {
+  
   data: any;
   ol: any = window['ol'];
   state = "closed";
@@ -49,220 +50,44 @@ export default class _2D {
   clickHandler: any;
 
   curr_layer_source_arr: any[] = [];
+  curr_layer_source: any =  null;
   goto_click = false;
   info_click = false;
 
-
-  /** Measurement Starts */
-
-  style = new this.ol.style.Style({
-    fill: new this.ol.style.Fill({
-      color: 'rgba(255, 255, 255, 0.2)',
-    }),
-    stroke: new this.ol.style.Stroke({
-      color: 'rgba(255,0,0,3)',
-      lineDash: [10, 10],
-      width: 2,
-    }),
-  });
-
-  labelStyle = new this.ol.style.Style({
-    text: new this.ol.style.Text({
-      font: '14px Calibri,sans-serif',
-      fill: new this.ol.style.Fill({
-        color: 'rgba(255, 255, 255, 1)',
-      }),
-      backgroundFill: new this.ol.style.Fill({
-        color: 'rgba(0, 0, 0, 0.7)',
-      }),
-      padding: [3, 3, 3, 3],
-      textBaseline: 'bottom',
-      offsetY: -15,
-    }),
-    image: new this.ol.style.RegularShape({
-      radius: 8,
-      points: 3,
-      angle: Math.PI,
-      displacement: [0, 10],
-      fill: new this.ol.style.Fill({
-        color: 'rgba(0, 0, 0, 0.7)',
-      }),
-    }),
-  });
-
-  tipStyle = new this.ol.style.Style({
-    text: new this.ol.style.Text({
-      font: '12px Calibri,sans-serif',
-      fill: new this.ol.style.Fill({
-        color: 'rgba(255, 255, 255, 1)',
-      }),
-      backgroundFill: new this.ol.style.Fill({
-        color: 'rgba(0, 0, 0, 0.4)',
-      }),
-      padding: [2, 2, 2, 2],
-      textAlign: 'left',
-      offsetX: 15,
-    }),
-  });
-
-
-  modifyStyle = new this.ol.style.Style({
-    text: new this.ol.style.Text({
-      text: 'Drag to modify',
-      font: '12px Calibri,sans-serif',
-      fill: new this.ol.style.Fill({
-        color: 'rgba(255, 255, 255, 1)',
-      }),
-      backgroundFill: new this.ol.style.Fill({
-        color: 'rgba(0, 0, 0, 0.7)',
-      }),
-      padding: [2, 2, 2, 2],
-      textAlign: 'left',
-      offsetX: 15,
-    }),
-  });
-
-  segmentStyle = new this.ol.style.Style({
-    text: new this.ol.style.Text({
-      font: '12px Calibri,sans-serif',
-      fill: new this.ol.style.Fill({
-        color: 'rgba(255, 255, 255, 1)',
-      }),
-      backgroundFill: new this.ol.style.Fill({
-        color: 'rgba(0, 0, 0, 0.4)',
-      }),
-      padding: [2, 2, 2, 2],
-      textBaseline: 'bottom',
-      offsetY: -12,
-    }),
-    image: new this.ol.style.RegularShape({
-      radius: 6,
-      points: 3,
-      angle: Math.PI,
-      displacement: [0, 8],
-      fill: new this.ol.style.Fill({
-        color: 'rgba(0, 0, 0, 0.4)',
-      }),
-    }),
-  });
-
-  segmentStyles = [this.segmentStyle];
-
-  formatLength = function (line) {
-    const length = this.ol.sphere.getLength(line, { projection: 'EPSG:4326' });
-    return (length / 1000).toFixed(2) + ' km';
-  };
-
-  formatArea = function (polygon) {
-    const area = this.ol.sphere.getArea(polygon, { projection: 'EPSG:4326' });
-    return (area / 1000000).toFixed(2) + ' km²';
-  };
-
-  raster = new this.ol.layer.Tile({
-    source: new this.ol.source.OSM(),
-  });
+  projection = this.ol.proj.get('EPSG:3857');
+  projectionExtent = this.projection.getExtent();
+  size = this.ol.extent.getWidth(this.projectionExtent) / 256;
+  resolutions = new Array(25);
+  matrixIds = new Array(25);
+  map_layers: any[] = [];
+  vector_arr: any[] = [];
 
   source = new this.ol.source.Vector();
 
-  modify = new this.ol.interaction.Modify({
-    source: this.source,
-    style: this.modifyStyle
-  });
-
-  tipPoint: any;
-  
-
-  styleFunction(feature, segments, drawType, tip) {
-    const styles = [];
-    const geometry = feature.getGeometry();
-    const type = geometry.getType();
-    let point, label, line;
-    if (!drawType || drawType === type || type === 'Point') {
-      styles.push(style);
-      if (type === 'Polygon') {
-        point = geometry.getInteriorPoint();
-        label = this.formatArea(geometry);
-        line = new this.ol.geom.LineString(geometry.getCoordinates()[0]);
-      } else if (type === 'LineString') {
-        point = new this.ol.geom.Point(geometry.getLastCoordinate());
-        label = this.formatLength(geometry);
-        line = geometry;
-      }
-    }
-    if (segments && line) {
-      let count = 0;
-      line.forEachSegment(function (a, b) {
-        const segment = new this.ol.geom.LineString([a, b]);
-        const label = this.formatLength(segment);
-        if (this.segmentStyles.length - 1 < count) {
-          this.segmentStyles.push(this.segmentStyle.clone());
-        }
-        const segmentPoint = new this.ol.geom.Point(segment.getCoordinateAt(0.5));
-        this.segmentStyles[count].setGeometry(segmentPoint);
-        this.segmentStyles[count].getText().setText(label);
-        styles.push(this.segmentStyles[count]);
-        count++;
-      });
-    }
-    if (label) {
-      this.labelStyle.setGeometry(point);
-      this.labelStyle.getText().setText(label);
-      styles.push(this.labelStyle);
-    }
-    if (
-      tip &&
-      type === 'Point' &&
-      !this.modify.getOverlay().getSource().getFeatures().length
-    ) {
-      this.tipPoint = geometry;
-      this.tipStyle.getText().setText(tip);
-      styles.push(this.tipStyle);
-    }
-    return styles;
-  }
-
   vector = new this.ol.layer.Vector({
     source: this.source,
-    style: function (feature) {
-      return this.styleFunction(feature, true);
-    },
+    style: new this.ol.style.Style({        
+      stroke: new this.ol.style.Stroke({
+        color: '#0e97fa',
+        width:4
+      })
+    })
   });
 
-  addInteraction(event) {
-    const drawType = event.currentTarget.title;
-    const activeTip =
-      'Click to continue drawing the ' +
-      (drawType === 'Polygon' ? 'polygon' : 'line');
-    const idleTip = 'Click to start measuring';
-    let tip = idleTip;
-    this.Measuredraw = new this.ol.interaction.Draw({
-      source: this.source,
-      type: drawType,
-      style: (feature) : any => {
-        return this.styleFunction(feature, true, drawType, tip);
+
+  container: any = document.getElementById('popup') as HTMLElement;
+  content: any = document.getElementById('popup-content') as HTMLElement;
+  closer: any = document.getElementById('popup-closer') as HTMLElement;
+  calculated_measurement: any = "";
+
+  overlay = new this.ol.Overlay({
+    element: this.container,
+    autoPan: {
+      animation: {
+        duration: 250,
       },
-    });
-    this.Measuredraw.on('drawstart', function () {
-      if (this.clearPrevious.checked) {
-        this.source.clear();
-      }
-      this.modify.setActive(false);
-      tip = activeTip;
-    });
-    this.Measuredraw.on('drawend', function () {
-      this.modifyStyle.setGeometry(this.tipPoint);
-      this.modify.setActive(true);
-      this.map.once('pointermove', function () {
-        this.modifyStyle.setGeometry();
-      });
-      tip = idleTip;
-    });
-    this.modify.setActive(true);
-    this.map.addInteraction(this.Measuredraw);
-  }
-
-  /** Measurement Ends */
-
+    },
+  });
 
   private baseUrl1 = glob.environment.baseUrl;
   constructor(private http: HttpClient, private commonService: CommonsService) { }
@@ -310,17 +135,109 @@ export default class _2D {
     this.layer_name = event.target.getAttribute("layer_name");
     this.layer_id = event.target.getAttribute("layer_id");
 
+    const flag_status =           event.target.getAttribute("dataid");
+    const service_url =           event.target.getAttribute("service-url");
+    const mobile_service_url =    event.target.getAttribute("mobile_service_url");
+    const is_combined_service =   event.target.getAttribute("combined_service");
+    const is_info_popup =         event.target.getAttribute("is_info_popup");
+    const is_attribute_info =     event.target.getAttribute("is_attribute_info");
+    const layer_name =            event.target.getAttribute("layer_name");
+    const defination =            event.target.getAttribute("defination");
+    const parent_layer =          event.target.getAttribute("parent_layer");
+    const table_name =            event.target.getAttribute("value");
+
 
     if (event.target.checked == true) {
 
-      // this.add_layer_on_map(this.url, this.layer_id);
+      //this.add_layer_on_map(this.url, this.layer_id);
+      if (flag_status != "Image") {
+
+        if (parent_layer == "DP department layers") {
+            let current_layer = new this.ol.layer.Tile({
+                source: new this.ol.source.TileWMS({
+                    url: mobile_service_url,
+                    params: { 'LAYERS': table_name, 'CRS': 'EPSG:4326' },
+                    transition: 0,
+                    crossOrigin: 'anonymous'
+                })
+            });
+
+            this.map.addLayer(current_layer);
+            this.map_layers.push(current_layer);
+            this.map_layers[table_name] = current_layer;
+
+        } else if (parent_layer == "Disaster Management") {
+            let current_layer = new this.ol.layer.Tile({
+                source: new this.ol.source.TileWMS({
+                    url: service_url,
+                    params: { 'LAYERS': table_name, 'CRS': 'EPSG:4326' },
+                    transition: 0,
+                    crossOrigin: 'anonymous'
+                })
+            });
+
+            this.map.addLayer(current_layer);
+            this.map_layers.push(current_layer);
+            this.map_layers[table_name] = current_layer;
+        } else if (parent_layer == "Assessment Department") {
+            let current_layer = new this.ol.layer.Tile({
+                source: new this.ol.source.TileWMS({
+                    url: service_url,
+                    params: { 'LAYERS': table_name, 'CRS': 'EPSG:4326' },
+                    transition: 0,
+                    crossOrigin: 'anonymous'
+                })
+            });
+
+            this.map.addLayer(current_layer);
+            this.map_layers.push(current_layer);
+            this.map_layers[table_name] = current_layer;
+        } else {
+            let current_layer = new this.ol.layer.Tile({
+                source: new this.ol.source.TileWMS({
+                    url: mobile_service_url,
+                    params: { 'LAYERS': "MCGM:" + table_name, 'TILED': true },
+                    transition: 0,
+                    crossOrigin: 'anonymous'
+                })
+            });
+
+            this.map.addLayer(current_layer);
+            this.map_layers.push(current_layer);
+            this.map_layers[table_name] = current_layer;
+
+        }
+      }else{
+
+        let current_image = new this.ol.layer.Tile({
+          // opacity: 0.7,
+          source: new this.ol.source.WMTS({
+              url: service_url,
+              layer: table_name,
+              matrixSet: 'GoogleMapsCompatibleExt2:epsg:3857',
+              format: 'image/png',
+              projection: this.projection,
+              tileGrid: new this.ol.tilegrid.WMTS({
+                  origin: this.ol.extent.getTopLeft(this.projectionExtent),
+                  resolutions: this.resolutions,
+                  matrixIds: this.matrixIds,
+              }),
+              style: 'default',
+              wrapX: true,
+              crossOrigin: 'anonymous'
+          }),
+      });
+
+      this.map.addLayer(current_image);
+      this.map_layers.push(current_image);
+      this.map_layers[table_name] = current_image;
+
+      }
 
     }
     else {
 
-      console.log(this.all_layer);
-      this.map.removeLayer(this.all_layer[this.layer_id]);
-
+      this.map.removeLayer(this.map_layers[table_name]);
       if (this.all_layer.includes(this.layer_name)) {
         delete this.all_layer[this.layer_id];
       }
@@ -490,15 +407,15 @@ export default class _2D {
   /** GOTO ENDS */
   ngOnInit(): void {
 
-    this.get_layer_panel_data("3D", "");
+    this.get_layer_panel_data("2D", "");
 
     this.osm = new this.ol.layer.Tile({
       source: new this.ol.source.OSM()
     });
 
     this.view = new this.ol.View({
-      projection: 'EPSG:4326',
-      center: [75.8577, 22.7196],
+      projection: 'EPSG:3857',
+      center: this.ol.proj.fromLonLat([72.893189, 19.076986]),
       zoom: 12,
     });
 
@@ -508,25 +425,101 @@ export default class _2D {
       view: this.view
     });
 
-    this.map.addLayer(this.vector);
-		this.map.addInteraction(this.modify);					
+    this.map.addLayer(this.vector);		
+
+    for (let z = 0; z < 25; ++z) {
+      this.resolutions[z] = this.size / Math.pow(2, z);
+      this.matrixIds[z] = z;
+    }
+    this.map.addOverlay(this.overlay);
+
+  }
+  
+
+  
+  addDrawInteraction(geometryType) {
+
+    var source = new this.ol.source.Vector({ wrapX: false });
+
+        var vector = new this.ol.layer.Vector({
+            source: source
+        });
+      this.vector_arr.push(vector);
+    // if (this.Measuredraw) {
+    //   this.map?.removeInteraction(this.Measuredraw);
+    // }
+    this.Measuredraw = new this.ol.interaction.Draw({
+      source: this.source,
+      type: geometryType,
+    });
+    this.map.addInteraction(this.Measuredraw);
+
+    var measurementFormatted;
+    this.Measuredraw.on('drawstart', function(event) {
+      vector.getSource().clear();
+  
+      event.feature.on('change', function(event) {
+        var measurement = geometryType === 'Polygon' ? event.target.getGeometry().getArea() : event.target.getGeometry().getLength();
+  
+        measurementFormatted = measurement > 1000 ? (measurement / 1000).toFixed(2) + 'km' : measurement.toFixed(2) + 'm';
+
+        console.log(measurementFormatted);
+
+        //resultElement.html(measurementFormatted + html);
+      });
+    });
+  
+    this.Measuredraw.on('drawend', (event) => {
+      const geometry = event.feature.getGeometry();
+      const coordinate = geometry.getLastCoordinate();
+
+      if (measurementFormatted) {
+        this.addPopupOverlay(measurementFormatted, coordinate);
+      }
+      
+    });
+
+    this.map.addInteraction(this.Measuredraw);    
+    
+  }
+
+  clearDrawnFeature(){
+    debugger;
+    this.map.removeInteraction(this.Measuredraw);
+    for (var i = 0; i < this.vector_arr.length; i++) {
+      this.map.removeLayer(this.vector_arr[i]);
+    }
 
 
   }
 
-  add_layer_on_map(mobile_service_url, layer_name) {
-    this.current_layer = new this.ol.layer.Tile({
-      source: new this.ol.source.TileWMS({
-        url: mobile_service_url,
-        params: { 'LAYERS': "iscdl:" + layer_name },
-        transition: 0,
-        crossOrigin: 'anonymous'
-      })
+  addPopupOverlay(content: string, coordinate: any): void {
+
+    const popupElement = document.createElement('div');
+    popupElement.id = 'ol-popup';
+    popupElement.innerHTML = content;
+
+    const popupOverlay = new this.ol.Overlay({
+      element: popupElement,
+      position: coordinate,
+      positioning: 'bottom-center',
+      stopEvent: true,
     });
-    this.map.addLayer(this.current_layer);
-    this.all_layer[layer_name] = this.current_layer;
-    this.curr_layer_source_arr.push(this.current_layer.getSource());
-    console.log(this.all_layer);
+
+    this.map.addOverlay(popupOverlay);
+
+    document.getElementById('ol-popup').setAttribute('style' , 'background-color: white;    border-radius: 10px;     border: 1px solid black;      padding: 5px 10px !important;')
+
+  }
+  
+  addLineStringMeasurement(): void {
+    this.map.removeInteraction(this.Measuredraw);
+    this.addDrawInteraction('LineString');
+  }
+
+  addPolygonMeasurement(): void {
+    this.map.removeInteraction(this.Measuredraw);
+    this.addDrawInteraction('Polygon');
   }
 
 

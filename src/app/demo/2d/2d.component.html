@@ -10,10 +10,11 @@
         
         <mat-button-toggle-group name="ingredients" aria-label="Ingredients">
           <mat-button-toggle (click)="gotoFtn()"  title="Go-To"><i class="fas fa-map-marker-alt fa-2x"></i></mat-button-toggle>
-          <mat-button-toggle (click)="addInteraction($event)"  title="LineString"><mat-icon>timeline</mat-icon></mat-button-toggle>
-          <mat-button-toggle (click)="addInteraction($event)" title="Polygon" ><i class="fas fa-draw-polygon fa-2x"></i></mat-button-toggle>
-            <mat-button-toggle (click)="featureInfo()" title="info"><mat-icon>info</mat-icon></mat-button-toggle>
+          <mat-button-toggle (click)="addLineStringMeasurement()"  title="LineString"><mat-icon>timeline</mat-icon></mat-button-toggle>
+          <mat-button-toggle (click)="addPolygonMeasurement()" title="Polygon" ><i class="fas fa-draw-polygon fa-2x"></i></mat-button-toggle>
+            <mat-button-toggle (click)="featureInfo()" title="Info"><mat-icon>info</mat-icon></mat-button-toggle>
             <mat-button-toggle title="Take Screenshot" (click)="takeSS()"><i class="fas fa-camera-retro fa-2x"></i></mat-button-toggle>
+            <mat-button-toggle (click)="clearDrawnFeature()" title="Erase"><i class="fas fa-eraser fa-2x"></i></mat-button-toggle>
        
         </mat-button-toggle-group>
       </div>
@@ -76,7 +77,7 @@
                           [attr.parent_layer]="childLayer.parent_layer" [attr.defination]="childLayer.defination"
                           [attr.layer_name]="childLayer.layer_name"
                           [attr.combined_service]="childLayer.is_combined_service"
-                          [attr.service-url]="childLayer.service_url" [attr._id]="childLayer.geometry_type"
+                          [attr.service-url]="childLayer.service_url" [attr.dataid]="childLayer.geometry_type"
                           data-id="Image" type="checkbox" [attr.value]="childLayer.layer_id"
                           [attr.Id]="'flexCheckDefault' + childLayer.layer_id"
                           [attr.layer_name]="childLayer.layer_name">
@@ -95,5 +96,4 @@
 
   </div>
 </div>
-
 

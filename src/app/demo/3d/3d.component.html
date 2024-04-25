@@ -1,6 +1,26 @@
 <!-- <div appCesium></div>  -->
 
 <div id="cesiumContainer"></div>
+<div class="modal fade" [ngStyle]="{'display':display}" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<button type="button" (click)="openPopup()">OPEN</button>
+<select class="form-select form-select-sm form-select-width200" (change)="add_bim_data($event)" id="bim_data_type">
+  <option value="">Select Data Type</option>
+  <option value="car">Car</option>
+</select>
 <div class="SubCursorBar">
   <div class="content">
     <div class="DisabledContent" is-disabled="false">
@@ -16,6 +36,9 @@
           <mat-button-toggle title="Measure polygon" (click)="measurementType($event)"><i class="fas fa-draw-polygon fa-2x"></i></mat-button-toggle>
             <mat-button-toggle title="info" (click)="featureInfo()"><mat-icon>info</mat-icon></mat-button-toggle>
             <mat-button-toggle title="Take Screenshot" (click)="takeSS()"><i class="fas fa-camera-retro fa-2x"></i></mat-button-toggle>
+            <mat-button-toggle (click)="clearAllMeasurementData()" title="Erase"><i class="fas fa-eraser fa-2x"></i></mat-button-toggle>
+            <mat-button-toggle (click)="add_bim_data($event)" title="Add"><i class="fas fa-plus fa-2x"></i></mat-button-toggle>
+
             <!-- <mat-button-toggle title="Download Image" ><i class="fas fa-camera fa-2x"></i></mat-button-toggle> -->
         </mat-button-toggle-group>
       </div>
@@ -57,7 +80,7 @@
   {{galleryImg}} 
 </mat-slide-toggle>
 
-<mat-form-field class="dd_state">
+<!-- <mat-form-field class="dd_state">
   <mat-label>Select State Name</mat-label>
   <mat-select (selectionChange)="get_layer_by_state_id($event)">
 
@@ -68,7 +91,7 @@
 
 
   </mat-select>
-</mat-form-field>
+</mat-form-field> -->
 
 <button type="button" (click)="togglePanel()">Layer</button>
 

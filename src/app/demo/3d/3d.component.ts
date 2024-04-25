@@ -95,6 +95,8 @@ export default class _3D implements OnInit {
   selectedEntity: any = new Cesium.Entity();
 
   state = "closed";
+  addBimDataHandler: any;
+  display: any = "none";
 
   constructor(private http: HttpClient,
     private commonService: CommonsService,
@@ -243,6 +245,10 @@ export default class _3D implements OnInit {
     return shape;
   }
 
+  clearAllMeasurementData(){
+    this.viewer.entities.removeAll();
+  }
+
   clearMeasurements() {
     this.points = [];
     if (Cesium.defined(this.lineGraphics)) {
@@ -308,6 +314,38 @@ export default class _3D implements OnInit {
             }
 
             console.log('Total distance between all points: ' + totalDistance.toFixed(2) + ' meters');
+
+            var midpoint = Cesium.Cartesian3.lerp(this.points[i - 1], this.points[i], 0.5, new Cesium.Cartesian3());
+
+//            document.getElementById('ol-popup').setAttribute('style' , 'background-color: white;    border-radius: 10px;     border: 1px solid black;      padding: 5px 10px !important;')
+
+            var entity = this.viewer.entities.add({
+              position : midpoint,
+              // point : {
+              //     pixelSize : 10,
+              //     color : Cesium.Color.YELLOW
+              // },
+              label: {
+                     showBackground: true  ,
+                     text: totalDistance.toFixed(2) + ' meters',
+                     backgroundColor: Cesium.Color.BLACK,
+                     border: 1
+                                        
+              }
+          });
+
+            // var labelEntity = this.viewer.entities.add({
+            //   position: midpoint,
+            //   label: {
+            //     text: totalDistance.toFixed(2) + ' meters',
+            //     font: '12px sans-serif',
+            //     fillColor: Cesium.Color.BLACK,
+            //     outlineColor: Cesium.Color.BLACK,
+            //     outlineWidth: 0.5,
+            //     style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+            //   }
+            // });
+            // this.labelEntities.push(labelEntity);
 
             this.dblClick = true;
           }
@@ -384,6 +422,51 @@ export default class _3D implements OnInit {
 
   }
 
+  add_bim_data(event){
+
+    this.measureEnabled = false;
+    this.goto_click = false;
+    this.polygonMeasureEnabled = false;
+    this.info_click = false;
+
+    this.addBimDataHandler.setInputAction((click) => {
+ 
+      var cartesian = this.viewer.scene.pickPosition(click.position);
+   
+   
+     var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+   console.log(
+       'lon ' + Cesium.Math.toDegrees(cartographic.longitude) + ', ' +
+       'lat ' + Cesium.Math.toDegrees(cartographic.latitude) + ', ' +
+       'alt ' + cartographic.height);
+  
+   
+       this.add_data_on_click(Cesium.Math.toDegrees(cartographic.longitude) , Cesium.Math.toDegrees(cartographic.latitude));
+   
+   }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+  }
+
+  add_data_on_click(long , lat){
+
+    let modelEntity = this.viewer.entities.add({
+      name: "milktruck",
+      position: Cesium.Cartesian3.fromDegrees(long, lat),
+      model: {
+        uri:
+          "../../../assets/3d_data/streetLight.glb",
+          heightReference : Cesium.HeightReference.CLAMP_TO_GROUND
+      },
+      
+    });
+    this.viewer.zoomTo(modelEntity);
+  
+  }
+
+  openPopup(){
+    this.display = "block"; 
+  }
+
   drawLines() {
     if (Cesium.defined(this.lineGraphics)) {
       this.viewer.entities.remove(this.lineGraphics);
@@ -405,9 +488,9 @@ export default class _3D implements OnInit {
           label: {
             text: distance.toFixed(2) + ' meters',
             font: '12px sans-serif',
-            fillColor: Cesium.Color.WHITE,
+            fillColor: Cesium.Color.BLACK,
             outlineColor: Cesium.Color.BLACK,
-            outlineWidth: 2,
+            outlineWidth: 0.5,
             style: Cesium.LabelStyle.FILL_AND_OUTLINE,
             //= heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
           }
@@ -575,6 +658,8 @@ export default class _3D implements OnInit {
   }
 
 
+
+
   /** Highlight Building */
 
   per_selection() {
@@ -687,6 +772,10 @@ export default class _3D implements OnInit {
     this.viewer.scene.imageryLayers.removeAll();
 
     if(this.galleryImg == "Satellite Map"){
+
+      document.getElementById("mat-mdc-slide-toggle-1-label").setAttribute("style" , "color: white; font-weight: 500;")
+      //element.setAttribute("style", "color:red; border: 1px solid blue;");
+
       this.galleryImg = "Default Map"
       const imageryLayer = Cesium.ImageryLayer.fromWorldImagery(null);
       this.viewer.scene.imageryLayers.add(imageryLayer);
@@ -694,6 +783,7 @@ export default class _3D implements OnInit {
     }
     else{
       this.galleryImg = "Satellite Map"
+      document.getElementById("mat-mdc-slide-toggle-1-label").setAttribute("style" , "color: black; font-weight: 500;")
       const imageryLayer = new Cesium.ImageryLayer(new Cesium.OpenStreetMapImageryProvider({
       url: "https://tile.openstreetmap.org/"
     }));
@@ -724,6 +814,9 @@ export default class _3D implements OnInit {
     this.state = (this.state === "closed") ? "open" : "closed";
   }
 
+  
+
+
   ngOnInit() {
 
     this.get_layer_panel_data("3D", "");
@@ -753,9 +846,13 @@ export default class _3D implements OnInit {
       },
     });
 
+    var canvas = document.createElement('div');
+
     this.handler = new Cesium.ScreenSpaceEventHandler(this.viewer.canvas);
 
     this.LineMeasurementhandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
+
+    this.addBimDataHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
 
     this.silhouetteGreen.uniforms.color = Cesium.Color.LIME;
     this.silhouetteGreen.uniforms.length = 0.01;
