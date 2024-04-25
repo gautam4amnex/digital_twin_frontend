@@ -63,6 +63,15 @@ const NavigationItems = [
         classes: 'nav-item',
       },
       {
+        id: 'role-management',
+        title: 'Role Management',
+        type: 'item',
+        url: '/role-management',
+        icon: 'feather icon-home',
+        classes: 'nav-item',
+      },
+     {
+
         id: 'surveydetail',
         title: 'Survey Detail',
         type: 'item',
@@ -70,6 +79,7 @@ const NavigationItems = [
         icon: 'feather icon-home',
         classes: 'nav-item',
       }
+
     ],
   },
   
