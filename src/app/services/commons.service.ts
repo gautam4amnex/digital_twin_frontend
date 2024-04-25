@@ -23,6 +23,10 @@ export class CommonsService extends BehaviorSubject<any[]> {
     return this.http.post(`${this.url}` + 'get_verify_feature_data', { jsonData }, {headers:this.getAccessToken()});
   }
 
+  get_verify_feature_data_by_id(jsonData){
+    return this.http.post(`${this.url}` + 'get_verify_feature_data_by_id', jsonData , {headers:this.getAccessToken()});
+  }
+
   getAccessToken() {
     return new HttpHeaders().set("Authorization",localStorage.getItem("token"));
   }

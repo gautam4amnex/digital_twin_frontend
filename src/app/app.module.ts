@@ -26,11 +26,10 @@ import { NavigationItem } from './theme/layout/admin/navigation/navigation';
 import { ToggleFullScreenDirective } from './theme/shared/components/full-screen/toggle-full-screen';
 
 //import { CesiumDirective } from './demo/3d/cesium.component';
-
 import { AuthorizationCheckService } from './services/authorization-check.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { GridEditFormComponent } from './demo/surveydetail/edit-form.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +47,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
     NavGroupComponent,
     NavItemComponent,
     NavSearchComponent,
-    ToggleFullScreenDirective
+    ToggleFullScreenDirective,
+    //GridEditFormComponent
   ],
   imports: [
     BrowserModule,
@@ -57,8 +57,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
     ReactiveFormsModule,
     SharedModule,
     BrowserAnimationsModule,
-    HttpClientModule,
-    MatFormFieldModule
+    HttpClientModule
   ],
   providers: [
     NavigationItem,AuthorizationCheckService
