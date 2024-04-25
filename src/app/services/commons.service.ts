@@ -3,6 +3,8 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import * as glob from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 import { Role } from '../models/role';
+import { MatSnackBar } from '@angular/material/snack-bar';
+ import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -12,10 +14,11 @@ export class CommonsService extends BehaviorSubject<any[]> {
   private url = glob.environment.baseUrl;
   private measurement_type: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private _snackBar: MatSnackBar) {
     super([]);
   }
-
+  
   get_verify_feature_data(jsonData){
     return this.http.post(`${this.url}` + 'get_verify_feature_data', { jsonData }, {headers:this.getAccessToken()});
   }
@@ -59,9 +62,23 @@ export class CommonsService extends BehaviorSubject<any[]> {
     console.log(data)
     return this.http.post("http://localhost:3000/customer",data);
   }
-  GetRoleById(id:any){
-    return this.http.get("http://localhost:3000/customer/"+id);
+  updateRole(data: any): Observable<any> {
+    return this.http.put(`http://localhost:3000/employees`, data);
   }
- 
+  GetRoleById(data:any){
+    return this.http.post("http://localhost:8090/digitaltwin/dashboard/get_role_by_id",data);
+  }
+  GetAllModules(){
+    return this.http.get("http://localhost:8090/digitaltwin/dashboard/get_all_modules");
+  }
+  openSnackBar(message: string, action: string = 'ok') {
+    this._snackBar.open(message, action, {
+      duration: 1000,
+      verticalPosition: 'top',
+    });
+  }
+  deleteRole(id: number){
+    return this.http.delete(`http://localhost:3000/employees/${id}`);
+  }
 
 }
