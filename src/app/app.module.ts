@@ -30,6 +30,7 @@ import { ToggleFullScreenDirective } from './theme/shared/components/full-screen
 import { AuthorizationCheckService } from './services/authorization-check.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { UserService } from './services/user.service';
     ReactiveFormsModule,
     SharedModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatFormFieldModule
   ],
   providers: [
     NavigationItem,AuthorizationCheckService
