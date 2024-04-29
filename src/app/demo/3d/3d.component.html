@@ -1,26 +1,30 @@
-<!-- <div appCesium></div>  -->
-
 <div id="cesiumContainer"></div>
-<div class="modal fade" [ngStyle]="{'display':display}" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">...</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-<button type="button" (click)="openPopup()">OPEN</button>
-<select class="form-select form-select-sm form-select-width200" (change)="add_bim_data($event)" id="bim_data_type">
-  <option value="">Select Data Type</option>
-  <option value="car">Car</option>
-</select>
+
+<kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="editDialog" [minWidth]="250" [width]="1024" (close)="closeEditDialog()">
+  <form [formGroup]="bimDataForm">
+  <label>Name: </label><br>
+  <input formControlName="layer_name" type="text" value="" placeholder="Enter Name"><br>
+  <label>Description: </label><br>
+  <input formControlName="description" type="text" value="" placeholder="Enter Description"><br><br>
+    <button (click)="add_bim_data_to_db($event)" type="button">Submit</button>
+  </form>
+</kendo-dialog>
+
+<kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="selectFeatureDialog" [minWidth]="250" [width]="1024" (close)="closeFeatureDialog()">
+  <h4>Select Feature</h4>
+  <mat-form-field>
+    <mat-label>Features</mat-label>
+    <select #feature (change)="getFeature($event)" matNativeControl required>
+      <option value="">Select</option>
+      <option value="car">Car</option>
+      <option value="street_light">Street Light</option>
+    </select>    
+  </mat-form-field>
+
+</kendo-dialog>
+
+ <!-- <button type="button" (click)="openEditDialog()">OPEN</button>
+<button type="button" (click)="getBimData()">GET</button>  -->
 <div class="SubCursorBar">
   <div class="content">
     <div class="DisabledContent" is-disabled="false">
@@ -93,7 +97,7 @@
   </mat-select>
 </mat-form-field> -->
 
-<button type="button" (click)="togglePanel()">Layer</button>
+<!-- <button type="button" (click)="togglePanel()">Layer</button> -->
 
 <div class="row closed-panel" [@widthGrow]="state">
   <div class="col-sm-12">
@@ -169,3 +173,4 @@
 
   </div>
 </div>
+

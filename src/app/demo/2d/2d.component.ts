@@ -44,7 +44,7 @@ export default class _2D {
   mobile_service_url: any
   current_layer: any;
   layer_id: any
-  Measuredraw: any
+  Measuredraw: any = null;
   GoToVectorLayer: any = null;
   view: any;
   clickHandler: any;
@@ -61,6 +61,17 @@ export default class _2D {
   matrixIds = new Array(25);
   map_layers: any[] = [];
   vector_arr: any[] = [];
+  drawsource = new this.ol.source.Vector({ wrapX: false });
+
+  drawvector = new this.ol.layer.Vector({
+    source: this.drawsource,
+    style: new this.ol.style.Style({        
+      stroke: new this.ol.style.Stroke({
+        color: '#0e97fa',
+        width:4
+      })
+    })
+  });
 
   source = new this.ol.source.Vector();
 
@@ -432,35 +443,30 @@ export default class _2D {
       this.matrixIds[z] = z;
     }
     this.map.addOverlay(this.overlay);
+    this.map.addLayer(this.drawvector);
 
   }
   
 
   
-  addDrawInteraction(geometryType) {
 
-    var source = new this.ol.source.Vector({ wrapX: false });
+  addDrawInteraction(geometryType) {   
 
-        var vector = new this.ol.layer.Vector({
-            source: source
-        });
-      this.vector_arr.push(vector);
-    // if (this.Measuredraw) {
-    //   this.map?.removeInteraction(this.Measuredraw);
-    // }
     this.Measuredraw = new this.ol.interaction.Draw({
-      source: this.source,
-      type: geometryType,
+      source: this.drawsource,
+      //type: geometryType,
+      type: /** @type {ol.geom.GeometryType} */ (geometryType)
     });
     this.map.addInteraction(this.Measuredraw);
-
+    
+    this.vector_arr.push(this.drawvector);
     var measurementFormatted;
-    this.Measuredraw.on('drawstart', function(event) {
-      vector.getSource().clear();
-  
-      event.feature.on('change', function(event) {
+    this.Measuredraw.on('drawstart', function (event) {
+      
+
+      event.feature.on('change', function (event) {
         var measurement = geometryType === 'Polygon' ? event.target.getGeometry().getArea() : event.target.getGeometry().getLength();
-  
+
         measurementFormatted = measurement > 1000 ? (measurement / 1000).toFixed(2) + 'km' : measurement.toFixed(2) + 'm';
 
         console.log(measurementFormatted);
@@ -468,7 +474,7 @@ export default class _2D {
         //resultElement.html(measurementFormatted + html);
       });
     });
-  
+
     this.Measuredraw.on('drawend', (event) => {
       const geometry = event.feature.getGeometry();
       const coordinate = geometry.getLastCoordinate();
@@ -476,20 +482,30 @@ export default class _2D {
       if (measurementFormatted) {
         this.addPopupOverlay(measurementFormatted, coordinate);
       }
-      
-    });
 
-    this.map.addInteraction(this.Measuredraw);    
-    
+    });
+    //this.map.addLayer(drawvector);
   }
 
   clearDrawnFeature(){
-    debugger;
-    this.map.removeInteraction(this.Measuredraw);
-    for (var i = 0; i < this.vector_arr.length; i++) {
-      this.map.removeLayer(this.vector_arr[i]);
-    }
 
+    if (this.Measuredraw != null) {
+      this.map.removeInteraction(this.Measuredraw);
+      this.Measuredraw = null; 
+    }
+  
+    var id = document.querySelectorAll('#ol-popup');
+    id.forEach(e => e.remove());
+   
+    console.log(this.vector_arr);
+
+    for (var i = 0; i < this.vector_arr.length; i++) {      
+      this.map.removeLayer(this.vector_arr[i]); 
+    }
+  
+
+    this.vector_arr = [];
+  
 
   }
 
@@ -513,12 +529,18 @@ export default class _2D {
   }
   
   addLineStringMeasurement(): void {
-    this.map.removeInteraction(this.Measuredraw);
+    if(this.Measuredraw != null){
+      this.map.removeInteraction(this.Measuredraw);
+    }
+    
     this.addDrawInteraction('LineString');
   }
 
   addPolygonMeasurement(): void {
-    this.map.removeInteraction(this.Measuredraw);
+   
+    if(this.Measuredraw != null){
+      this.map.removeInteraction(this.Measuredraw);
+    }
     this.addDrawInteraction('Polygon');
   }
 
