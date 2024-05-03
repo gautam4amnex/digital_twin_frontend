@@ -26,7 +26,6 @@ import { NavigationItem } from './theme/layout/admin/navigation/navigation';
 import { ToggleFullScreenDirective } from './theme/shared/components/full-screen/toggle-full-screen';
 
 //import { CesiumDirective } from './demo/3d/cesium.component';
-
 import { AuthorizationCheckService } from './services/authorization-check.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';

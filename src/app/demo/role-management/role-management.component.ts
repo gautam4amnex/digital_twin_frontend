@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Output, inject } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,7 +12,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { CommonModule } from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
-import {MatDialogModule, MatDialog} from '@angular/material/dialog';
+import {MatDialogModule, MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { PopupComponent } from 'src/app/theme/shared/components/popup/popup.component';
+import { EditPopupComponent } from 'src/app/theme/shared/components/edit-popup/edit-popup.component';
+import { Router } from '@angular/router';
+import { EventEmitter } from 'ws';
  
 
 @Component({
@@ -34,7 +38,7 @@ import {MatDialogModule, MatDialog} from '@angular/material/dialog';
   ]
 })
 export class RoleManagementComponent implements OnInit {
-result:any;
+
   tableData: Role[] = [];
   displayedColumns: string[] = ["role_id", "role_name", "description", "assign_permission", "status", "action"];
   dataSource: MatTableDataSource<any>;
@@ -42,11 +46,17 @@ result:any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private service: CommonsService,public dialog: MatDialog) {}
-  
+  constructor(private service: CommonsService,
+    public dialog: MatDialog,
+    
+   ) {
+
+    }
+
   ngOnInit(): void {
     this.loadCustomer();
   }
+  
 
   loadCustomer() {
     this.service.getRoleManagementTableData().subscribe((res:any) => {
@@ -56,7 +66,29 @@ result:any;
       this.dataSource.sort = this.sort;
     });
   }
+  openAddForm(){
+    const dialogRef = this.dialog.open(PopupComponent);
+    dialogRef.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.loadCustomer();
+        }
+      },
+    });
+  }
 
+  openEditForm(roledata:any,button:string){
+    
+      const dialog = this.dialog.open(PopupComponent, {
+        data:{roledata,button}});
+        dialog.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.loadCustomer();
+        }
+      },
+    });
+  }
   add() {
     // const dialogRef = this.dialog.open(formComponent);
     // dialogRef.afterClosed().subscribe(result => {
@@ -65,18 +97,24 @@ result:any;
     // Implement add functionality
   }
 
-  edit(id) {
-    // Implement edit functionality
-  }
+ 
 
-  delete(id) {
-    // Implement delete functionality
+  delete(id:number) {
+    this.service.deleteRole(id).subscribe({
+      next: (res) => {
+        this.service.openSnackBar('Employee deleted!', 'done');
+        this.loadCustomer();
+      },
+      error: console.log,
+    });
   }
 
   filterChange(event:any) {
-    this.dataSource.filter = event.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
+}
 }

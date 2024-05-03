@@ -52,7 +52,6 @@ export class CommonsService extends BehaviorSubject<any[]> {
   }
 
   public getLayerAndImagePanel(jsonData){
-    debugger;
     return this.http.post( this.url + "get_all_layer_and_image", jsonData, { headers: this.getAccessToken() });
   }
 
@@ -83,6 +82,10 @@ export class CommonsService extends BehaviorSubject<any[]> {
   }
   deleteRole(id: number){
     return this.http.delete(`http://localhost:3000/employees/${id}`);
+  }
+
+  public crudBimData(jsonData){
+    return this.http.post( "http://localhost:8085/crud_bim_data", jsonData);
   }
 
 }

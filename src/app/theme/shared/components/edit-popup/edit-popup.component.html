@@ -1,0 +1,44 @@
+<p>edit-popup works!</p>
+
+<div>
+    <div mat-dialog-title class="p-4 bg-white-200">
+      Add New Role
+    </div>
+    <div mat-dialog-content pt-10>
+      <div class="">
+        <form [formGroup]="roleForm" (ngSubmit)="onupdate()">
+          <mat-form-field appearance="outline">
+            <mat-label>Role Name</mat-label>
+            <input matInput formControlName="roleName" placeholder="Add your role">
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Role Description</mat-label>
+            <input type="text" matInput formControlName="roleDescription" placeholder="Add description">
+          </mat-form-field>
+  
+          <mat-form-field>
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="active">Active</mat-option>
+              <mat-option value="inactive">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <div>
+            <mat-label>Assign Permission</mat-label>
+            <div  >
+              <input formControlName="permissions" type="checkbox"  >
+            </div>
+          </div>
+         
+  
+          <div mat-dialog-actions>
+            <button mat-raised-button color="primary" type="submit">update</button>
+            <button mat-raised-button (click)="closepopup()" color="warn" type="button">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

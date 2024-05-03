@@ -1,6 +1,30 @@
-<!-- <div appCesium></div>  -->
-
 <div id="cesiumContainer"></div>
+
+<kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="editDialog" [minWidth]="250" [width]="1024" (close)="closeEditDialog()">
+  <form [formGroup]="bimDataForm">
+  <label>Name: </label><br>
+  <input formControlName="layer_name" type="text" value="" placeholder="Enter Name"><br>
+  <label>Description: </label><br>
+  <input formControlName="description" type="text" value="" placeholder="Enter Description"><br><br>
+    <button (click)="add_bim_data_to_db($event)" type="button">Submit</button>
+  </form>
+</kendo-dialog>
+
+<kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="selectFeatureDialog" [minWidth]="250" [width]="1024" (close)="closeFeatureDialog()">
+  <h4>Select Feature</h4>
+  <mat-form-field>
+    <mat-label>Features</mat-label>
+    <select #feature (change)="getFeature($event)" matNativeControl required>
+      <option value="">Select</option>
+      <option value="car">Car</option>
+      <option value="street_light">Street Light</option>
+    </select>    
+  </mat-form-field>
+
+</kendo-dialog>
+
+ <!-- <button type="button" (click)="openEditDialog()">OPEN</button>
+<button type="button" (click)="getBimData()">GET</button>  -->
 <div class="SubCursorBar">
   <div class="content">
     <div class="DisabledContent" is-disabled="false">
@@ -15,6 +39,10 @@
           <mat-button-toggle (click)="measurementType($event)" title="Measure polyline"><mat-icon>timeline</mat-icon></mat-button-toggle>
           <mat-button-toggle title="Measure polygon" (click)="measurementType($event)"><i class="fas fa-draw-polygon fa-2x"></i></mat-button-toggle>
             <mat-button-toggle title="info" (click)="featureInfo()"><mat-icon>info</mat-icon></mat-button-toggle>
+            <mat-button-toggle title="Take Screenshot" (click)="takeSS()"><i class="fas fa-camera-retro fa-2x"></i></mat-button-toggle>
+            <mat-button-toggle (click)="clearAllMeasurementData()" title="Erase"><i class="fas fa-eraser fa-2x"></i></mat-button-toggle>
+            <mat-button-toggle (click)="add_bim_data($event)" title="Add"><i class="fas fa-plus fa-2x"></i></mat-button-toggle>
+
             <!-- <mat-button-toggle title="Download Image" ><i class="fas fa-camera fa-2x"></i></mat-button-toggle> -->
         </mat-button-toggle-group>
       </div>
@@ -52,8 +80,11 @@
   </mat-select>
 </mat-form-field> -->
 
+<mat-slide-toggle (change)="changeBaseLayer()" id="slider" color="#76ee59"> 
+  {{galleryImg}} 
+</mat-slide-toggle>
 
-<mat-form-field>
+<!-- <mat-form-field class="dd_state">
   <mat-label>Select State Name</mat-label>
   <mat-select (selectionChange)="get_layer_by_state_id($event)">
 
@@ -64,9 +95,10 @@
 
 
   </mat-select>
-</mat-form-field>
+</mat-form-field> -->
 
-<button type="button" (click)="togglePanel()">Layer</button>
+<!-- <button type="button" (click)="togglePanel()">Layer</button> -->
+
 <div class="row closed-panel" [@widthGrow]="state">
   <div class="col-sm-12">
 
@@ -141,3 +173,4 @@
 
   </div>
 </div>
+
