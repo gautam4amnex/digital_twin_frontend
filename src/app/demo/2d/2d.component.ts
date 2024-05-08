@@ -46,6 +46,7 @@ export default class _2D {
   layer_id: any
   Measuredraw: any = null;
   GoToVectorLayer: any = null;
+  location_mark : any;
   view: any;
   clickHandler: any;
 
@@ -61,17 +62,9 @@ export default class _2D {
   matrixIds = new Array(25);
   map_layers: any[] = [];
   vector_arr: any[] = [];
-  drawsource = new this.ol.source.Vector({ wrapX: false });
+  drawsource: any;
 
-  drawvector = new this.ol.layer.Vector({
-    source: this.drawsource,
-    style: new this.ol.style.Style({        
-      stroke: new this.ol.style.Stroke({
-        color: '#0e97fa',
-        width:4
-      })
-    })
-  });
+  drawvector: any;
 
   source = new this.ol.source.Vector();
 
@@ -443,7 +436,8 @@ export default class _2D {
       this.matrixIds[z] = z;
     }
     this.map.addOverlay(this.overlay);
-    this.map.addLayer(this.drawvector);
+    //this.map.addLayer(this.drawvector);
+
 
   }
   
@@ -452,12 +446,26 @@ export default class _2D {
 
   addDrawInteraction(geometryType) {   
 
+    this.drawsource = new this.ol.source.Vector({ wrapX: false });
+
+    this.drawvector = new this.ol.layer.Vector({
+      source: this.drawsource,
+      style: new this.ol.style.Style({        
+        stroke: new this.ol.style.Stroke({
+          color: '#0e97fa',
+          width:4
+        })
+      })
+    });
+
+
     this.Measuredraw = new this.ol.interaction.Draw({
       source: this.drawsource,
       //type: geometryType,
       type: /** @type {ol.geom.GeometryType} */ (geometryType)
     });
     this.map.addInteraction(this.Measuredraw);
+    this.map.addLayer(this.drawvector);
     
     this.vector_arr.push(this.drawvector);
     var measurementFormatted;
@@ -506,6 +514,7 @@ export default class _2D {
 
     this.vector_arr = [];
   
+    this.map.removeLayer(this.GoToVectorLayer);
 
   }
 

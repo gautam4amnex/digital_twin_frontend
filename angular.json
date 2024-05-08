@@ -17,7 +17,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["apexcharts","dompurify",
+            "allowedCommonJsDependencies": [
+              "apexcharts",
+              "dompurify",
               "protobufjs",
               "mersenne-twister",
               "earcut",
@@ -25,34 +27,39 @@
               "urijs",
               "grapheme-splitter",
               "nosleep.js",
-              "bitmap-sdf"],
+              "bitmap-sdf"
+            ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets", "src/fake-data",
-            {
-              "glob": "**/*",
-              "input": "node_modules/cesium/Build/Cesium/Workers",
-              "output": "/assets/cesium/Workers"
-            },
-            {
-              "glob": "**/*",
-              "input": "node_modules/cesium/Build/Cesium/ThirdParty",
-              "output": "/assets/cesium/ThirdParty"
-            },
-            {
-              "glob": "**/*",
-              "input": "node_modules/cesium/Build/Cesium/Assets",
-              "output": "/assets/cesium/Assets"
-            },
-            {
-              "glob": "**/*",
-              "input": "node_modules/cesium/Build/Cesium/Widgets",
-              "output": "/assets/cesium/Widgets"
-            }],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/fake-data",
+              {
+                "glob": "**/*",
+                "input": "node_modules/cesium/Build/Cesium/Workers",
+                "output": "/assets/cesium/Workers"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/cesium/Build/Cesium/ThirdParty",
+                "output": "/assets/cesium/ThirdParty"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/cesium/Build/Cesium/Assets",
+                "output": "/assets/cesium/Assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/cesium/Build/Cesium/Widgets",
+                "output": "/assets/cesium/Widgets"
+              }
+            ],
             "styles": [
               "@angular/material/prebuilt-themes/pink-bluegrey.css",
               "node_modules/bootstrap/scss/bootstrap.scss",
@@ -60,8 +67,11 @@
               "src/styles.scss",
               "node_modules/@progress/kendo-theme-default/dist/all.css"
             ],
-            "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js","node_modules/cesium/Build/Cesium/Cesium.js"]
-            
+            "scripts": [
+              "node_modules/apexcharts/dist/apexcharts.min.js",
+              "node_modules/cesium/Build/Cesium/Cesium.js",
+              "node_modules/chart.js/dist/chart.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -122,26 +132,30 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets",{
-              "glob": "**/*",
-              "input": "node_modules/cesium/Build/Cesium/Workers",
-              "output": "/assets/cesium/Workers"
-            },
-            {
-              "glob": "**/*",
-              "input": "node_modules/cesium/Build/Cesium/ThirdParty",
-              "output": "/assets/cesium/ThirdParty"
-            },
-            {
-              "glob": "**/*",
-              "input": "node_modules/cesium/Build/Cesium/Assets",
-              "output": "/assets/cesium/Assets"
-            },
-            {
-              "glob": "**/*",
-              "input": "node_modules/cesium/Build/Cesium/Widgets",
-              "output": "/assets/cesium/Widgets"
-            }],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/cesium/Build/Cesium/Workers",
+                "output": "/assets/cesium/Workers"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/cesium/Build/Cesium/ThirdParty",
+                "output": "/assets/cesium/ThirdParty"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/cesium/Build/Cesium/Assets",
+                "output": "/assets/cesium/Assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/cesium/Build/Cesium/Widgets",
+                "output": "/assets/cesium/Widgets"
+              }
+            ],
             "styles": [
               "@angular/material/prebuilt-themes/pink-bluegrey.css",
               "src/styles.scss",
@@ -149,8 +163,10 @@
               "node_modules/@progress/kendo-theme-default/dist/all.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": ["node_modules/cesium/Build/Cesium/Cesium.js", 
-                        "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
+            "scripts": [
+              "node_modules/cesium/Build/Cesium/Cesium.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           }
         }
       }

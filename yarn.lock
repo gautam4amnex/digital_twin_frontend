@@ -161,7 +161,7 @@
     "symbol-observable" "4.0.0"
     "yargs" "17.7.2"
 
-"@angular/common@^17.0.0", "@angular/common@^17.0.0 || ^18.0.0", "@angular/common@^17.1.0", "@angular/common@>= 10.0.0", "@angular/common@>=13.0.0", "@angular/common@>=16.0.0", "@angular/common@13 - 17", "@angular/common@17.1.2":
+"@angular/common@^17.0.0", "@angular/common@^17.0.0 || ^18.0.0", "@angular/common@^17.1.0", "@angular/common@>= 10.0.0", "@angular/common@>=13.0.0", "@angular/common@>=16.0.0", "@angular/common@>=16.0.0-0", "@angular/common@13 - 17", "@angular/common@17.1.2":
   "integrity" "sha512-y/wD+zuPaPgK3dB80Q63qBtuu5TuryKuUgjWrOmrguBWV9oiJRhKQrcp1gVw9vVrowmbDBKGtPMS622Q4oxOWQ=="
   "resolved" "https://registry.npmjs.org/@angular/common/-/common-17.1.2.tgz"
   "version" "17.1.2"
@@ -189,7 +189,7 @@
   dependencies:
     "tslib" "^2.3.0"
 
-"@angular/core@^17.0.0", "@angular/core@^17.0.0 || ^18.0.0", "@angular/core@^17.1.0", "@angular/core@>= 10.0.0", "@angular/core@>=13.0.0", "@angular/core@>=16.0.0", "@angular/core@13 - 17", "@angular/core@17.1.2":
+"@angular/core@^17.0.0", "@angular/core@^17.0.0 || ^18.0.0", "@angular/core@^17.1.0", "@angular/core@>= 10.0.0", "@angular/core@>=13.0.0", "@angular/core@>=16.0.0", "@angular/core@>=16.0.0-0", "@angular/core@13 - 17", "@angular/core@17.1.2":
   "integrity" "sha512-0M787BZVgYSVogHCUzo/dFrT56TgfQoEsOQngHMpyERJZv6dycXZlRdHc6TzvHUa+Uu/MNjn/RclBR8063bdWA=="
   "resolved" "https://registry.npmjs.org/@angular/core/-/core-17.1.2.tgz"
   "version" "17.1.2"
@@ -274,7 +274,7 @@
   dependencies:
     "tslib" "^2.3.0"
 
-"@angular/platform-browser@^17.0.0 || ^18.0.0", "@angular/platform-browser@^17.1.0", "@angular/platform-browser@13 - 17", "@angular/platform-browser@17.1.2":
+"@angular/platform-browser@^17.0.0 || ^18.0.0", "@angular/platform-browser@^17.1.0", "@angular/platform-browser@>=16.0.0-0", "@angular/platform-browser@13 - 17", "@angular/platform-browser@17.1.2":
   "integrity" "sha512-unfpA5OLnqDmDb/oAQR2t2iROpOg02qwZayxyFg4MUZdDdnghPCfX77L2sr6oVVa7OJfKYFlmwmBXX1H3zjcXA=="
   "resolved" "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-17.1.2.tgz"
   "version" "17.1.2"
@@ -1321,6 +1321,11 @@
   "integrity" "sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA=="
   "resolved" "https://registry.npmjs.org/@fastify/busboy/-/busboy-2.1.0.tgz"
   "version" "2.1.0"
+
+"@fortawesome/fontawesome-free@^6.0.0":
+  "integrity" "sha512-hRILoInAx8GNT5IMkrtIt9blOdrqHOnPBH+k70aWUAqPZPgopb9G5EQJFpaBx/S8zp2fC+mPW349Bziuk1o28Q=="
+  "resolved" "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-6.5.2.tgz"
+  "version" "6.5.2"
 
 "@isaacs/cliui@^8.0.2":
   "integrity" "sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA=="
@@ -4838,6 +4843,11 @@
   "resolved" "https://registry.npmjs.org/chardet/-/chardet-0.7.0.tgz"
   "version" "0.7.0"
 
+"chart.js@^3.1.1":
+  "integrity" "sha512-Ro2JbLmvg83gXF5F4sniaQ+lTbSv18E+TIf2cOeiH1Iqd2PGFOtem+DUufMZsCJwFE7ywPOpfXFBwRTGq7dh6w=="
+  "resolved" "https://registry.npmjs.org/chart.js/-/chart.js-3.9.1.tgz"
+  "version" "3.9.1"
+
 "chokidar@^3.0.0", "chokidar@^3.5.1", "chokidar@^3.5.2", "chokidar@^3.5.3", "chokidar@>=3.0.0 <4.0.0":
   "integrity" "sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw=="
   "resolved" "https://registry.npmjs.org/chokidar/-/chokidar-3.5.3.tgz"
@@ -7294,6 +7304,13 @@
   "version" "13.0.3"
   dependencies:
     "tslib" "^2.3.1"
+
+"ngx-toastr@^18.0.0":
+  "integrity" "sha512-jZ3rOG6kygl8ittY8OltIMSo47P1VStuS01igm3MZXK6InJwHVvxU7wDHI/HGMlXSyNvWncyOuFHnnMEAifsew=="
+  "resolved" "https://registry.npmjs.org/ngx-toastr/-/ngx-toastr-18.0.0.tgz"
+  "version" "18.0.0"
+  dependencies:
+    "tslib" "^2.3.0"
 
 "node-forge@^1":
   "integrity" "sha512-dPEtOeMvF9VMcYV/1Wb8CPoVAXtp6MKMlcbAt4ddqmGqUJ6fQZFXkNZNkNlfevtNkGtaSoXf/vNNNSvgrdXwtA=="

@@ -85,7 +85,7 @@ export class CommonsService extends BehaviorSubject<any[]> {
   }
 
   public crudBimData(jsonData){
-    return this.http.post( "http://localhost:8085/crud_bim_data", jsonData);
+    return this.http.post( "https://apagri.infinium.management/midcgis/layer/crud_cctv_location", jsonData);
   }
 
 }
