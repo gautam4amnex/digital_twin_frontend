@@ -58,7 +58,8 @@
               "node_modules/bootstrap/scss/bootstrap.scss",
               "node_modules/cesium/Build/Cesium/Widgets/widgets.css",
               "src/styles.scss",
-              "node_modules/@progress/kendo-theme-default/dist/all.css" // KENDO DEFAULT THEME
+              "node_modules/@progress/kendo-theme-default/dist/all.css", // KENDO DEFAULT THEME
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js","node_modules/cesium/Build/Cesium/Cesium.js"]
             

@@ -2,9 +2,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-
+import { ToastrModule } from 'ngx-toastr'; // Import ToastrModule
 
 // project import
 import { AppComponent } from './app.component';
@@ -29,7 +29,7 @@ import { ToggleFullScreenDirective } from './theme/shared/components/full-screen
 import { AuthorizationCheckService } from './services/authorization-check.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
-import { GridEditFormComponent } from './demo/surveydetail/edit-form.component';
+import { GridEditFormComponent } from './demo/role-management/edit-form.component';
 
 @NgModule({
   declarations: [
@@ -57,10 +57,13 @@ import { GridEditFormComponent } from './demo/surveydetail/edit-form.component';
     ReactiveFormsModule,
     SharedModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
-    NavigationItem,AuthorizationCheckService
+    NavigationItem,AuthorizationCheckService,
+   
   ],
   bootstrap: [AppComponent],
 })
