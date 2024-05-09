@@ -8,6 +8,7 @@ import * as CryptoJS from 'crypto-js';
 import { NgIf } from '@angular/common';
 import { data } from 'jquery';
 import * as glob from '../../../../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-auth-signin',
@@ -20,7 +21,7 @@ import * as glob from '../../../../../environments/environment';
 export default class AuthSigninComponent implements OnInit {
 
   constructor(public fb: FormBuilder,private authorizationCheckService:AuthorizationCheckService, 
-    private userservice: UserService, private _router: Router) {
+    private userservice: UserService, private _router: Router, private toastr: ToastrService) {
   }
 
   user: User = new User();
@@ -49,10 +50,16 @@ export default class AuthSigninComponent implements OnInit {
   });
 
   refreshCaptcha(){
-    
+    var captcha_img = document.getElementById("captcha_img");
+    captcha_img.setAttribute("src" , this.baseUrl1 + "getcaptcha");
   }
 
   verifyCaptcha(){
+
+    if(this.loginForm.controls.captcha.value == ""){
+      this.toastr.info('Please Enter Captcha');
+      return;
+    }
 
     var form_data = {
       flag: "fetch"
@@ -63,10 +70,11 @@ export default class AuthSigninComponent implements OnInit {
       
       if(data.responseCode == 200){
         if(data.data[0].captcha == this.loginForm.controls.captcha.value){
+          this.toastr.success('Login Success');
           this.loginUser("");
         }
         else{
-          alert("captcha Failed");
+          this.toastr.error('Invalid Captcha');
         }
       }
 

@@ -30,6 +30,7 @@ import { AuthorizationCheckService } from './services/authorization-check.servic
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
 import { GridEditFormComponent } from './demo/surveydetail/edit-form.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { GridEditFormComponent } from './demo/surveydetail/edit-form.component';
     ReactiveFormsModule,
     SharedModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     NavigationItem,AuthorizationCheckService

@@ -519,7 +519,7 @@ export default class _2D {
   }
 
   addPopupOverlay(content: string, coordinate: any): void {
-
+    
     const popupElement = document.createElement('div');
     popupElement.id = 'ol-popup';
     popupElement.innerHTML = content;
