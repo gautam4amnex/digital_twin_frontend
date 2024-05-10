@@ -53,7 +53,6 @@ export default class RoleManagementComponent implements OnInit {
   modulesArray: any[] = []; // Array to store roles
   isLoading: boolean = true;
   webPermissionsArray: FormArray;
-  //form--------------------------------------
   roleForm: FormGroup;
   public btnName: any;
   public btnSubmit: any;
@@ -62,7 +61,7 @@ export default class RoleManagementComponent implements OnInit {
   isAdd: boolean = false;
 
   public editDialog: any = false;
-  SurveyDetailsForm: FormGroup;
+
 
   constructor(private commonService: CommonsService, private fb: FormBuilder, private toastr: ToastrService) { }
 
@@ -78,16 +77,14 @@ export default class RoleManagementComponent implements OnInit {
    
     this.loadGridData();
     this.loadModules();
-   
-   
-    // this.AddCheckboxes();
   }
 
-  loadGridData() {
-    this.commonService.getAllRoles().subscribe((data: any) => {
+  loadGridData() 
+  { const jsondata={"flag": "fetch"}
+    this.commonService.roleCrudManagement(jsondata).subscribe((data: any) => {
       this.isLoading = true;
       // Set loading to true before API call
-      if (data.responseCode === 200) {
+      if (data) {
         this.featureData = data.data;
         this.isLoading = false; // Set loading to true before API call
        
@@ -115,29 +112,21 @@ export default class RoleManagementComponent implements OnInit {
       this.initializeForm();
     });
   }
-  
-  // AddCheckboxes(){
-  //   const selectedModules = this.editData.web_permissions;
-  //   for(let item of selectedModules){
-  //     if(item){
-  //       this.roleForm.patchValue({
-  //         module_id:this.editData.web_permissions.module_id,
-  //         module_name:this.editData.web_permissions.module_name,
-  //         checked:
-  //       })
-  //     }
-  //   }
-  // }
+ 
   initializeForm() {
     this.roleForm = new FormGroup({
       role_id: new FormControl('', [Validators.required]),
       role_name: new FormControl('', [Validators.required]),
       role_desc: new FormControl('', [Validators.required]),
-      status: new FormControl('false', [Validators.required]),
+      status: new FormControl('false'),
       web_permissions: this.fb.array([])
 
     });
-
+    // , this.atLeastOneCheckedValidator
+    // atLeastOneCheckedValidator(formArr: FormArray) {
+    //   const atLeastOneChecked = formArr.controls.some(control => control.get('checked').value);
+    //   return atLeastOneChecked ? null : { atLeastOneChecked: true };
+    // }
     // Dynamically create form controls for web_permissions
     const webPermissionsArray = this.roleForm.get('web_permissions') as FormArray;
     console.log(this.modulesArray)
@@ -145,7 +134,7 @@ export default class RoleManagementComponent implements OnInit {
       const moduleFormGroup = this.fb.group({
         module_id: module.module_id,
         module_name: module.module_name,
-        checked: false });
+        checked: false, });
       webPermissionsArray.push(moduleFormGroup);
     });
 
@@ -195,7 +184,7 @@ export default class RoleManagementComponent implements OnInit {
           console.log("Fetched edit data:", selectedModules);
           this.roleForm.patchValue({
             role_id: this.editData.role_id,
-            role_name: this.editData.role_nmae,
+            role_name: this.editData.role_name,
             role_desc: this.editData.description,
             status: this.editData.status,
             
@@ -249,59 +238,64 @@ export default class RoleManagementComponent implements OnInit {
 
   onSubmit() {
     const formValue = this.roleForm.value;
-  const checkedModules = formValue.web_permissions.filter((module: any) => module.checked);
+    const checkedModules = formValue.web_permissions.filter((module: any) => module.checked);
+    
+    // Extract module_id and module_name from checkedModules
+    const checkedModulesData = checkedModules.map((module: any) => {
+      return {
+        module_id: module.module_id,
+       
+      };
+    });
   
-  // Extract module_id and module_name from checkedModules
-  const checkedModulesData = checkedModules.map((module: any) => {
-    return {
-      module_id: module.module_id,
+    // Create the JSON structure
+    const jsonData = {
      
+      role_id:formValue.role_id,
+      role_name: formValue.role_name,
+      description: formValue.role_desc,
+      status: formValue.status,
+      assign_permission: checkedModulesData
     };
-  });
-
-  // Create the JSON structure
-  const jsonData = {
-    role_id:formValue.role_id,
-    role_name: formValue.role_name,
-    role_desc: formValue.role_desc,
-    status: formValue.status,
-    web_permissions: checkedModulesData
-  };
-
-  // Log or use the JSON data as required
-  console.log('JSON Data:', jsonData);
-
-    if (this.isAdd) {
-     
-      delete jsonData.role_id;
-      this.commonService.roleCrudManagement(jsonData).subscribe((data: any) => {
-        if (data.responseCode === 200) {
-          this.loadGridData(); // Reload data after adding user
-          this.toastr.success("user added successfully");
-          this.editDialog = false;
-        } else {
-          this.toastr.error('Something Happened Wrong.');
-        }
-      });
-
-      debugger;
-      console.log(this.roleForm.controls['User Management']);
-    } else {
-      this.commonService.roleCrudManagement(jsonData).subscribe((data: any) => {
-        if (data.responseCode === 200) {
-          this.loadGridData(); // Reload data after adding user
-          this.toastr.success("user updated successfully");
-          this.editDialog = false;
-        } else {
-          this.toastr.error('Something Happened Wrong.');
-        }
-      });
-    }
+  
+    // Log or use the JSON data as required
+    console.log('JSON Data:', jsonData);
+  
+      if (this.isAdd) {
+       jsonData['flag']='insert';
+        delete jsonData.role_id;
+        this.commonService.roleCrudManagement(jsonData).subscribe((data: any) => {
+          if (data) {
+            this.loadGridData(); // Reload data after adding user
+            this.toastr.success("user added successfully");
+            this.editDialog = false;
+          } else {
+            this.toastr.error('Something Happened Wrong.');
+          }
+        });
+  
+      } else {
+        jsonData['flag']='update';
+        this.commonService.roleCrudManagement(jsonData).subscribe((data: any) => {
+          if (data) {
+            this.loadGridData(); // Reload data after adding user
+            this.toastr.success("user updated successfully");
+            this.editDialog = false;
+          } else {
+            this.toastr.error('Something Happened Wrong.');
+          }
+        });
+      }
   }
+ 
+
+   
+    
+ 
 
   delete(id: any) {
-    const jsondata={"role_id": id}
-    this.commonService.deleteRole(jsondata).subscribe((data: any) => {
+    const jsondata={"role_id": id,"flag":"delete"}
+    this.commonService.roleCrudManagement(jsondata).subscribe((data: any) => {
       if (data.responseCode === 200) {
         this.toastr.success("user deleted successfully");
         this.loadGridData();
@@ -325,7 +319,12 @@ export default class RoleManagementComponent implements OnInit {
       component1.save(workbooks[0]);
     });
   }
-
+  atLeastOneCheckedValidator(): Validators {
+    return (control: FormArray) => {
+      const checkedCount = control.controls.filter(control => control.get('checked').value).length;
+      return checkedCount > 0 ? null : { required: true };
+    };
+  }
 
 }
 // console.log(this.roleForm.value);

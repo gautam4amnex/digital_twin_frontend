@@ -1,6 +1,232 @@
-<!-- <div appCesium></div>  -->
-
 <div id="cesiumContainer"></div>
+<button type="button" (click)="openLayerDetailDialog()">GET CCTV</button>
+
+<kendo-dialog class="custom-dialog handler-dialog" title="Layer Details" *ngIf="layerDetailDialog" [height]="700" [minWidth]="250" [width]="1024" (close)="closeLayerDetailDialog()">
+
+<form [formGroup]="reactiveForm">
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Name:</label>
+      <input type="text" id="name" name="name" formControlName="layer_name" placeholder="Your name" required minlength="1" maxlength="250" class="form-control form-control-sm" [class.is-invalid]="f.layer_name.invalid && (f.layer_name.dirty || f.layer_name.touched)">
+      <div *ngIf="f.layer_name.invalid && (f.layer_name.dirty || f.layer_name.touched)" class="invalid-feedback">
+        <div *ngIf="f.layer_name.errors?.['required']">
+          This field is required.
+        </div>
+        <div *ngIf="f.layer_name.errors?.['minlength']">
+          This field must have at least 1 character.
+        </div>
+        <div *ngIf="f.layer_name.errors?.['maxlength']">
+          This field must have at most 250 characters.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Table Name:</label>
+      <input class="form-control" formControlName="table_name" type="text" value="" required placeholder="Enter Table Name" [class.is-invalid]="f.table_name.invalid && (f.table_name.dirty || f.table_name.touched)">
+      <div *ngIf="f.table_name.invalid && (f.table_name.dirty || f.table_name.touched)" class="invalid-feedback">
+        <div *ngIf="f.table_name.errors?.['required']">
+          This field is required.
+        </div>
+        <div *ngIf="f.table_name.errors?.['minlength']">
+          This field must have at least 1 character.
+        </div>
+        <div *ngIf="f.table_name.errors?.['maxlength']">
+          This field must have at most 250 characters.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Layer Id:</label>
+      <input class="form-control" formControlName="layer_id" type="text" value="" required placeholder="Enter Layer Id" [class.is-invalid]="f.layer_id.invalid && (f.layer_id.dirty || f.layer_id.touched)">
+      <div *ngIf="f.layer_id.invalid && (f.layer_id.dirty || f.layer_id.touched)" class="invalid-feedback">
+        <div *ngIf="f.layer_id.errors?.['required']">
+          This field is required.
+        </div>
+        <div *ngIf="f.layer_id.errors?.['minlength']">
+          This field must have at least 1 character.
+        </div>
+        <div *ngIf="f.layer_id.errors?.['maxlength']">
+          This field must have at most 250 characters.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Layer Type:</label>
+      <select class="form-control" formControlName="layer_type" required [class.is-invalid]="f.layer_type.invalid && (f.layer_type.dirty || f.layer_type.touched)">
+        <option value="">Select</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>      
+      <div *ngIf="f.layer_type.invalid && (f.layer_type.dirty || f.layer_type.touched)" class="invalid-feedback">
+        <div *ngIf="f.layer_type.errors?.['required']">
+          This field is required.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Parent Layer Type:</label>
+      <select class="form-control" formControlName="parent_layer" required [class.is-invalid]="f.parent_layer.invalid && (f.parent_layer.dirty || f.parent_layer.touched)">
+        <option value="">Select</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>      
+      <div *ngIf="f.parent_layer.invalid && (f.parent_layer.dirty || f.parent_layer.touched)" class="invalid-feedback">
+        <div *ngIf="f.parent_layer.errors?.['required']">
+          This field is required.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Service Url:</label>
+      <input class="form-control" formControlName="service_url" type="text" value="" required placeholder="Enter Layer Id" [class.is-invalid]="f.service_url.invalid && (f.service_url.dirty || f.service_url.touched)">
+      <div *ngIf="f.service_url.invalid && (f.service_url.dirty || f.service_url.touched)" class="invalid-feedback">
+        <div *ngIf="f.service_url.errors?.['required']">
+          This field is required.
+        </div>
+        <div *ngIf="f.service_url.errors?.['minlength']">
+          This field must have at least 1 character.
+        </div>
+        <div *ngIf="f.service_url.errors?.['maxlength']">
+          This field must have at most 250 characters.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Geometry Type:</label>
+      <select class="form-control" formControlName="geometry_type" required [class.is-invalid]="f.geometry_type.invalid && (f.geometry_type.dirty || f.geometry_type.touched)">
+        <option value="">Select</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>      
+      <div *ngIf="f.geometry_type.invalid && (f.geometry_type.dirty || f.geometry_type.touched)" class="invalid-feedback">
+        <div *ngIf="f.geometry_type.errors?.['required']">
+          This field is required.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Scale Start:</label>
+      <input pattern="[0-9]*" class="form-control" formControlName="scale_start" type="text" value="" required placeholder="Enter Layer Id" [class.is-invalid]="f.scale_start.invalid && (f.scale_start.dirty || f.scale_start.touched)">
+      <div *ngIf="f.scale_start.invalid && (f.scale_start.dirty || f.scale_start.touched)" class="invalid-feedback">
+        <div *ngIf="f.scale_start.errors?.['required']">
+          This field is required.
+        </div>
+        <div *ngIf="f.scale_start.errors?.['pattern']">
+          This field must be a number.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Scale End:</label>
+      <input pattern="[0-9]*" class="form-control" formControlName="scale_end" type="text" value="" required placeholder="Enter Layer Id" [class.is-invalid]="f.scale_end.invalid && (f.scale_end.dirty || f.scale_end.touched)">
+      <div *ngIf="f.scale_end.invalid && (f.scale_end.dirty || f.scale_end.touched)" class="invalid-feedback">
+        <div *ngIf="f.scale_end.errors?.['required']">
+          This field is required.
+        </div>
+        <div *ngIf="f.scale_end.errors?.['pattern']">
+          This field must be a number.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mb-2">        
+      <label class="form-check-label">
+        Status:
+      </label>    
+      <input class="form-check-input" formControlName="status" type="checkbox" id="status">
+    </div>
+
+    <div class="col mb-2">        
+      <label class="form-check-label">
+        WMS:
+      </label>    
+      <input class="form-check-input" formControlName="wms" type="checkbox"  id="wms">
+    </div>
+
+    <div class="col mb-2">        
+      <label class="form-check-label">
+        Info Click:
+      </label>    
+      <input class="form-check-input" formControlName="info_click" type="checkbox" id="info_click">
+    </div>
+
+    <div class="col mb-2">        
+      <label class="form-check-label">
+        First Time Load:
+      </label>    
+      <input class="form-check-input" formControlName="first_time" type="checkbox" id="first_time">
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Z - Index:</label>
+      <input pattern="[0-9]*" class="form-control" formControlName="z_index" type="text" value="" required placeholder="Enter Layer Id" [class.is-invalid]="f.z_index.invalid && (f.z_index.dirty || f.z_index.touched)">
+      <div *ngIf="f.z_index.invalid && (f.z_index.dirty || f.z_index.touched)" class="invalid-feedback">
+        <div *ngIf="f.z_index.errors?.['required']">
+          This field is required.
+        </div>
+        <div *ngIf="f.z_index.errors?.['pattern']">
+          This field must be a number.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col mb-2 d-grid">
+      <button type="button" class="btn btn-sm btn-primary" (click)="validate()">Submit</button>
+    </div>
+  </div>
+</form>
+
+</kendo-dialog>
+
+<kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="editDialog" [minWidth]="250" [width]="1024" (close)="closeEditDialog()">
+  <form [formGroup]="DataFormDetail">
+  <label>Asset Id: </label><br>
+  <input formControlName="cctv_asset_id" type="text" value="" placeholder="Enter Asset Id"><br><br>
+  <label>Location Name: </label><br>
+  <input formControlName="location_name" type="text" value="" placeholder="Enter Location"><br>
+  <label>Junction Type: </label><br>
+  <input formControlName="junction_type" type="text" value="" placeholder="Enter Junction Type"><br>
+  <label>Police Sytation Name: </label><br>
+  <input formControlName="pstation_name" type="text" value="" placeholder="Enter PoliceStation"><br>
+    <button (click)="add_bim_data_to_db($event)" type="button">Submit</button>
+  </form>
+</kendo-dialog>
+
+<!-- <kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="selectFeatureDialog" [minWidth]="250" [width]="1024" (close)="closeFeatureDialog()">
+  <h4>Select Feature</h4>
+</kendo-dialog> -->
+
+ <!-- <button type="button" (click)="openEditDialog()">OPEN</button> -->
+<button type="button" (click)="getBimData()">GET</button>
 <div class="SubCursorBar">
   <div class="content">
     <div class="DisabledContent" is-disabled="false">
@@ -15,6 +241,23 @@
           <mat-button-toggle (click)="measurementType($event)" title="Measure polyline"><mat-icon>timeline</mat-icon></mat-button-toggle>
           <mat-button-toggle title="Measure polygon" (click)="measurementType($event)"><i class="fas fa-draw-polygon fa-2x"></i></mat-button-toggle>
             <mat-button-toggle title="info" (click)="featureInfo()"><mat-icon>info</mat-icon></mat-button-toggle>
+            <mat-button-toggle title="Take Screenshot" (click)="takeSS()"><i class="fas fa-camera-retro fa-2x"></i></mat-button-toggle>
+            <mat-button-toggle title="3d Data Info" (click)="infoOf3DData()" ><i class="fas fa-question-circle fa-2x"></i></mat-button-toggle>
+            <mat-button-toggle (click)="clearAllMeasurementData()" title="Erase"><i class="fas fa-eraser fa-2x"></i></mat-button-toggle>
+            <mat-button-toggle  [matMenuTriggerFor]="menu" title="Add"><i class="fas fa-plus fa-2x"></i></mat-button-toggle>
+            <mat-menu #menu="matMenu">
+              <form [formGroup]="bimDataForm">
+                <mat-form-field>                  
+                  <select formControlName="feature_name" #feature (click)="add_bim_data($event)" matNativeControl required>
+                    <option value="">Select</option>
+                    <option value="car">Car</option>
+                    <option value="street_light">Street Light</option>
+                    <option value="cctv">CCTV</option>
+                    <option value="smart_pole">Smart Pole</option>
+                  </select>
+                </mat-form-field>
+              </form>
+            </mat-menu>
             <!-- <mat-button-toggle title="Download Image" ><i class="fas fa-camera fa-2x"></i></mat-button-toggle> -->
         </mat-button-toggle-group>
       </div>
@@ -39,6 +282,18 @@
     }
   </tbody>
 </table>
+
+<!-- <table id="property_tbl" class="table table-striped" style="display: block;">
+  <tbody>
+    @for (property of gridInfoKeys; track gridInfoKeys; let i = $index) {
+    <tr>
+      <th scope="row">{{ [gridInfoKeys [i] ] }}</th>
+      <td>{{ gridarr[property] }}</td>      
+    </tr>
+    }
+  </tbody>
+</table> -->
+
 <button type="button" class="cesium-button">
   <label>
     <input type="checkbox" id="per_selection" (click)="per_selection()">Per-feature selection </label>
@@ -52,8 +307,13 @@
   </mat-select>
 </mat-form-field> -->
 
-
-<mat-form-field>
+<mat-slide-toggle (change)="changeBaseLayer()" id="slider" color="#76ee59"> 
+  {{galleryImg}} 
+</mat-slide-toggle>
+<button (click)="rotateEntity(modelEntity, -5);">Rotate Left</button>
+<button (click)="rotateEntity(modelEntity, 5);">Rotate Right</button>
+<button (click)="getFeature()">Done</button>
+<!-- <mat-form-field class="dd_state">
   <mat-label>Select State Name</mat-label>
   <mat-select (selectionChange)="get_layer_by_state_id($event)">
 
@@ -64,9 +324,10 @@
 
 
   </mat-select>
-</mat-form-field>
+</mat-form-field> -->
 
-<button type="button" (click)="togglePanel()">Layer</button>
+<!-- <button type="button" (click)="togglePanel()">Layer</button> -->
+
 <div class="row closed-panel" [@widthGrow]="state">
   <div class="col-sm-12">
 
@@ -141,3 +402,4 @@
 
   </div>
 </div>
+

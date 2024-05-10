@@ -31,6 +31,21 @@
 //   color: #ffffff;
 // }
 
+#slider{
+  position: relative;
+  bottom: 818px;
+  right: 163px;
+}
+
+
+.mat-slide-toggle:checked{
+
+  background-color: green;
+
+}
+
+
+
 .mat-button-toggle:hover {
   background-color: transparent;
   color: #1dd9cd !important;    
@@ -43,7 +58,7 @@
 
 
 .cesium-button{
-  top: -873px;
+  top: -853px;
   left: 8px;
   border-radius: 3px;
 }
@@ -52,6 +67,20 @@
   display: none;
 }
 
+#mat-mdc-slide-toggle-1-label {
+  color: black;
+  font-weight: 500;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: #76ee59 !important;
+}
+
+.dd_state{
+  position: relative;
+  bottom: 772px;
+  right: 287px;
+}
 .mdc-text-field--filled:not(.mdc-text-field--disabled) {
   background-color: #3f4d67 !important;
 }
@@ -62,6 +91,22 @@
     left: 10px;
 
 }
+
+#popupBox {
+  background-color: #333;
+  border: 1px solid #fff;
+  padding: 10px;
+  color: #fff;
+}
+
+.doc-title {
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 2rem 0;
+  margin: 5rem 0 2rem;
+  text-transform: uppercase;
+ }
 
 .SubCursorBar>.content {
   align-items: center;

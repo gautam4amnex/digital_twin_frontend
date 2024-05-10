@@ -8,7 +8,7 @@
     </div>
     <div class="card">
       <div class="card-body text-center">
-      <form [formGroup]="loginForm" #loginuser (ngSubmit)="loginUser(loginUser)">
+      <form [formGroup]="loginForm" #loginuser (ngSubmit)="verifyCaptcha()">
         
         <div class="mb-4">
           <i class="feather icon-unlock auth-icon"></i>
@@ -26,6 +26,14 @@
           <!-- <div class="alert alert-danger" *ngIf = "(password.touched) && (password.invalid)" style="margin-top: 5px;">
             <span *ngIf="password.errors.required">Password is Required</span>  
           </div> -->
+        </div>
+        <div class="input-group mb-4">
+          <input type="text" maxlength="20" formControlName="captcha" class="form-control" placeholder="Captcha" />
+          <!-- <div class="alert alert-danger" *ngIf = "(password.touched) && (password.invalid)" style="margin-top: 5px;">
+            <span *ngIf="password.errors.required">Password is Required</span>  
+          </div> -->
+          <img id="captcha_img" class="ms-2" name="captcha_image" alt="captcha" />
+            <img src = "../../../../../assets/images/captcha_icon.svg" class="ms-2" (click)="refreshCaptcha()" id="refresh_captcha" name="captcha_image" alt="captcha" />
         </div>
 
         <div class="form-group text-start mb-4">

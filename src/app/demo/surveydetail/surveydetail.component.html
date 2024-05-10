@@ -1,0 +1,121 @@
+<div class="row">
+
+  <kendo-grid [kendoGridBinding]="featureData" [style.height.%]="100" [pageSize]="10" filterable="menu" [skip]="0" [pageable]="true" [sortable]="true">
+
+    <ng-template kendoGridToolbarTemplate>
+      <div class="export-template">
+          <button type="button" kendoGridExcelCommand icon="file-excel" class="export-new excel" (click)="exportExcel(excelexport)">Export to Excel</button>
+      </div>
+    </ng-template>
+
+    <ng-container *ngFor="let data of grid_fields">
+        <kendo-grid-column field="{{data.fields}}" title="{{data.title}}" [hidden]="data.hide" [width]="250"></kendo-grid-column>
+    </ng-container>        
+    
+    <kendo-grid-column field="Action" title="Action" [width]="80" [sticky]="true" [columnMenu]="false">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div class="d-flex gap-2">
+          <button kendoButton size="small" class="d-flex align-items-center" size="small" rounded="small" fillMode="outline"
+            themeColor="base" (click)="openEditDialog(dataItem)">
+            Info
+          </button>
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+
+    <!-- <kendo-grid-command-column title="View">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton size="small" class="d-flex align-items-center" rounded="small" fillMode="outline" 
+                    themeColor="base" (click)="openEditDialog(dataItem)"><span class="k-i-edit k-i-pencil k-icon"></span>
+                  </button>
+      </ng-template>
+    </kendo-grid-command-column> -->
+  
+     <!-- Excel -->
+    <kendo-excelexport fileName="Reports.xlsx" [data]="featureData" #excelexport>
+      <ng-container *ngFor="let data of grid_fields">
+          <kendo-excelexport-column field="{{data.fields}}" title="{{data.title}}"></kendo-excelexport-column>
+      </ng-container>
+    </kendo-excelexport>
+
+  </kendo-grid>
+
+</div>
+
+
+<!-- Edit dialog -->
+<kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="editDialog" [minWidth]="250" [width]="1024" (close)="closeEditDialog()">
+  <form [formGroup]="SurveyDetailsForm">
+
+    
+    <div class="mx-0 p-0 row">
+
+
+      <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xl-6">
+        <div class="w-100 mb-2">
+          <div class="d-flex align-items-center w-100">
+            <label class="custom-lable"><strong>Layer Name</strong><span class="text-danger">*</span></label>
+            <!-- <kendo-textbox placeholder="Enter"  value="provisioningstatus" formControlName="provisioningstatus"></kendo-textbox> -->
+            <!-- <kendo-textbox placeholder="Enter"  value="layer_name" [disabled]="true" formControlName="layer_name"></kendo-textbox> -->
+            <input type="text" class="k-textbox custom-popup-text overflow-text" formControlName="layer_name" value="layer_name" />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xl-6">
+        <div class="w-100 mb-2">
+          <div class="d-flex align-items-center w-100">
+            <label class="custom-lable"><strong>Location Status</strong><span class="text-danger">*</span></label>
+            <!-- <kendo-textbox placeholder="Enter" value="provisioningactivity" [disabled]="true" formControlName="provisioningactivity"></kendo-textbox> -->
+            <input type="text" class="k-textbox custom-popup-text overflow-text" formControlName="location_status" value="location_status"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xl-6">
+        <div class="w-100 mb-2">
+          <div class="d-flex align-items-center w-100">
+            <label class="custom-lable"><strong>Ward No</strong><span class="text-danger">*</span></label>
+            <input type="text" class="k-textbox custom-popup-text overflow-text" formControlName="ward_no" value="ward_no" />
+            <!-- <kendo-textbox placeholder="Enter" value="provisioningactivity" [disabled]="true" formControlName="provisioningactivity"></kendo-textbox> -->
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xl-6">
+        <div class="w-100 mb-2">
+          <div class="d-flex align-items-center w-100">
+            <label class="custom-lable"><strong>Status</strong><span class="text-danger">*</span></label>
+            <input type="text" class="k-textbox custom-popup-text overflow-text" formControlName="status" value="status" />
+            <!-- <kendo-textbox placeholder="Enter" value="provisioningactivity" [disabled]="true" formControlName="provisioningactivity"></kendo-textbox> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xl-6">
+        <div class="w-100 mb-2">
+          <div class="d-flex align-items-center w-100">
+            <label class="custom-lable"><strong>Location Name</strong><span class="text-danger">*</span></label>
+            <input type="text" class="k-textbox custom-popup-text overflow-text" formControlName="location_name" value="location_name" />
+
+            <!-- <kendo-textbox placeholder="Enter" value="provisioningactivity" [disabled]="true" formControlName="provisioningactivity"></kendo-textbox> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xl-6">
+        <div class="w-100 mb-2">
+          <div class="d-flex align-items-center w-100">
+            <label class="custom-lable"><strong>Comment</strong><span class="text-danger">*</span></label>
+            <input type="text" class="k-textbox custom-popup-text overflow-text" formControlName="comment" value="comment" />
+
+            <!-- <kendo-textbox placeholder="Enter" value="provisioningactivity" [disabled]="true" formControlName="provisioningactivity"></kendo-textbox> -->
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </form>
+</kendo-dialog>

@@ -21,7 +21,7 @@
 
 @import "scss/custom";
 /* styles.css or styles.scss */
-@import "~bootstrap/dist/css/bootstrap.min.css";
+@import '~bootstrap/dist/css/bootstrap.min.css';
 
 
 
@@ -43,3 +43,4 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .ol-zoom-out{
     display: none !important;
 }
+

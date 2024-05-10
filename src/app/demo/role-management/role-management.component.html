@@ -1,9 +1,10 @@
-<div class="row justify-content-center flex" *ngIf="isLoading">
+<!-- <div class="row justify-content-center flex" *ngIf="isLoading">
   <div class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
-</div>
-<div class="row" *ngIf="!isLoading">
+</div> -->
+<!--  *ngIf="!isLoading" -->
+<div class="row">
 
   <kendo-grid [kendoGridBinding]="featureData" [data]="featureData" [style.height.%]="100" [pageSize]="10"
     filterable="menu" [skip]="0" [pageable]="true" [sortable]="true">
@@ -58,11 +59,10 @@
   </kendo-grid>
 </div>
 <!-- Edit dialog -->
-<kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="editDialog" [minWidth]="250" [width]="1024"
+<kendo-dialog class="custom-dialog handler-dialog" title={{btnName}} *ngIf="editDialog" [minWidth]="250" [width]="1024"
   (close)="closeEditDialog()">
   <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
-    <div class="cross-validation"
-      [class.cross-validation-error]="roleForm.errors?.['identityRevealed'] && (roleForm.touched || roleForm.dirty)">
+    <div>
 
       <div class="form-group">
         <label for="">Role Name</label>
@@ -90,10 +90,7 @@
           <option [value]="true">TRUE</option>
           <option [value]="false">FALSE</option>
         </select>
-        <div *ngIf="roleForm.get('status').invalid && (roleForm.get('status').dirty || roleForm.get('status').touched)"
-          class="alert alert-danger">
-          <div *ngIf="roleForm.get('status').errors['required']">Status is required</div>
-        </div>
+        
       </div>
 
       <div formGroupName="web_permissions">
@@ -105,15 +102,14 @@
             <input type="hidden" [formControlName]="'module_name'" [value]="permission.value.module_name">
           </div>
         </div>
-        <div *ngIf="roleForm.get('web_permissions').errors?.['required']" class="alert alert-danger">
-          At least one order must be selected
-        </div>
+         
+        
       </div>
-      <button [disabled]="roleForm.invalid" type="submit" class="btn btn-dark">{{btnSubmit}}</button>
+      <button  type="submit" class="btn btn-dark">{{btnSubmit}}</button>
       <button class="btn btn-dark" (click)="closeEditDialog()">close</button>
     </div>
-    <!-- {{this.roleForm.value|json}}
-    {{this.roleForm.valid|json}} -->
+    {{this.roleForm.value|json}}
+    {{this.roleForm.valid|json}}
   </form>
 </kendo-dialog>
 
