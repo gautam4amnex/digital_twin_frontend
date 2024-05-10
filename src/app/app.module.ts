@@ -29,7 +29,6 @@ import { ToggleFullScreenDirective } from './theme/shared/components/full-screen
 import { AuthorizationCheckService } from './services/authorization-check.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
-import { GridEditFormComponent } from './demo/role-management/edit-form.component';
 
 
 @NgModule({

@@ -163,7 +163,8 @@
               "src/styles.scss",
               "node_modules/cesium/Build/Cesium/Widgets/widgets.css",
               "node_modules/@progress/kendo-theme-default/dist/all.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "node_modules/cesium/Build/Cesium/Cesium.js",

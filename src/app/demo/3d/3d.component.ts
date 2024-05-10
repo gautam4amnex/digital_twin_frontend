@@ -16,7 +16,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import * as glob from '../../../environments/environment';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import html2canvas from 'html2canvas'; 
+import html2canvas from 'html2canvas';
 import { LabelModule } from '@progress/kendo-angular-label';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
@@ -24,9 +24,9 @@ import { TreeViewModule } from '@progress/kendo-angular-treeview';
 import { GridModule, ExcelModule, PDFModule } from '@progress/kendo-angular-grid';
 import { DialogModule } from '@progress/kendo-angular-dialog';
 import { WorkbookSheet, ExcelExportData } from '@progress/kendo-angular-excel-export';
-import { ReactiveFormsModule , FormGroup, FormControl , Validators  } from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
-import { MatMenuModule} from '@angular/material/menu';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 interface Food {
@@ -41,7 +41,7 @@ interface Food {
   templateUrl: './3d.component.html',
   styleUrls: ['./3d.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  imports: [LabelModule, DropDownsModule, TreeViewModule ,DialogModule , DateInputsModule,  RouterOutlet, CommonModule, MatInputModule, MatSelectModule, MatButtonToggleModule, MatIconModule ,MatSlideToggleModule , ReactiveFormsModule , MatButtonModule , MatMenuModule , MatFormFieldModule ],
+  imports: [LabelModule, DropDownsModule, TreeViewModule, DialogModule, DateInputsModule, RouterOutlet, CommonModule, MatInputModule, MatSelectModule, MatButtonToggleModule, MatIconModule, MatSlideToggleModule, ReactiveFormsModule, MatButtonModule, MatMenuModule, MatFormFieldModule],
   animations: [
     trigger('widthGrow', [
       state('closed', style({
@@ -96,41 +96,8 @@ export default class _3D implements OnInit {
   propertyDataInfohandler: any;
   propertyDataInfo_click = false;
 
-  gridarr:any [] = [];
+  gridarr: any[] = [];
   gridInfoKeys: any;
-
-  reactiveForm = new FormGroup({
-    layer_name: new FormControl('', [ Validators.required, Validators.minLength(1), Validators.maxLength(250) ]),
-    table_name: new FormControl('' , [ Validators.required, Validators.minLength(1), Validators.maxLength(250) ]),
-    layer_id: new FormControl('' , [ Validators.required, Validators.minLength(1), Validators.maxLength(250) ]),
-    layer_type: new FormControl('' , [ Validators.required ]),
-    parent_layer: new FormControl('' , [ Validators.required ]),
-    service_url: new FormControl('' , [ Validators.required, Validators.minLength(1), Validators.maxLength(1000) ]),
-    geometry_type: new FormControl('' , [Validators.required ]),
-    scale_start: new FormControl('' , [Validators.required ]),
-    scale_end: new FormControl('' , [Validators.required ]),
-    status: new FormControl(),
-    z_index: new FormControl(),
-    wms: new FormControl(),
-    info_click: new FormControl(),
-    first_time: new FormControl()
-  });
-
-  
-  public validate(): void {
-    if (this.reactiveForm.invalid) {    
-      for (const control of Object.keys(this.reactiveForm.controls)) {
-        this.reactiveForm.controls[control].markAsTouched();
-      }  
-      return;
-    }
-    else{
-      alert('Done');
-    }
-  }
-
-
-  get f() { return this.reactiveForm.controls; }
 
   silhouetteGreen: any = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
   silhouetteBlue: any = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
@@ -153,22 +120,119 @@ export default class _3D implements OnInit {
   latitude: any;
   longitude: any;
   bimDataForm: FormGroup;
-  DataFormDetail: FormGroup;  
+  DataFormDetail: FormGroup;
   show: boolean = false;
-  public editDialog:any = false;
+  public editDialog: any = false;
   public layerDetailDialog: any = false;
   feature_name: any;
   selectFeatureDialog: any = false;
 
   constructor(private http: HttpClient,
     private commonService: CommonsService,
-    ) { }
+  ) { }
 
-  foods: Food[] = [
-    { value: 'steak-0', viewValue: 'Steak' },
-    { value: 'pizza-1', viewValue: 'Pizza' },
-    { value: 'tacos-2', viewValue: 'Tacos' },
-  ];
+  ngOnInit() {
+
+    this.bimDataForm = new FormGroup({
+      feature_name: new FormControl()
+    });
+
+    this.DataFormDetail = new FormGroup({
+      cctv_asset_id: new FormControl(),
+      location_name: new FormControl(),
+      junction_type: new FormControl(),
+      pstation_name: new FormControl()
+    })
+
+    this.initializeViewer();
+
+    this.get_layer_panel_data("3D", "");
+
+    var canvas = document.createElement('div');
+
+    this.handler = new Cesium.ScreenSpaceEventHandler(this.viewer.canvas);
+
+    this.LineMeasurementhandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
+
+    this.addBimDataHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
+
+    this.propertyDataInfohandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
+
+    this.silhouetteGreen.uniforms.color = Cesium.Color.LIME;
+    this.silhouetteGreen.uniforms.length = 0.01;
+    this.silhouetteGreen.selected = [];
+
+    this.silhouetteBlue.uniforms.color = Cesium.Color.BLUE;
+    this.silhouetteBlue.uniforms.length = 0.01;
+    this.silhouetteBlue.selected = [];
+
+
+    this.viewer.scene.postProcessStages.add(
+      Cesium.PostProcessStageLibrary.createSilhouetteStage([
+        this.silhouetteBlue,
+        this.silhouetteGreen,
+      ])
+    );
+
+    this.imageryLayers = this.viewer.imageryLayers;
+
+  }
+
+  reactiveForm = new FormGroup({
+    layer_name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(250)]),
+    table_name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(250)]),
+    layer_id: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(250)]),
+    layer_type: new FormControl('', [Validators.required]),
+    parent_layer: new FormControl('', [Validators.required]),
+    service_url: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(1000)]),
+    geometry_type: new FormControl('', [Validators.required]),
+    scale_start: new FormControl('', [Validators.required]),
+    scale_end: new FormControl('', [Validators.required]),
+    status: new FormControl(),
+    z_index: new FormControl(),
+    wms: new FormControl(),
+    info_click: new FormControl(),
+    first_time: new FormControl()
+  });
+
+
+  public validate(): void {
+    if (this.reactiveForm.invalid) {
+      for (const control of Object.keys(this.reactiveForm.controls)) {
+        this.reactiveForm.controls[control].markAsTouched();
+      }
+      return;
+    }
+    else {
+
+      var wmsElement = <HTMLInputElement>document.getElementById("wms");
+      var statusElement = <HTMLInputElement>document.getElementById("status");
+      var info_clickElement = <HTMLInputElement>document.getElementById("info_click");
+      var first_timeElement = <HTMLInputElement>document.getElementById("first_time");
+
+      var form_data = {
+        flag: "insert",
+        layer_name: this.reactiveForm.controls.layer_name.value,
+        table_name: this.reactiveForm.controls.table_name.value,
+        layer_id: this.reactiveForm.controls.layer_id.value,
+        layer_type: this.reactiveForm.controls.layer_type.value,
+        parent_layer: this.reactiveForm.controls.parent_layer.value,
+        service_url: this.reactiveForm.controls.service_url.value,
+        geometry_type: this.reactiveForm.controls.geometry_type.value,
+        scale_start: this.reactiveForm.controls.scale_start.value,
+        scale_end: this.reactiveForm.controls.scale_end.value,
+        wms: wmsElement.checked,
+        status: statusElement.checked,
+        is_info_click: info_clickElement.checked,
+        z_index: this.reactiveForm.controls.z_index.value,
+        is_first_time_load: first_timeElement.checked
+      }
+
+      this.commonService.crudLayerManagement(form_data).subscribe((data: any) => {
+        console.log(data);
+      });
+    }
+  }
 
   toggleCollapse(parentLayerId: number) {
     const collapseId = 'panelsStayOpen-collapse' + parentLayerId;
@@ -178,14 +242,11 @@ export default class _3D implements OnInit {
     }
   }
 
-  addLayerDetails(){
-    debugger;    
-// var element = <HTMLInputElement> document.getElementById("info_click");
-// var isChecked = element.checked;
-this.formSubmitted = true;
-if (this.reactiveForm.valid){
-  return;
-}
+  addLayerDetails() {
+    this.formSubmitted = true;
+    if (this.reactiveForm.valid) {
+      return;
+    }
   }
 
   public closeEditDialog() {
@@ -196,32 +257,33 @@ if (this.reactiveForm.valid){
     this.editDialog = true;
   }
 
-  public openLayerDetailDialog(){
-    //this.layerDetailDialog = true;
+  public openLayerDetailDialog() {
+    this.layerDetailDialog = true;
 
-    var form_data = {
-      flag: "fetch"
-    }
+    /** Below Commented Code is to get all 3d data from db and add 3d object to map */
+    // var form_data = {
+    //   flag: "fetch"
+    // }
 
-    this.commonService.crudBimData(form_data).subscribe((data: any) => {
-      this.bimdata = data.data;    
-      
-      for(var i=0; i< this.bimdata.length; i++){
-        this.add_data_on_click(this.bimdata[i].longitude , this.bimdata[i].latitude , "get" , this.bimdata[i] , "cctv");
-      }
+    // this.commonService.crudBimData(form_data).subscribe((data: any) => {
+    //   this.bimdata = data.data;    
 
-    });
+    //   for(var i=0; i< this.bimdata.length; i++){
+    //     this.add_data_on_click(this.bimdata[i].longitude , this.bimdata[i].latitude , "get" , this.bimdata[i] , "cctv");
+    //   }
+
+    // });
 
 
   }
 
-  public closeLayerDetailDialog(){
+  public closeLayerDetailDialog() {
     this.formSubmitted = false;
     this.reactiveForm.reset();
     this.layerDetailDialog = false;
   }
 
-  formDATTA : any={
+  formDATTA: any = {
     layer_name: "",
     table_name: "",
     parent_layer_id: "",
@@ -240,7 +302,6 @@ if (this.reactiveForm.valid){
   }
 
   showHideData(event) {
-    //console.log(event.target.getAttribute("mobile_service_url");;
     var service_url = event.target.getAttribute("service-url");
     var mobile_service_url = event.target.getAttribute("mobile_service_url")
     var is_combined_service = event.target.getAttribute("combined_service");
@@ -290,29 +351,15 @@ if (this.reactiveForm.valid){
   }
 
 
-
-  get_state_name() {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    this.commonService.getStateName().subscribe((data: any) => {
-      this.dropDownData = data;
-       // console.log(this.dropDownData);
-    });
-  }
-
   get_layer_panel_data(pageName, stateId) {
     this.data = [];
-    // var formData = {
-    //   "page_name": pageName,
-    //   "state_id": stateId
-    // }
-
     var formData = {
       flag: "fetch_all"
     }
 
     this.commonService.getLayerAndImagePanel(formData).subscribe((data: any) => {
       this.data = data.data;
-    //  console.log(this.data);
+
     });
 
 
@@ -321,7 +368,6 @@ if (this.reactiveForm.valid){
 
   async add_remove_3d_data_new(assest_id, flag) {
     if (flag) {
-      //var _3dTileSet = await Cesium.Cesium3DTileset.fromIonAssetId(asset_id); //2409626 //2411758
       var tileurl = "https://re-gis.mcgm.gov.in:9443/data/" + assest_id + "/tileset.json";
       var _3dTileSet = await Cesium.Cesium3DTileset.fromUrl(tileurl); //2409626 //2411758
       this.viewer.scene.primitives.add(_3dTileSet);
@@ -350,7 +396,6 @@ if (this.reactiveForm.valid){
   drawShape(positionData) {
     let shape;
     if (this.drawingMode === "polygon") {
-      debugger;
       shape = this.viewer.entities.add({
         polygon: {
           hierarchy: positionData,
@@ -363,7 +408,7 @@ if (this.reactiveForm.valid){
     return shape;
   }
 
-  clearAllMeasurementData(){
+  clearAllMeasurementData() {
     this.property_data = null;
     this.viewer.entities.removeAll();
     this.add_bim_data_click = false;
@@ -388,8 +433,6 @@ if (this.reactiveForm.valid){
   measurementType(event) {
 
     if (event.currentTarget.title == "Measure polyline") {
-      debugger;
-
 
       this.measureEnabled = !this.measureEnabled;
       this.goto_click = false;
@@ -442,24 +485,22 @@ if (this.reactiveForm.valid){
 
             var midpoint = Cesium.Cartesian3.lerp(this.points[i - 1], this.points[i], 0.5, new Cesium.Cartesian3());
 
-//            document.getElementById('ol-popup').setAttribute('style' , 'background-color: white;    border-radius: 10px;     border: 1px solid black;      padding: 5px 10px !important;')
-
             var entity = this.viewer.entities.add({
-              position : midpoint,
+              position: midpoint,
               // point : {
               //     pixelSize : 10,
               //     color : Cesium.Color.YELLOW
               // },
               label: {
-                     showBackground: true  ,
-                     text: totalDistance.toFixed(2) + ' meters',
-                     backgroundColor: Cesium.Color.BLACK,
-                     border: 1
-                                        
-              }
-          });
+                showBackground: true,
+                text: totalDistance.toFixed(2) + ' meters',
+                backgroundColor: Cesium.Color.BLACK,
+                border: 1
 
-          this.labelEntities.push(entity);
+              }
+            });
+
+            this.labelEntities.push(entity);
 
             // var labelEntity = this.viewer.entities.add({
             //   position: midpoint,
@@ -506,7 +547,7 @@ if (this.reactiveForm.valid){
             this.floatingPoint = this.createPoint(earthPosition);
             this.activeShapePoints.push(earthPosition);
             const dynamicPositions = new Cesium.CallbackProperty(() => {
-              if (this.drawingMode === "polygon") {                
+              if (this.drawingMode === "polygon") {
                 return new Cesium.PolygonHierarchy(this.activeShapePoints);
               }
               return this.activeShapePoints;
@@ -544,19 +585,19 @@ if (this.reactiveForm.valid){
           var cartesian = this.viewer.scene.pickPosition(event.position);
 
           var cartographic = Cesium.Cartographic.fromCartesian(cartesian);
-            var longitude = Cesium.Math.toDegrees(cartographic.longitude);
-            var latitude = Cesium.Math.toDegrees(cartographic.latitude);
+          var longitude = Cesium.Math.toDegrees(cartographic.longitude);
+          var latitude = Cesium.Math.toDegrees(cartographic.latitude);
 
-            var entity = this.viewer.entities.add({
-              position : cartesian,
-              label: {
-                      pixelSize: 1,
-                     showBackground: true  ,
-                     text: area.toFixed(2) + ' sq.m\^2',
-                     backgroundColor: Cesium.Color.BLACK,
-                     border: 1
-                                        
-              }
+          var entity = this.viewer.entities.add({
+            position: cartesian,
+            label: {
+              pixelSize: 1,
+              showBackground: true,
+              text: area.toFixed(2) + ' sq.m\^2',
+              backgroundColor: Cesium.Color.BLACK,
+              border: 1
+
+            }
           });
 
 
@@ -569,7 +610,7 @@ if (this.reactiveForm.valid){
 
   }
 
-  getFeature(){
+  getFeature() {
     this.selectFeatureDialog = false;
     this.editDialog = true;
   }
@@ -605,21 +646,21 @@ if (this.reactiveForm.valid){
           'lat ' + Cesium.Math.toDegrees(cartographic.latitude) + ', ' +
           'alt ' + cartographic.height);
 
-        this.add_data_on_click(Cesium.Math.toDegrees(cartographic.longitude), Cesium.Math.toDegrees(cartographic.latitude), "create" , "" , event.target.value);
+        this.add_data_on_click(Cesium.Math.toDegrees(cartographic.longitude), Cesium.Math.toDegrees(cartographic.latitude), "create", "", event.target.value);
       }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
   }
 
-  add_data_on_click(long , lat , type , response ,Featuretype){
-    if(type == "create"){
+  add_data_on_click(long, lat, type, response, Featuretype) {
+    if (type == "create") {
 
       this.latitude = lat;
       this.longitude = long;
 
       console.log("Lat = ", this.latitude);
 
-      if(Featuretype == "car"){
+      if (Featuretype == "car") {
 
         this.modelEntity = this.viewer.entities.add({
           name: "milktruck",
@@ -627,24 +668,24 @@ if (this.reactiveForm.valid){
           model: {
             uri:
               "../../../assets/3d_data/CesiumMilkTruck.glb",
-              minimumPixelSize: 30,
-             // maximumScale: 20000,
-              heightReference : Cesium.HeightReference.CLAMP_TO_GROUND
+            minimumPixelSize: 30,
+            // maximumScale: 20000,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
           },
-          
+
         });
 
         const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
           this.modelEntity.position.getValue(this.viewer.clock.currentTime),
           new Cesium.HeadingPitchRoll(0, 0, 0)
-      );
-    
-      this.modelEntity.orientation = initialOrientation;
+        );
+
+        this.modelEntity.orientation = initialOrientation;
 
         return;
 
       }
-      if(Featuretype == "street_light"){
+      if (Featuretype == "street_light") {
 
         this.modelEntity = this.viewer.entities.add({
           name: "milktruck",
@@ -652,24 +693,24 @@ if (this.reactiveForm.valid){
           model: {
             uri:
               "../../../assets/3d_data/dividerStreetLight.glb",
-              minimumPixelSize: 30,
-             // maximumScale: 20000,
-              heightReference : Cesium.HeightReference.CLAMP_TO_GROUND
+            minimumPixelSize: 30,
+            // maximumScale: 20000,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
           },
-          
+
         });
 
         const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
           this.modelEntity.position.getValue(this.viewer.clock.currentTime),
           new Cesium.HeadingPitchRoll(0, 0, 0)
-      );
-    
-      this.modelEntity.orientation = initialOrientation;
+        );
+
+        this.modelEntity.orientation = initialOrientation;
 
         return;
 
       }
-      if(Featuretype == "cctv"){
+      if (Featuretype == "cctv") {
 
         this.modelEntity = this.viewer.entities.add({
           name: "milktruck",
@@ -677,26 +718,26 @@ if (this.reactiveForm.valid){
           model: {
             uri:
               "../../../assets/3d_data/cctv.glb",
-              minimumPixelSize: 30,
-             // maximumScale: 20000,
-              heightReference : Cesium.HeightReference.CLAMP_TO_GROUND
+            minimumPixelSize: 30,
+            // maximumScale: 20000,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
           },
-          
-          
+
+
         });
 
         const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
           this.modelEntity.position.getValue(this.viewer.clock.currentTime),
           new Cesium.HeadingPitchRoll(0, 0, 0)
-      );
-    
-      this.modelEntity.orientation = initialOrientation;
+        );
+
+        this.modelEntity.orientation = initialOrientation;
 
         return;
 
       }
 
-      if(Featuretype == "smart_pole"){
+      if (Featuretype == "smart_pole") {
 
         this.modelEntity = this.viewer.entities.add({
           name: "milktruck",
@@ -704,147 +745,147 @@ if (this.reactiveForm.valid){
           model: {
             uri:
               "../../../assets/3d_data/smart_pole.glb",
-              minimumPixelSize: 30,
-             // maximumScale: 20000,
-              heightReference : Cesium.HeightReference.CLAMP_TO_GROUND
+            minimumPixelSize: 30,
+            // maximumScale: 20000,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
           },
-          
+
         });
 
         const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
           this.modelEntity.position.getValue(this.viewer.clock.currentTime),
           new Cesium.HeadingPitchRoll(0, 0, 0)
-      );
-    
-      this.modelEntity.orientation = initialOrientation;
+        );
+
+        this.modelEntity.orientation = initialOrientation;
 
         return;
 
       }
 
     }
-    else{
+    else {
 
-      if(Featuretype == "car"){      
-      
-      let modelEntity = this.viewer.entities.add({
-        name: "milktruck",
-        position: Cesium.Cartesian3.fromDegrees(long, lat),
-        model: {
-          uri:
-            "../../../assets/3d_data/CesiumMilkTruck.glb",
+      if (Featuretype == "car") {
+
+        let modelEntity = this.viewer.entities.add({
+          name: "milktruck",
+          position: Cesium.Cartesian3.fromDegrees(long, lat),
+          model: {
+            uri:
+              "../../../assets/3d_data/CesiumMilkTruck.glb",
             minimumPixelSize: 30,
-           // maximumScale: 20000,
-            heightReference : Cesium.HeightReference.CLAMP_TO_GROUND
-        },
-        
-      });
+            // maximumScale: 20000,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+          },
 
-      const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
-        modelEntity.position.getValue(this.viewer.clock.currentTime),
-        new Cesium.HeadingPitchRoll(0, 0, 0)
-    );
-  
-    modelEntity.orientation = initialOrientation;
+        });
 
-      if(response.orientation != null){
-        var result = JSON.parse(response.orientation);
+        const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
+          modelEntity.position.getValue(this.viewer.clock.currentTime),
+          new Cesium.HeadingPitchRoll(0, 0, 0)
+        );
 
-        modelEntity.orientation._value.w = result.w
-        modelEntity.orientation._value.x = result.x
-        modelEntity.orientation._value.y = result.y
-        modelEntity.orientation._value.z = result.z
+        modelEntity.orientation = initialOrientation;
+
+        if (response.orientation != null) {
+          var result = JSON.parse(response.orientation);
+
+          modelEntity.orientation._value.w = result.w
+          modelEntity.orientation._value.x = result.x
+          modelEntity.orientation._value.y = result.y
+          modelEntity.orientation._value.z = result.z
+        }
+
+        return;
+
       }
 
-      return;
+      if (Featuretype == "street_light") {
 
-    }
-
-    if(Featuretype == "street_light"){
-
-      let modelEntity = this.viewer.entities.add({
-        name: "milktruck",
-        position: Cesium.Cartesian3.fromDegrees(long, lat),
-        model: {
-          uri:
-            "../../../assets/3d_data/dividerStreetLight.glb",
+        let modelEntity = this.viewer.entities.add({
+          name: "milktruck",
+          position: Cesium.Cartesian3.fromDegrees(long, lat),
+          model: {
+            uri:
+              "../../../assets/3d_data/dividerStreetLight.glb",
             minimumPixelSize: 30,
-           // maximumScale: 20000,
-            heightReference : Cesium.HeightReference.CLAMP_TO_GROUND
-        },
-        
-      });
+            // maximumScale: 20000,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+          },
 
-      const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
-        modelEntity.position.getValue(this.viewer.clock.currentTime),
-        new Cesium.HeadingPitchRoll(0, 0, 0)
-    );
-  
-    modelEntity.orientation = initialOrientation;
+        });
 
-      if(response.orientation != null){
-        var result = JSON.parse(response.orientation);
+        const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
+          modelEntity.position.getValue(this.viewer.clock.currentTime),
+          new Cesium.HeadingPitchRoll(0, 0, 0)
+        );
 
-        modelEntity.orientation._value.w = result.w
-        modelEntity.orientation._value.x = result.x
-        modelEntity.orientation._value.y = result.y
-        modelEntity.orientation._value.z = result.z
+        modelEntity.orientation = initialOrientation;
+
+        if (response.orientation != null) {
+          var result = JSON.parse(response.orientation);
+
+          modelEntity.orientation._value.w = result.w
+          modelEntity.orientation._value.x = result.x
+          modelEntity.orientation._value.y = result.y
+          modelEntity.orientation._value.z = result.z
+        }
+
+        return;
+
+
       }
 
-      return;
+      if (Featuretype == "cctv") {
 
+        var propertyBag = new Cesium.PropertyBag();
+        propertyBag.addProperty('cctv_asset_id', response.cctv_asset_id);
+        propertyBag.addProperty('cctv_id', response.cctv_id);
+        propertyBag.addProperty('junction_type', response.junction_type);
+        propertyBag.addProperty('latitude', response.latitude);
+        propertyBag.addProperty('location_name', response.location_name);
+        propertyBag.addProperty('longitude', response.longitude);
+        propertyBag.addProperty('police_station_name', response.police_station_name);
 
-    }
+        console.log(response);
 
-    if(Featuretype == "cctv"){
-
-      var propertyBag = new Cesium.PropertyBag();
-      propertyBag.addProperty('cctv_asset_id', response.cctv_asset_id);
-      propertyBag.addProperty('cctv_id', response.cctv_id);
-      propertyBag.addProperty('junction_type', response.junction_type);
-      propertyBag.addProperty('latitude', response.latitude);
-      propertyBag.addProperty('location_name', response.location_name);
-      propertyBag.addProperty('longitude', response.longitude);
-      propertyBag.addProperty('police_station_name', response.police_station_name);
-
-      console.log(response);
-
-      let modelEntity = this.viewer.entities.add({
-        name: "milktruck",
-        position: Cesium.Cartesian3.fromDegrees(long, lat),
-        model: {
-          uri:
-            "../../../assets/3d_data/cctv.glb",
+        let modelEntity = this.viewer.entities.add({
+          name: "milktruck",
+          position: Cesium.Cartesian3.fromDegrees(long, lat),
+          model: {
+            uri:
+              "../../../assets/3d_data/cctv.glb",
             minimumPixelSize: 30,
-           // maximumScale: 20000,
-            heightReference : Cesium.HeightReference.CLAMP_TO_GROUND
-        },
-        properties: propertyBag
-        
-      });
+            // maximumScale: 20000,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+          },
+          properties: propertyBag
 
-      const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
-        modelEntity.position.getValue(this.viewer.clock.currentTime),
-        new Cesium.HeadingPitchRoll(0, 0, 0)
-    );
-  
-    modelEntity.orientation = initialOrientation;
+        });
 
-      if(response.orientation != null){
-        var result = JSON.parse(response.orientation);
+        const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
+          modelEntity.position.getValue(this.viewer.clock.currentTime),
+          new Cesium.HeadingPitchRoll(0, 0, 0)
+        );
 
-        modelEntity.orientation._value.w = result.w
-        modelEntity.orientation._value.x = result.x
-        modelEntity.orientation._value.y = result.y
-        modelEntity.orientation._value.z = result.z
+        modelEntity.orientation = initialOrientation;
+
+        if (response.orientation != null) {
+          var result = JSON.parse(response.orientation);
+
+          modelEntity.orientation._value.w = result.w
+          modelEntity.orientation._value.x = result.x
+          modelEntity.orientation._value.y = result.y
+          modelEntity.orientation._value.z = result.z
+        }
+
+        return;
+
+
       }
 
-      return;
 
-
-    }
-
-      
 
 
 
@@ -856,8 +897,8 @@ if (this.reactiveForm.valid){
 
     const angleRadians = Cesium.Math.toRadians(angleDegrees);
     const rotationQuat = Cesium.Quaternion.fromAxisAngle(
-        new Cesium.Cartesian3(0, 0, 1),
-        angleRadians
+      new Cesium.Cartesian3(0, 0, 1),
+      angleRadians
     );
     const currentOrientation = this.modelEntity.orientation.getValue(this.viewer.clock.currentTime);
     const newOrientation = Cesium.Quaternion.multiply(currentOrientation, rotationQuat, new Cesium.Quaternion());
@@ -865,10 +906,10 @@ if (this.reactiveForm.valid){
 
     console.log(this.modelEntity.orientation);
 
-}
+  }
 
-  add_bim_data_to_db($event){
-    
+  add_bim_data_to_db($event) {
+
     var form_data = {
 
       cctv_asset_id: this.DataFormDetail.controls['cctv_asset_id'].value,
@@ -883,40 +924,39 @@ if (this.reactiveForm.valid){
     }
 
     this.latitude = null;
-    this.longitude = null; 
-    
+    this.longitude = null;
+
     console.log(form_data);
 
     this.commonService.crudBimData(form_data).subscribe((data: any) => {
-      this.bimdata = data.data;    
+      this.bimdata = data.data;
     });
 
     this.editDialog = false;
 
   }
 
-  getBimData(){
+  getBimData() {
 
     var form_data = {
       flag: "fetch"
     }
 
     this.commonService.crudBimData(form_data).subscribe((data: any) => {
-      this.bimdata = data.data;    
-      
-      for(var i=0; i< this.bimdata.length; i++){
-        this.add_data_on_click(this.bimdata[i].longitude , this.bimdata[i].latitude , "get" , this.bimdata[i] , "car");
+      this.bimdata = data.data;
+
+      for (var i = 0; i < this.bimdata.length; i++) {
+        this.add_data_on_click(this.bimdata[i].longitude, this.bimdata[i].latitude, "get", this.bimdata[i], "car");
       }
 
     });
 
-    
+
 
 
   }
 
-  openPopup(){
-    alert('Done');
+  openPopup() {
     this.show = !this.show;
   }
 
@@ -964,7 +1004,6 @@ if (this.reactiveForm.valid){
       }
     });
 
-    // console.log('Total distance between all points: ' + totalDistance.toFixed(2) + ' meters');
   }
 
   terminateShape() {
@@ -1007,7 +1046,9 @@ if (this.reactiveForm.valid){
 
   /** 3D INFO CLICK starts*/
 
-  infoOf3DData(){
+  infoOf3DData() {
+
+    /** BElow Code is to get Info of 3d object plotted by user */
     // this.goto_click = false;
     // this.measureEnabled = false;
     // this.polygonMeasureEnabled = false;
@@ -1028,14 +1069,14 @@ if (this.reactiveForm.valid){
     //     return;
     //   }
     //   else {
-        
+
     //     var pickedFeature = this.viewer.scene.pick(movement.position);
 
     //     for(let i=0; i<Object.values(pickedFeature.id.properties._propertyNames).length; i++){
     //       var key:any = Object.values(pickedFeature.id.properties._propertyNames)[i];
-          
+
     //       this.gridarr[key] = pickedFeature.id.properties[key]._value;          
-          
+
     //   }
 
     //   this.gridInfoKeys =  pickedFeature.id.properties._propertyNames;
@@ -1046,13 +1087,10 @@ if (this.reactiveForm.valid){
     //   }
 
 
-    // }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
-
-    
-
+    //  }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
 
   }
-  
+
   /** 3D INFO CLICK ends */
 
 
@@ -1082,32 +1120,34 @@ if (this.reactiveForm.valid){
       else {
 
         this.silhouetteGreen.selected = [];
-
-        // Pick a new feature
         var pickedFeature = this.viewer.scene.pick(movement.position);
         if (!Cesium.defined(pickedFeature)) {
-          //clickHandler(movement);
+
           return;
         }
 
-        // Select the feature if it's not already selected
+
         if (this.silhouetteGreen.selected[0] === pickedFeature) {
           return;
         }
 
-        // Save the selected feature's original color
+
         var highlightedFeature = this.silhouetteBlue.selected[0];
         if (pickedFeature === highlightedFeature) {
           this.silhouetteBlue.selected = [];
         }
 
-        // Highlight newly selected feature
+
         this.silhouetteGreen.selected = [pickedFeature];
 
-        // Set feature infobox description
+
         var featureName = pickedFeature.getProperty("Prabhag");
 
         this.property_data = [
+          {
+            value: 'Name',
+            field: pickedFeature.getProperty("Name"),
+          },
           {
             value: 'UID',
             field: pickedFeature.getProperty("Prabhag"),
@@ -1154,8 +1194,6 @@ if (this.reactiveForm.valid){
           }
 
         ]
-
-        //document.querySelector("#property_tbl").setAttribute("style" , "display: block");
 
       }
 
@@ -1274,38 +1312,38 @@ if (this.reactiveForm.valid){
 
   }
 
-  changeBaseLayer(){
+  changeBaseLayer() {
 
     this.viewer.scene.imageryLayers.removeAll();
 
-    if(this.galleryImg == "Satellite Map"){
+    if (this.galleryImg == "Satellite Map") {
 
-      document.getElementById("mat-mdc-slide-toggle-1-label").setAttribute("style" , "color: white; font-weight: 500;")
-      //element.setAttribute("style", "color:red; border: 1px solid blue;");
+      document.getElementById("mat-mdc-slide-toggle-1-label").setAttribute("style", "color: white; font-weight: 500;")
+
 
       this.galleryImg = "Default Map"
       const imageryLayer = Cesium.ImageryLayer.fromWorldImagery(null);
       this.viewer.scene.imageryLayers.add(imageryLayer);
-      
+
     }
-    else{
+    else {
       this.galleryImg = "Satellite Map"
-      document.getElementById("mat-mdc-slide-toggle-1-label").setAttribute("style" , "color: black; font-weight: 500;")
+      document.getElementById("mat-mdc-slide-toggle-1-label").setAttribute("style", "color: black; font-weight: 500;")
       const imageryLayer = new Cesium.ImageryLayer(new Cesium.OpenStreetMapImageryProvider({
-      url: "https://tile.openstreetmap.org/"
-    }));
-    this.viewer.scene.imageryLayers.add(imageryLayer);
-  }
-    
+        url: "https://tile.openstreetmap.org/"
+      }));
+      this.viewer.scene.imageryLayers.add(imageryLayer);
+    }
+
   }
 
-  takeSS(){
+  takeSS() {
 
     this.viewer.render();
     var captureElement: any = document.querySelector("#cesiumContainer");
 
-    html2canvas(captureElement , {allowTaint: false, useCORS: true,}).then((canvas) => {
-   
+    html2canvas(captureElement, { allowTaint: false, useCORS: true, }).then((canvas) => {
+
       const imageData = canvas.toDataURL("image/png");
 
       const link = document.createElement("a");
@@ -1313,7 +1351,7 @@ if (this.reactiveForm.valid){
       link.setAttribute("href", imageData);
       link.click();
     });
-  
+
   }
 
   togglePanel() {
@@ -1321,23 +1359,8 @@ if (this.reactiveForm.valid){
     this.state = (this.state === "closed") ? "open" : "closed";
   }
 
-  
 
-
-  ngOnInit() {
-
-    this.bimDataForm = new FormGroup({          
-      feature_name: new FormControl()
-  });
-
-  this.DataFormDetail = new FormGroup({
-    cctv_asset_id: new FormControl(),
-    location_name: new FormControl(),
-    junction_type: new FormControl(),
-    pstation_name: new FormControl()
-  })
-
-    this.get_layer_panel_data("3D", "");
+  initializeViewer() {
 
     this.viewer = new Cesium.Viewer("cesiumContainer", {
       baseLayer: new Cesium.ImageryLayer(new Cesium.OpenStreetMapImageryProvider({
@@ -1363,45 +1386,6 @@ if (this.reactiveForm.valid){
         roll: 0.0,
       },
     });
-
-    var canvas = document.createElement('div');
-
-    this.handler = new Cesium.ScreenSpaceEventHandler(this.viewer.canvas);
-
-    this.LineMeasurementhandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
-
-    this.addBimDataHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
-
-    this.propertyDataInfohandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
-//     var bimhandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
-
-
-//     bimhandler.setInputAction((click) =>{
-
-//   var pickedFeature = this.viewer.scene.pick(click.position);
-//   console.log(pickedFeature);
-
-// }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
-
-    this.silhouetteGreen.uniforms.color = Cesium.Color.LIME;
-    this.silhouetteGreen.uniforms.length = 0.01;
-    this.silhouetteGreen.selected = [];
-
-    this.silhouetteBlue.uniforms.color = Cesium.Color.BLUE;
-    this.silhouetteBlue.uniforms.length = 0.01;
-    this.silhouetteBlue.selected = [];
-
-
-    this.viewer.scene.postProcessStages.add(
-      Cesium.PostProcessStageLibrary.createSilhouetteStage([
-        this.silhouetteBlue,
-        this.silhouetteGreen,
-      ])
-    );
-
-    this.imageryLayers = this.viewer.imageryLayers;
-
-    this.get_state_name();
 
   }
 

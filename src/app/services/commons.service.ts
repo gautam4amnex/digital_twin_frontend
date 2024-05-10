@@ -65,62 +65,27 @@ export class CommonsService extends BehaviorSubject<any[]> {
       }
   getUserBYId(roll_id:any){
     return this.http.get(`${this.url_midc}` + `getUserDetailsById/${roll_id}`);
-
   }
+ 
   roleCrudManagement(jsonData:any){
             return this.http.post( this.url_midc + "role_management", jsonData);
           }
   getRoleDataById(roll_id:any){
-    return this.http.get(`${this.url}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
+    return this.http.get(`${this.url_midc}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
             
               } 
             
   getAllModulesname(){
-   return this.http.get('http://localhost:8090/digitaltwin/dashboard/get_all_modules' );
+    return this.http.get( this.url_midc + "get_all_modules",{ headers: this.getAccessToken() });
               
   }            
-// 
-//   public getRoleManagementTableData() {
-//     return this.http.get<Role[]>("http://localhost:8090/digitaltwin/get_all_role", {headers:this.getAccessToken()});
-//   }
- 
-//   openSnackBar(message: string, action: string = 'ok') {
-//     this._snackBar.open(message, action, {
-//       duration: 1000,
-//       verticalPosition: 'top',
-//     });
-//   }
-
-// // {"flag": "fetch"} -to fetch all records
-// // {"flag": "fetch","user_id":28,"email_id": "qatwo@amnex.com","user_name": "qatwo","password": "$2a$10$eX9l21JQkVsO3iJg898e0u8Htezik1TPWzsea1AKuiVNP9UMpuzwe",
-//   //  "contact_no":"9865263529","role_id": "2","status": true}--to add new record
-  
-//   // {"flag": "fetch_id","user_id":"39"}--to get data by id
-//   userCrudManagement(jsonData:any){
-//     return this.http.post( this.url + "crud_user_management", jsonData, { headers: this.getAccessToken() });
-//   }
-//   getAllRoles(){//fn_web_get_all_role();
-//     return this.http.get(`${this.url}` + 'get_all_role',{ headers: this.getAccessToken() });
-//   }
-
-//   roleCrudManagement(jsonData:any){//.fn_web_add_or_update_role()
-//     return this.http.post( this.url + "add_update_role", jsonData, { headers: this.getAccessToken() });
-//   }
-//   deleteRole(jsonData:any){//fn_web_delete_role(?)
-//     return this.http.post( this.url + "delete_role", jsonData, { headers: this.getAccessToken() });
-
-//   }
-//   getRoleDataById(roll_id:any){
-//     return this.http.get(`${this.url}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
-
-//   }
-//   getAllModulesname(){
-//     return this.http.get(`${this.url}` + 'dashboard/get_all_modules',{ headers: this.getAccessToken() });
-
-//   }
 
   public crudBimData(jsonData){
     return this.http.post( "https://apagri.infinium.management/midcgis/layer/crud_cctv_location", jsonData);
+  }
+
+  public crudLayerManagement(jsonData){
+    return this.http.post( "https://apagri.infinium.management/midcgis/layer/layer_management", jsonData);
   }
 
 }
