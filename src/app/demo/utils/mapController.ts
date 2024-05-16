@@ -38,20 +38,20 @@ export class MapController {
             geocoder: false
         });
 
-        this.viewer.camera.flyTo({
-            destination: Cesium.Cartesian3.fromDegrees(72.730797, 18.891774, 25000),
-            orientation: {
-              heading: Cesium.Math.toRadians(35.0),
-              pitch: Cesium.Math.toRadians(-45.0),
-              roll: 0.0,
-            },
-        });
+        // this.viewer.camera.flyTo({
+        //     destination: Cesium.Cartesian3.fromDegrees(72.730797, 18.891774, 25000),
+        //     orientation: {
+        //       heading: Cesium.Math.toRadians(35.0),
+        //       pitch: Cesium.Math.toRadians(-45.0),
+        //       roll: 0.0,
+        //     },
+        // });
     }
 
 
     async temp_data_new() {
         if (true) {
-          var tileurl = "http://localhost:8080/Snomen/tileset.json";
+          var tileurl = "http://localhost:8080/fme/Test1/Metadata.FileInformation/tileset.json";
 
           //var tileurl = "https://apagri.infinium.management/3d/MIDCBuilding/tileset.json";
           var _3dTileSet = await Cesium.Cesium3DTileset.fromUrl(tileurl); 

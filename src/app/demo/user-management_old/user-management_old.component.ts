@@ -120,13 +120,10 @@ export class UserManagementComponent implements OnInit {
 
   loadRoles() {
     const jsonData={"flag":"fetch"}
-    this.commonService.userCrudManagement(jsonData).subscribe((data: any) => {
+    this.commonService.get_all_role(jsonData).subscribe((data: any) => {
       console.log("load roles",data)
       if (data.responseCode === 200) {
-        // Assuming roles are returned in the 'data' property
-        this.roles = data.data.map((role: any) => {
-          return { role_id: role.role_id, role_name: role.role_name };
-        });
+        this.roles = data.data;
       } else {
         console.error("Error fetching roles:", data.responseMessage);
         this.toastr.error('Error fetching roles');

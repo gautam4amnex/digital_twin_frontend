@@ -141,6 +141,7 @@
       <div class="form-group">
         <label for="role_id">Role Name:</label>
         <select id="role_id" class="form-control" formControlName="role_id">
+          <option value="">Select</option>
           <option *ngFor="let role of roles" [value]="role.role_id">{{ role.role_name }}</option>
         </select>
         <div

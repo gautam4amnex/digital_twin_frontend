@@ -65,8 +65,13 @@ export class CommonsService extends BehaviorSubject<any[]> {
   }
 
   userCrudManagement(jsonData:any){
-        return this.http.post( this.url_midc + "crud_user_management", jsonData);
-      }
+    return this.http.post( this.url_midc + "crud_user_management", jsonData);
+  }
+
+  get_all_role(jsonData:any){
+    return this.http.post( this.url_midc + "role_management", jsonData);
+  }
+
   getUserBYId(roll_id:any){
     return this.http.get(`${this.url_midc}` + `getUserDetailsById/${roll_id}`);
   }
