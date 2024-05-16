@@ -1,0 +1,172 @@
+<div class="row justify-content-center flex" *ngIf="isLoading">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+<div class="row" *ngIf="!isLoading">
+
+  <kendo-grid [kendoGridBinding]="userData" [style.height.%]="100" [pageSize]="10" filterable="menu" [skip]="0"
+    [pageable]="true" [sortable]="true">
+
+    <ng-template kendoGridToolbarTemplate let-dataItem>
+      <div class="export-template">
+        <button kendoGridExcelCommand icon="file-excel" class=" btn btn-dark export-new excel"
+          (click)="exportExcel(excelexport)">Export to Excel</button>
+      </div>
+
+      <div class="export-template">
+        <button class="export-new excel btn btn-dark" (click)="openEditDialog('add','1')">add new user</button>
+      </div>
+    </ng-template>
+
+
+    <ng-container>
+      <kendo-grid-column *ngFor="let data of grid_fields" field="{{data.fields}}" title="{{data.title}}"
+        [hidden]="data.hide" [width]="250">
+      </kendo-grid-column>
+      <kendo-grid-column field="Action" title="Action" [width]="150" [sticky]="true" [columnMenu]="false">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div class="d-flex gap-2">
+            <button kendoButton size="small" class="d-flex align-items-center btn btn-dark" size="small" rounded="small"
+              fillMode="outline" themeColor="base" (click)="openEditDialog('edit',dataItem.user_id)">
+              Edit
+            </button>
+            <button class="d-flex align-items-center  btn btn-dark" (click)="delete(dataItem.user_id)">
+              delete
+            </button>
+          </div>
+          <div class="d-flex gap-2">
+
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+    </ng-container>
+
+    <!-- <kendo-grid-command-column title="View">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton size="small" class="d-flex align-items-center" rounded="small" fillMode="outline" 
+                    themeColor="base" (click)="openEditDialog(dataItem)"><span class="k-i-edit k-i-pencil k-icon"></span>
+                  </button>
+      </ng-template>
+    </kendo-grid-command-column> -->
+
+    <!-- Excel -->
+    <kendo-excelexport fileName="Reports.xlsx" [data]="userData" #excelexport>
+      <ng-container *ngFor="let data of grid_fields">
+        <kendo-excelexport-column field="{{data.fields}}" title="{{data.title}}"></kendo-excelexport-column>
+      </ng-container>
+    </kendo-excelexport>
+
+  </kendo-grid>
+
+</div>
+
+
+<!-- Edit dialog -->
+<kendo-dialog class="custom-dialog handler-dialog" title="form" *ngIf="editDialog" [minWidth]="250" [width]="1024"
+  (close)="closeEditDialog()">
+  <h1>{{btnName}}</h1>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit(btnSubmit)">
+    <div class="cross-validation"
+      [class.cross-validation-error]="userForm.errors?.['identityRevealed'] && (userForm.touched || userForm.dirty)">
+      <div class="form-group">
+        <label for="first-name">UserName</label>
+        <input type="text" id="username" class="form-control" formControlName="user_name">
+        <div *ngIf="user_name.invalid && (user_name.dirty || user_name.touched)" class="alert alert-danger">
+          <div *ngIf="user_name.errors?.['required']">
+            user_name is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contact_no">contact no</label>
+        <input type="text" id="" class="form-control" formControlName="contact_no">
+
+        <div *ngIf="contact_no.invalid && (contact_no.dirty || contact_no.touched)" class="alert alert-danger">
+          <div *ngIf="contact_no.errors?.['required']">
+            contactno is required.
+          </div>
+          <div *ngIf="userForm.get('contact_no').errors['invalidContactNumber']">Invalid contact number (should be a
+            10-digit number)</div>
+        </div>
+      </div>
+
+      <br />
+      <div *ngIf="isAdd">
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" formControlName="password" class="form-control">
+
+          <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+
+            <div *ngIf="password.errors?.['required']">
+              password is required.
+            </div>
+            <div *ngIf="password.errors?.['minlength']">
+              password must be at least 8 characters long.
+            </div>
+          </div>
+        </div>
+        <br />
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" formControlName="confirmPassword" class="form-control">
+
+          <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)"
+            class="alert alert-danger">
+
+            <div *ngIf="confirmPassword.errors?.['required']">
+              confirmPassword is required.
+            </div>
+            <div *ngIf="confirmPassword.errors?.['minlength']">
+              confirmPassword must with Password
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="form-group">
+        <label for="email_id">Email: </label>
+        <input type="text" formControlName="email_id" class="form-control">
+        <div
+          *ngIf="userForm.get('email_id').invalid && (userForm.get('email_id').dirty || userForm.get('email_id').touched)"
+          class="alert alert-danger">
+          <div *ngIf="userForm.get('email_id').errors['required']">Email is required</div>
+          <div *ngIf="userForm.get('email_id').errors['pattern']">Email format is required</div>
+          <div *ngIf="userForm.get('email_id').errors['email']">Please enter a valid email address</div>
+        </div>
+      </div>
+      <br>
+      <div class="form-group">
+        <label for="role_id">Role Name:</label>
+        <select id="role_id" class="form-control" formControlName="role_id">
+          <option *ngFor="let role of roles" [value]="role.role_id">{{ role.role_name }}</option>
+        </select>
+        <div
+          *ngIf="userForm.get('role_id').invalid && (userForm.get('role_id').dirty || userForm.get('role_id').touched)"
+          class="alert alert-danger">
+          <div *ngIf="userForm.get('role_id').errors['required']">role id is required</div>
+        </div>
+      </div>
+      <br>
+      <div class="form-group" [formGroup]="userForm">
+        <label for="status">Status: </label>
+        <select formControlName="status" class="form-control">
+          <option value="true">TRUE</option>
+          <option value="false">FALSE</option>
+        </select>
+
+        <div *ngIf="userForm.get('status').invalid && (userForm.get('status').dirty || userForm.get('status').touched)"
+          class="alert alert-danger">
+          <div *ngIf="userForm.get('status').errors['required']">Status is required</div>
+        </div>
+      </div>
+    </div>
+    <!--  -->
+    <button [disabled]="!userForm.valid" class="btn btn-dark" type="submit">{{btnSubmit}}</button>
+    <button class="btn btn-dark" (click)="closeEditDialog()">close</button>
+  </form>
+
+</kendo-dialog>

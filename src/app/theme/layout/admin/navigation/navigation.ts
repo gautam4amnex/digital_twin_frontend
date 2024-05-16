@@ -63,6 +63,16 @@ const NavigationItems = [
         classes: 'nav-item',
       },
       {
+        id: 'user-management',
+        title: 'User Management',
+        type: 'item',
+        url: '/user-management',
+        icon: 'feather icon-home',
+        classes: 'nav-item',
+      },
+     
+     {
+
         id: 'role-management',
         title: 'Role Management',
         type: 'item',
@@ -88,8 +98,14 @@ const NavigationItems = [
         icon: 'feather icon-home',
         classes: 'nav-item',
       }
-
-
+      //  {
+      //   id: 'role-management',
+      //   title: 'Survey Details',
+      //   type: 'item',
+      //   url: '/role-management',
+      //   icon: 'feather icon-home',
+      //   classes: 'nav-item',
+      // },
     ],
   },
   

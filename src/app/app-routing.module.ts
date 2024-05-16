@@ -77,15 +77,22 @@ const routes: Routes = [
       },
       {
 
-        path: 'role-management',
-        //loadComponent: () => import('./demo/role-management/role-management.component'),
-        loadComponent: () => import('./demo/role-management/role-management.component').then(module => module.RoleManagementComponent),
+        path: 'user-management',
+       
+        loadComponent: () => import('./demo/user-management/user-management.component').then(module => module.UserManagementComponent),
         canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
+      // {
+      //   path: 'role-management',
+      //   //loadComponent: () => import('./demo/role-management/role-management.component'),
+      //   loadComponent: () => import('./demo/role-management/role-management.component').then(module => module.RoleManagementComponent),
+      //   canActivate: [AuthorizationCheckService],
+      //   pathMatch:'full'
+      // },
       {
-        path: 'surveydetail',
-        loadComponent: () => import('./demo/surveydetail/surveydetail.component'),
+        path: 'role-management',
+        loadComponent: () => import('./demo/role-management/role-management.component'),
         canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
