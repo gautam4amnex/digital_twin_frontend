@@ -70,6 +70,14 @@ const NavigationItems = [
         icon: 'feather icon-home',
         classes: 'nav-item',
       },
+      {
+        id: 'user-management',
+        title: 'User Management',
+        type: 'item',
+        url: '/user-management',
+        icon: 'feather icon-home',
+        classes: 'nav-item',
+      },
      {
 
         id: 'surveydetail',

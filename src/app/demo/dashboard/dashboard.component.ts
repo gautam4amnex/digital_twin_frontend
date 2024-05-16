@@ -29,10 +29,12 @@ export default class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.mapConroller.initMap();
+
+    this.mapConroller.temp_data_new();
   }
 
 
-
+  
 }
 
 

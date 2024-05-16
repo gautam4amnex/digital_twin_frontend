@@ -18,7 +18,7 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () => import('./demo/dashboard/dashboard.component'),
-        canActivate: [AuthorizationCheckService],
+        //canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
       {
@@ -81,6 +81,12 @@ const routes: Routes = [
         //loadComponent: () => import('./demo/role-management/role-management.component'),
         loadComponent: () => import('./demo/role-management/role-management.component').then(module => module.RoleManagementComponent),
         canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
+      },
+      {
+        path: 'user-management',
+        loadComponent: () => import('./demo/user-management/user-management.component'),
+        //canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
       {

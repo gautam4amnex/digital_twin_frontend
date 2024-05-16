@@ -35,7 +35,7 @@ export class MapController {
             shadows: false,
             skyAtmosphere: false,
             baseLayerPicker: true,
-            geocoder: false,
+            geocoder: false
         });
 
         this.viewer.camera.flyTo({
@@ -47,4 +47,17 @@ export class MapController {
             },
         });
     }
+
+
+    async temp_data_new() {
+        if (true) {
+          var tileurl = "http://localhost:8080/Snomen/tileset.json";
+
+          //var tileurl = "https://apagri.infinium.management/3d/MIDCBuilding/tileset.json";
+          var _3dTileSet = await Cesium.Cesium3DTileset.fromUrl(tileurl); 
+          this.viewer.scene.primitives.add(_3dTileSet);
+          this.viewer.flyTo(_3dTileSet);
+        } 
+    }
+
 }

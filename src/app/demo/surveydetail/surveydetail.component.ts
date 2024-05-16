@@ -19,11 +19,12 @@ import { MonitoringService } from 'src/app/services/monitoring.service';
 import { Router } from '@angular/router';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-surveydetail',
   standalone: true,
-  imports: [SharedModule,GridModule, ExcelModule, PDFModule, DialogModule, LabelModule,DropDownsModule,DateInputsModule,TreeViewModule,MatTooltipModule],
+  imports: [SharedModule,GridModule, ExcelModule, PDFModule, DialogModule, LabelModule,DropDownsModule,DateInputsModule,TreeViewModule,MatTooltipModule, CommonModule],
   templateUrl: './surveydetail.component.html',
   styleUrls: ['./surveydetail.component.scss'],
 })

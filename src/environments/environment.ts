@@ -13,8 +13,14 @@ export const environment = {
   // Local Server
   //baseUrl:'http://localhost:8090/digitaltwin/',
 
-  // Staging Server
-  baseUrl:'https://apagri.infinium.management/digitaltwin/',
+  // Staging Server - digitaltwin
+  //baseUrl:'https://apagri.infinium.management/digitaltwin/',
+
+  //Local - MIDC
+  baseUrl:'http://localhost:9090/midcgis/',
+  
+  //Staging - MIDC
+  //baseUrl:'https://apagri.infinium.management/midcgis/',
 
 };
 /*
