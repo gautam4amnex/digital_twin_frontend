@@ -12,19 +12,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class CommonsService extends BehaviorSubject<any[]> {
   private url = glob.environment.baseUrl;
+  private url_midc = glob.environment.baseUrl_midc;
+
   private measurement_type: string;
 
-  constructor(private http: HttpClient,
-    private _snackBar: MatSnackBar) {
+  constructor(private http: HttpClient) {
     super([]);
   }
   
-  get_verify_feature_data(jsonData){
-    return this.http.post(`${this.url}` + 'get_verify_feature_data', { jsonData }, {headers:this.getAccessToken()});
+  get_verify_feature_data(){
+    return this.http.get(`${this.url}` + 'get_all_role');
   }
 
-  get_verify_feature_data_by_id(jsonData){
-    return this.http.post(`${this.url}` + 'get_verify_feature_data_by_id', jsonData , {headers:this.getAccessToken()});
+  get_verify_feature_data_by_id(roll_id){
+    return this.http.post(`${this.url}` + `getRollDetailsById/${roll_id}`, {headers:this.getAccessToken()});
   }
 
   getAccessToken() {
@@ -51,41 +52,44 @@ export class CommonsService extends BehaviorSubject<any[]> {
     return response;
   }
 
+  // public getLayerAndImagePanel(jsonData){
+  //   return this.http.post( this.url + "get_all_layer_and_image", jsonData, { headers: this.getAccessToken() });
+  // }
+
   public getLayerAndImagePanel(jsonData){
-    return this.http.post( this.url + "get_all_layer_and_image", jsonData, { headers: this.getAccessToken() });
+    return this.http.post( "https://apagri.infinium.management/midcgis/layer/layer_management", jsonData);
   }
 
   public getStateName(){
     return this.http.get( this.url + "get_state_name", { headers: this.getAccessToken() });
   }
-  public getRoleManagementTableData() {
-    return this.http.get<Role[]>("http://localhost:8090/digitaltwin/get_all_role", {headers:this.getAccessToken()});
+
+  userCrudManagement(jsonData:any){
+        return this.http.post( this.url_midc + "crud_user_management", jsonData);
+      }
+  getUserBYId(roll_id:any){
+    return this.http.get(`${this.url_midc}` + `getUserDetailsById/${roll_id}`);
   }
-  SaveRole(data:any){
-    console.log(data)
-    return this.http.post("http://localhost:3000/customer",data);
-  }
-  updateRole(data: any): Observable<any> {
-    return this.http.put(`http://localhost:3000/employees`, data);
-  }
-  GetRoleById(data:any){
-    return this.http.post("http://localhost:8090/digitaltwin/dashboard/get_role_by_id",data);
-  }
-  GetAllModules(){
-    return this.http.get("http://localhost:8090/digitaltwin/dashboard/get_all_modules");
-  }
-  openSnackBar(message: string, action: string = 'ok') {
-    this._snackBar.open(message, action, {
-      duration: 1000,
-      verticalPosition: 'top',
-    });
-  }
-  deleteRole(id: number){
-    return this.http.delete(`http://localhost:3000/employees/${id}`);
-  }
+ 
+  roleCrudManagement(jsonData:any){
+            return this.http.post( this.url_midc + "role_management", jsonData);
+          }
+  getRoleDataById(roll_id:any){
+    return this.http.get(`${this.url_midc}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
+            
+              } 
+            
+  getAllModulesname(){
+    return this.http.get( this.url_midc + "get_all_modules",{ headers: this.getAccessToken() });
+              
+  }            
 
   public crudBimData(jsonData){
     return this.http.post( "https://apagri.infinium.management/midcgis/layer/crud_cctv_location", jsonData);
+  }
+
+  public crudLayerManagement(jsonData){
+    return this.http.post( "https://apagri.infinium.management/midcgis/layer/layer_management", jsonData);
   }
 
 }

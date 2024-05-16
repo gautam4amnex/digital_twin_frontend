@@ -1,63 +1,122 @@
-<p>role-management works!</p>
-<mat-card>
-  <mat-card-header>
-    <mat-form-field>
-      <input matInput (keyup)="filterChange($event)" placeholder="Enter the text" />
-    </mat-form-field>
-    <button  mat-button  style="margin-left: 60%;" (click)="openEditForm('','add')" mat-raised-button color="primary">Add new role (+)</button>
-  </mat-card-header>
-  <mat-card-content>
+<!-- <div class="row justify-content-center flex" *ngIf="isLoading">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div> -->
+<!--  *ngIf="!isLoading" -->
+<div class="row">
 
-    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <kendo-grid [kendoGridBinding]="featureData" [data]="featureData" [style.height.%]="100" [pageSize]="10"
+    filterable="menu" [skip]="0" [pageable]="true" [sortable]="true">
 
-      <ng-container matColumnDef="role_id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Role Id</th>
-        <td mat-cell *matCellDef="let element">{{ element.role_id }}</td>
+    <ng-template kendoGridToolbarTemplate>
+      <div class="export-template">
+        <button type="button" kendoGridExcelCommand class="export-new excel btn btn-dark"
+          (click)="exportExcel(excelexport)">Export to Excel</button>
+      </div>
+      <div class="export-template">
+        <button class="export-new excel btn btn-dark" (click)="openEditDialog('add','1')">add new role</button>
+      </div>
+    </ng-template>
+    <ng-container>
+      <ng-container *ngFor="let data of grid_fields">
+        <kendo-grid-column *ngIf="data.fields !== 'assign_permission'; else assignedPermissionColumn"
+          field="{{data.fields}}" title="{{data.title}}" [hidden]="data.hide" [width]="250">
+        </kendo-grid-column>
       </ng-container>
+      <ng-template #assignedPermissionColumn>
+        <kendo-grid-column field="assign_permission" title="Assigned Permissions" [width]="250">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <ng-container *ngFor="let permission of dataItem.assign_permission">
+              <div>{{ permission.module_name }}</div>
+            </ng-container>
+          </ng-template>
+        </kendo-grid-column>
+      </ng-template>
 
-      <ng-container matColumnDef="role_name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Role Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.role_name }}</td>
+      <kendo-grid-column field="Action" title="Action" [width]="80" [sticky]="true" [columnMenu]="false">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div class="d-flex gap-2">
+            <button kendoButton size="small" class="d-flex align-items-center btn btn-dark" size="small" rounded="small"
+              fillMode="outline" themeColor="base" (click)="openEditDialog('edit',dataItem.role_id)">
+              Edit
+            </button>
+            <button kendoButton size="small" class="d-flex align-items-center btn btn-dark" size="small" rounded="small"
+              fillMode="outline" themeColor="base" (click)="delete(dataItem.role_id)">
+              delete
+            </button>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+    </ng-container>
+
+    <!-- Excel -->
+    <kendo-excelexport fileName="Reports.xlsx" [data]="featureData" #excelexport>
+      <ng-container *ngFor="let data of grid_fields">
+        <kendo-excelexport-column field="{{data.fields}}" title="{{data.title}}"></kendo-excelexport-column>
       </ng-container>
+    </kendo-excelexport>
+  </kendo-grid>
+</div>
+<!-- Edit dialog -->
+<kendo-dialog class="custom-dialog handler-dialog" title={{btnName}} *ngIf="editDialog" [minWidth]="250" [width]="1024"
+  (close)="closeEditDialog()">
+  <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+    <div>
 
-      <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
-        <td mat-cell *matCellDef="let element">{{ element.description }}</td>
-      </ng-container>
+      <div class="form-group">
+        <label for="">Role Name</label>
+        <input type="text" id="" class="form-control" formControlName="role_name">
+        <div *ngIf="role_name.invalid && (role_name.dirty || role_name.touched)" class="alert alert-danger">
+          <div *ngIf="role_name.errors?.['required']">
+            role name is required.
+          </div>
+        </div>
+      </div>
 
-      <ng-container matColumnDef="assign_permission">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Assigned Modules</th>
-        <td mat-cell *matCellDef="let element">
-          <ng-container *ngFor="let permission of element.assign_permission; let last = last">
-            {{ permission.module_name }}
-            <span *ngIf="!last">, </span><!-- Add comma if it's not the last item -->
-          </ng-container>
-        </td>
-      </ng-container>
-      
+      <div class="form-group">
+        <label for="">Role Description</label>
+        <input type="text" id="" class="form-control" formControlName="role_desc">
+        <div *ngIf="role_desc.invalid && (role_desc.dirty || role_desc.touched)" class="alert alert-danger">
+          <div *ngIf="role_desc.errors?.['required']">
+            role description is required.
+          </div>
+        </div>
+      </div>
 
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-        <td mat-cell *matCellDef="let element">{{ element.status }}</td>
-      </ng-container>
+      <div class="form-group" [formGroup]="roleForm">
+        <label for="status">Status: </label>
+        <select formControlName="status" class="form-control">
+          <option [value]="true">TRUE</option>
+          <option [value]="false">FALSE</option>
+        </select>
+        
+      </div>
 
-      <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef>Action</th>
-        <td mat-cell *matCellDef="let element">
-            <div class="example-button-row">
-        <button   (click)="openEditForm(element,'edit')"  mat-raised-button color="primary">Edit</button>
-          <button   (click)="delete(element.id)" mat-raised-button color="primary">Delete</button>
-            </div>
-        </td>
-      </ng-container>
+      <div formGroupName="web_permissions">
+        <label>Assign Permission: </label>
+        <div class="form-group">
+          <div *ngFor="let permission of roleForm.get('web_permissions')['controls']; let i=index" [formGroupName]="i">
+            <input type="checkbox" [formControlName]="'checked'"> {{ permission.value.module_name }}
+            <input type="hidden" [formControlName]="'module_id'" [value]="permission.value.module_id">
+            <input type="hidden" [formControlName]="'module_name'" [value]="permission.value.module_name">
+          </div>
+        </div>
+         
+        
+      </div>
+      <button  type="submit" class="btn btn-dark">{{btnSubmit}}</button>
+      <button class="btn btn-dark" (click)="closeEditDialog()">close</button>
+    </div>
+    {{this.roleForm.value|json}}
+    {{this.roleForm.valid|json}}
+  </form>
+</kendo-dialog>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-  </mat-card-content>
-  <br>
-  <mat-card-footer>
-    <mat-paginator [pageSizeOptions]="[5,10,20]" [pageSize]="5" showFirstLastButtons></mat-paginator>
-  </mat-card-footer>
-</mat-card>
+<!-- <kendo-grid-command-column title="View">
+      <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton size="small" class="d-flex align-items-center" rounded="small" fillMode="outline" 
+                    themeColor="base" (click)="openEditDialog(dataItem)"><span class="k-i-edit k-i-pencil k-icon"></span>
+                  </button>
+      </ng-template>
+    </kendo-grid-command-column> -->

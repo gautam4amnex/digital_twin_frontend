@@ -8,6 +8,7 @@ import * as CryptoJS from 'crypto-js';
 import { NgIf } from '@angular/common';
 import { data } from 'jquery';
 import * as glob from '../../../../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-auth-signin',
@@ -20,7 +21,7 @@ import * as glob from '../../../../../environments/environment';
 export default class AuthSigninComponent implements OnInit {
 
   constructor(public fb: FormBuilder,private authorizationCheckService:AuthorizationCheckService, 
-    private userservice: UserService, private _router: Router) {
+    private userservice: UserService, private _router: Router, private toastr: ToastrService) {
   }
 
   user: User = new User();
@@ -49,10 +50,16 @@ export default class AuthSigninComponent implements OnInit {
   });
 
   refreshCaptcha(){
-    
+    var captcha_img = document.getElementById("captcha_img");
+    captcha_img.setAttribute("src" , this.baseUrl1 + "getcaptcha");
   }
 
   verifyCaptcha(){
+
+    if(this.loginForm.controls.captcha.value == ""){
+      this.toastr.info('Please Enter Captcha');
+      return;
+    }
 
     var form_data = {
       flag: "fetch"
@@ -62,11 +69,11 @@ export default class AuthSigninComponent implements OnInit {
       console.log(data);
       
       if(data.responseCode == 200){
-        if(data.data[0].captcha == this.loginForm.controls.captcha.value){
+        if(data.data[0].captcha == this.loginForm.controls.captcha.value){          
           this.loginUser("");
         }
         else{
-          alert("captcha Failed");
+          this.toastr.error('Invalid Captcha');
         }
       }
 
@@ -112,15 +119,16 @@ export default class AuthSigninComponent implements OnInit {
           localStorage.setItem('modules', data.data[0].modules);
           localStorage.setItem('token', data.data[0].accessToken);
           this.authorizationCheckService.modules = data.data[0].modules;
+          this.toastr.success('Login Success');
 		  
           //this.utilModule.notify(this.utilModule.SUCCESS_TAG, 'Login Successfull.');
         } else{
-          alert(data.responseMessage);
+          this.toastr.error(data.responseMessage);
           //this.utilModule.notify(this.utilModule.ERROR_TAG, data.responseMessage);
         }
         
-      }, (error) => {
-        alert('Something Happend Wrong.');
+      }, (error) => {        
+        this.toastr.error('Something Happend Wrong');
         //this.utilModule.notify(this.utilModule.ERROR_TAG, 'Something Happend Wrong.');
       });
     this.user = new User();

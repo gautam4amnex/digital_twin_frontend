@@ -61,15 +61,15 @@ export default class SurveyDetailComponent implements OnInit {
     
     this.featureData = [];
     let reqBody = {"attribute_status":[],"end_date":"","layer_name":"","location_status":[],"start_date":"","status":[],"ward_no":""};
-    this.commonService.get_verify_feature_data(reqBody).subscribe((data: any) => {
-      if (data.responseCode === 200) {
-        this.featureData = data.data;
-      } else{
-        alert(data.responseMessage);
-      }
-    }, (error) => {
-      alert('Something Happend Wrong.');
-    });
+    // this.commonService.get_verify_feature_data(reqBody).subscribe((data: any) => {
+    //   if (data.responseCode === 200) {
+    //     this.featureData = data.data;
+    //   } else{
+    //     alert(data.responseMessage);
+    //   }
+    // }, (error) => {
+    //   alert('Something Happend Wrong.');
+    // });
 
     this.initializeSurveyDetails();
 

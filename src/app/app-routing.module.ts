@@ -77,9 +77,22 @@ const routes: Routes = [
       },
       {
 
+        path: 'user-management-old',
+       
+        loadComponent: () => import('./demo/user-management_old/user-management_old.component').then(module => module.UserManagementComponent),
+        // canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
+      },
+      // {
+      //   path: 'role-management',
+      //   //loadComponent: () => import('./demo/role-management/role-management.component'),
+      //   loadComponent: () => import('./demo/role-management/role-management.component').then(module => module.RoleManagementComponent),
+      //   canActivate: [AuthorizationCheckService],
+      //   pathMatch:'full'
+      // },
+      {
         path: 'role-management',
-        //loadComponent: () => import('./demo/role-management/role-management.component'),
-        loadComponent: () => import('./demo/role-management/role-management.component').then(module => module.RoleManagementComponent),
+        loadComponent: () => import('./demo/role-management/role-management.component'),
         canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
@@ -92,6 +105,11 @@ const routes: Routes = [
       {
         path: 'surveydetail',
         loadComponent: () => import('./demo/surveydetail/surveydetail.component'),
+        pathMatch:'full'
+      },
+      {
+        path: 'layermanagement',
+        loadComponent: () => import('./demo/layer-management/layer-management.component').then(module => module.LayerManagementComponent),
         canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },

@@ -2,6 +2,7 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+
 import packageInfo from '../../package.json';
 
 export const environment = {
@@ -12,6 +13,7 @@ export const environment = {
 
   // Local Server
   //baseUrl:'http://localhost:8090/digitaltwin/',
+  //baseUrl:'http://localhost:9090/midcgis/',
 
   // Staging Server - digitaltwin
   //baseUrl:'https://apagri.infinium.management/digitaltwin/',
@@ -21,6 +23,13 @@ export const environment = {
   
   //Staging - MIDC
   //baseUrl:'https://apagri.infinium.management/midcgis/',
+
+
+  baseUrl_midc:'https://apagri.infinium.management/midcgis/',
+
+  //MIDC Server
+  //baseUrl: 'https://apagri.infinium.management/midcgis'
+
 
 };
 /*
