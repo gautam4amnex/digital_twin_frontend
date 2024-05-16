@@ -23,7 +23,7 @@ export class CommonsService extends BehaviorSubject<any[]> {
   get_verify_feature_data(){
     return this.http.get(`${this.url}` + 'get_all_role');
   }
-
+      
   get_verify_feature_data_by_id(roll_id){
     return this.http.post(`${this.url}` + `getRollDetailsById/${roll_id}`, {headers:this.getAccessToken()});
   }
@@ -60,11 +60,20 @@ export class CommonsService extends BehaviorSubject<any[]> {
     return this.http.get( this.url + "get_state_name", { headers: this.getAccessToken() });
   }
 
+  // userCrudManagement(jsonData:any){
+  //       return this.http.post( this.url_midc + "crud_user_management", jsonData);
+  //     }
+
   userCrudManagement(jsonData:any){
-        return this.http.post( this.url_midc + "crud_user_management", jsonData);
-      }
+    return this.http.post( this.url + "crud_user_management", jsonData);
+  }
+
+  // getUserBYId(roll_id:any){
+  //   return this.http.get(`${this.url_midc}` + `getUserDetailsById/${roll_id}`);
+  // }
+
   getUserBYId(roll_id:any){
-    return this.http.get(`${this.url_midc}` + `getUserDetailsById/${roll_id}`);
+    return this.http.get(`${this.url}` + `getUserDetailsById/${roll_id}`);
   }
  
   roleCrudManagement(jsonData:any){
