@@ -77,10 +77,10 @@ const routes: Routes = [
       },
       {
 
-        path: 'user-management',
+        path: 'user-management-old',
        
-        loadComponent: () => import('./demo/user-management/user-management.component').then(module => module.UserManagementComponent),
-        canActivate: [AuthorizationCheckService],
+        loadComponent: () => import('./demo/user-management_old/user-management_old.component').then(module => module.UserManagementComponent),
+        // canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
       // {
