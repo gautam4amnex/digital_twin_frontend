@@ -1,0 +1,246 @@
+<div class="row">
+
+    <button type="button" (click)="openEditDialog('')" class="btn btn-primary">Add Layer</button>
+    <kendo-grid [kendoGridBinding]="grid_data" [style.height.%]="100" [pageSize]="10" filterable="menu" [skip]="0" [pageable]="true" [sortable]="true">
+  
+      <ng-template kendoGridToolbarTemplate>
+        <div class="export-template">
+            <button type="button" kendoGridExcelCommand svg="file-excel" class="export-new excel" (click)="exportExcel(excelexport)">Export to Excel</button>
+        </div>
+      </ng-template>      
+      <ng-container *ngFor="let data of grid_fields">
+          <kendo-grid-column field="{{data.fields}}" title="{{data.title}}" [hidden]="data.hide" [width]="250"></kendo-grid-column>
+      </ng-container>        
+      
+      <kendo-grid-column field="Action" title="Action" [width]="200" [columnMenu]="true">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div class="d-flex gap-2">
+            <button kendoButton size="small" class="d-flex align-items-center" (click)="deletLayer(dataItem)" size="small" rounded="small" fillMode="outline"
+              themeColor="base">
+              Delete
+            </button>
+            <button kendoButton size="small" class="d-flex align-items-center" (click)="openEditDialog(dataItem)" id="Edit" size="small" rounded="small" fillMode="outline"
+            themeColor="base">
+            Edit
+          </button>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+    
+       <!-- Excel -->
+      <kendo-excelexport fileName="Reports.xlsx" [data]="grid_data" #excelexport>
+        <ng-container *ngFor="let data of grid_fields">
+            <kendo-excelexport-column field="{{data.fields}}" title="{{data.title}}"></kendo-excelexport-column>
+        </ng-container>
+      </kendo-excelexport>
+  
+    </kendo-grid>
+  
+  </div>
+
+
+  <kendo-dialog class="custom-dialog handler-dialog" title="Layer Details" *ngIf="layerDetailDialog" [height]="700" [minWidth]="250" [width]="1024" (close)="closeLayerDetailDialog()">
+
+    <form [formGroup]="reactiveForm">
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Name:</label>
+          <input type="text" id="name" name="name" formControlName="layer_name" placeholder="Your name" required minlength="1" maxlength="250" class="form-control form-control-sm" [class.is-invalid]="this.reactiveForm.controls.layer_name.invalid && (this.reactiveForm.controls.layer_name.dirty || this.reactiveForm.controls.layer_name.touched)">
+          <div *ngIf="this.reactiveForm.controls.layer_name.invalid && (this.reactiveForm.controls.layer_name.dirty || this.reactiveForm.controls.layer_name.touched)" class="invalid-feedback">
+            <div *ngIf="this.reactiveForm.controls.layer_name.errors?.['required']">
+              This field is required.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.layer_name.errors?.['minlength']">
+              This field must have at least 1 character.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.layer_name.errors?.['maxlength']">
+              This field must have at most 250 characters.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Table Name:</label>
+          <input class="form-control" formControlName="table_name" type="text" value="" required placeholder="Enter Table Name" [class.is-invalid]="this.reactiveForm.controls.table_name.invalid && (this.reactiveForm.controls.table_name.dirty || this.reactiveForm.controls.table_name.touched)">
+          <div *ngIf="this.reactiveForm.controls.table_name.invalid && (this.reactiveForm.controls.table_name.dirty || this.reactiveForm.controls.table_name.touched)" class="invalid-feedback">
+            <div *ngIf="this.reactiveForm.controls.table_name.errors?.['required']">
+              This field is required.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.table_name.errors?.['minlength']">
+              This field must have at least 1 character.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.table_name.errors?.['maxlength']">
+              This field must have at most 250 characters.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Layer Id:</label>
+          <input class="form-control" formControlName="layer_id" type="text" value="" required placeholder="Enter Layer Id" [class.is-invalid]="this.reactiveForm.controls.layer_id.invalid && (this.reactiveForm.controls.layer_id.dirty || this.reactiveForm.controls.layer_id.touched)">
+          <div *ngIf="this.reactiveForm.controls.layer_id.invalid && (this.reactiveForm.controls.layer_id.dirty || this.reactiveForm.controls.layer_id.touched)" class="invalid-feedback">
+            <div *ngIf="this.reactiveForm.controls.layer_id.errors?.['required']">
+              This field is required.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.layer_id.errors?.['minlength']">
+              This field must have at least 1 character.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.layer_id.errors?.['maxlength']">
+              This field must have at most 250 characters.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Layer Type:</label>
+          <select class="form-control" formControlName="layer_type" required [class.is-invalid]="this.reactiveForm.controls.layer_type.invalid && (this.reactiveForm.controls.layer_type.dirty || this.reactiveForm.controls.layer_type.touched)">
+            <option value="">Select</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>      
+          <div *ngIf="this.reactiveForm.controls.layer_type.invalid && (this.reactiveForm.controls.layer_type.dirty || this.reactiveForm.controls.layer_type.touched)" class="invalid-feedback">
+            <div *ngIf="this.reactiveForm.controls.layer_type.errors?.['required']">
+              This field is required.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Parent Layer Type:</label>
+          <select class="form-control" formControlName="parent_layer" required [class.is-invalid]="this.reactiveForm.controls.parent_layer.invalid && (this.reactiveForm.controls.parent_layer.dirty || this.reactiveForm.controls.parent_layer.touched)">
+            <option value="">Select</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>      
+          <div *ngIf="this.reactiveForm.controls.parent_layer.invalid && (this.reactiveForm.controls.parent_layer.dirty || this.reactiveForm.controls.parent_layer.touched)" class="invalid-feedback">
+            <div *ngIf="this.reactiveForm.controls.parent_layer.errors?.['required']">
+              This field is required.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Service Url:</label>
+          <input class="form-control" formControlName="service_url" type="text" value="" required placeholder="Enter Layer Id" [class.is-invalid]="this.reactiveForm.controls.service_url.invalid && (this.reactiveForm.controls.service_url.dirty || this.reactiveForm.controls.service_url.touched)">
+          <div *ngIf="this.reactiveForm.controls.service_url.invalid && (this.reactiveForm.controls.service_url.dirty || this.reactiveForm.controls.service_url.touched)" class="invalid-feedback">
+            <div *ngIf="this.reactiveForm.controls.service_url.errors?.['required']">
+              This field is required.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.service_url.errors?.['minlength']">
+              This field must have at least 1 character.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.service_url.errors?.['maxlength']">
+              This field must have at most 250 characters.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Geometry Type:</label>
+          <select class="form-control" formControlName="geometry_type" required [class.is-invalid]="this.reactiveForm.controls.geometry_type.invalid && (this.reactiveForm.controls.geometry_type.dirty || this.reactiveForm.controls.geometry_type.touched)">
+            <option value="">Select</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>      
+          <div *ngIf="this.reactiveForm.controls.geometry_type.invalid && (this.reactiveForm.controls.geometry_type.dirty || this.reactiveForm.controls.geometry_type.touched)" class="invalid-feedback">
+            <div *ngIf="this.reactiveForm.controls.geometry_type.errors?.['required']">
+              This field is required.
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Scale Start:</label>
+          <input pattern="[0-9]*" class="form-control" formControlName="scale_start" type="text" value="" required placeholder="Enter Layer Id" [class.is-invalid]="this.reactiveForm.controls.scale_start.invalid && (this.reactiveForm.controls.scale_start.dirty || this.reactiveForm.controls.scale_start.touched)">
+          <div *ngIf="this.reactiveForm.controls.scale_start.invalid && (this.reactiveForm.controls.scale_start.dirty || this.reactiveForm.controls.scale_start.touched)" class="invalid-feedback">
+            <div *ngIf="this.reactiveForm.controls.scale_start.errors?.['required']">
+              This field is required.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.scale_start.errors?.['pattern']">
+              This field must be a number.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Scale End:</label>
+          <input pattern="[0-9]*" class="form-control" formControlName="scale_end" type="text" value="" required placeholder="Enter Layer Id" [class.is-invalid]="this.reactiveForm.controls.scale_end.invalid && (this.reactiveForm.controls.scale_end.dirty || this.reactiveForm.controls.scale_end.touched)">
+          <div *ngIf="this.reactiveForm.controls.scale_end.invalid && (this.reactiveForm.controls.scale_end.dirty || this.reactiveForm.controls.scale_end.touched)" class="invalid-feedback">
+            <div *ngIf="this.reactiveForm.controls.scale_end.errors?.['required']">
+              This field is required.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.scale_end.errors?.['pattern']">
+              This field must be a number.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-2">        
+          <label class="form-check-label">
+            Status:
+          </label>    
+          <input class="form-check-input" formControlName="status" type="checkbox" id="status">
+        </div>
+    
+        <div class="col mb-2">        
+          <label class="form-check-label">
+            WMS:
+          </label>    
+          <input class="form-check-input" formControlName="wms" type="checkbox"  id="wms">
+        </div>
+    
+        <div class="col mb-2">        
+          <label class="form-check-label">
+            Info Click:
+          </label>    
+          <input class="form-check-input" formControlName="info_click" type="checkbox" id="info_click">
+        </div>
+    
+        <div class="col mb-2">        
+          <label class="form-check-label">
+            First Time Load:
+          </label>    
+          <input class="form-check-input" formControlName="first_time" type="checkbox" id="first_time">
+        </div>
+    
+      </div>
+    
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Z - Index:</label>
+          <input pattern="[0-9]*" class="form-control" formControlName="z_index" type="text" value="" required placeholder="Enter Layer Id" [class.is-invalid]="this.reactiveForm.controls.z_index.invalid && (this.reactiveForm.controls.z_index.dirty || this.reactiveForm.controls.z_index.touched)">
+          <div *ngIf="this.reactiveForm.controls.z_index.invalid && (this.reactiveForm.controls.z_index.dirty || this.reactiveForm.controls.z_index.touched)" class="invalid-feedback">
+            <div *ngIf="this.reactiveForm.controls.z_index.errors?.['required']">
+              This field is required.
+            </div>
+            <div *ngIf="this.reactiveForm.controls.z_index.errors?.['pattern']">
+              This field must be a number.
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="row">
+        <div class="col mb-2 d-grid">
+          <button type="button" class="btn btn-sm btn-primary" (click)="validate(flag_form)">Submit</button>
+        </div>
+      </div>
+    </form>
+    
+    </kendo-dialog>

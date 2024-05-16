@@ -113,9 +113,10 @@ export default class _2D {
   get_layer_panel_data(pageName, stateId) {
     this.data = [];
     var formData = {
-      "page_name": pageName,
-      "state_id": stateId
+      flag: "fetch_all",
+      layer_type: "2D"
     }
+
 
     this.commonService.getLayerAndImagePanel(formData).subscribe((data: any) => {
       this.data = data;
@@ -128,12 +129,6 @@ export default class _2D {
   layer_name: any;
   all_layer = new Array();
 
-  // addElement(element: any) {
-  //   this.all_layer.push(element);
-
-  //   this.all_layer['Hinal'] = "pancha;l";
-
-  // }
   showHideData(event) {
     this.url = event.target.getAttribute("service-url");
     this.layer_name = event.target.getAttribute("layer_name");
@@ -153,90 +148,18 @@ export default class _2D {
 
     if (event.target.checked == true) {
 
-      //this.add_layer_on_map(this.url, this.layer_id);
-      if (flag_status != "Image") {
-
-        if (parent_layer == "DP department layers") {
-            let current_layer = new this.ol.layer.Tile({
-                source: new this.ol.source.TileWMS({
-                    url: mobile_service_url,
-                    params: { 'LAYERS': table_name, 'CRS': 'EPSG:4326' },
-                    transition: 0,
-                    crossOrigin: 'anonymous'
-                })
-            });
-
-            this.map.addLayer(current_layer);
-            this.map_layers.push(current_layer);
-            this.map_layers[table_name] = current_layer;
-
-        } else if (parent_layer == "Disaster Management") {
             let current_layer = new this.ol.layer.Tile({
                 source: new this.ol.source.TileWMS({
                     url: service_url,
-                    params: { 'LAYERS': table_name, 'CRS': 'EPSG:4326' },
-                    transition: 0,
-                    crossOrigin: 'anonymous'
+                    params: { 'LAYERS': "MIDC:" + table_name , 'TILED': true },
+                    serverType: 'geoserver',
+                    transition: 0,                   
                 })
             });
 
             this.map.addLayer(current_layer);
-            this.map_layers.push(current_layer);
-            this.map_layers[table_name] = current_layer;
-        } else if (parent_layer == "Assessment Department") {
-            let current_layer = new this.ol.layer.Tile({
-                source: new this.ol.source.TileWMS({
-                    url: service_url,
-                    params: { 'LAYERS': table_name, 'CRS': 'EPSG:4326' },
-                    transition: 0,
-                    crossOrigin: 'anonymous'
-                })
-            });
-
-            this.map.addLayer(current_layer);
-            this.map_layers.push(current_layer);
-            this.map_layers[table_name] = current_layer;
-        } else {
-            let current_layer = new this.ol.layer.Tile({
-                source: new this.ol.source.TileWMS({
-                    url: mobile_service_url,
-                    params: { 'LAYERS': "MCGM:" + table_name, 'TILED': true },
-                    transition: 0,
-                    crossOrigin: 'anonymous'
-                })
-            });
-
-            this.map.addLayer(current_layer);
-            this.map_layers.push(current_layer);
             this.map_layers[table_name] = current_layer;
 
-        }
-      }else{
-
-        let current_image = new this.ol.layer.Tile({
-          // opacity: 0.7,
-          source: new this.ol.source.WMTS({
-              url: service_url,
-              layer: table_name,
-              matrixSet: 'GoogleMapsCompatibleExt2:epsg:3857',
-              format: 'image/png',
-              projection: this.projection,
-              tileGrid: new this.ol.tilegrid.WMTS({
-                  origin: this.ol.extent.getTopLeft(this.projectionExtent),
-                  resolutions: this.resolutions,
-                  matrixIds: this.matrixIds,
-              }),
-              style: 'default',
-              wrapX: true,
-              crossOrigin: 'anonymous'
-          }),
-      });
-
-      this.map.addLayer(current_image);
-      this.map_layers.push(current_image);
-      this.map_layers[table_name] = current_image;
-
-      }
 
     }
     else {
@@ -285,12 +208,8 @@ export default class _2D {
         console.info(this.ol.proj.fromLonLat(evt.coordinate));
 
         var know_your_coordinate = this.ol.proj.fromLonLat(evt.coordinate, 'EPSG:4326', 'EPSG:3857');
-        //know_your_coordinate = this.ol.proj.fromLonLat([know_your_coordinate[0], know_your_coordinate[1]], 'EPSG:3857', 'EPSG:4326');
 
         console.log(know_your_coordinate);
-
-        // this.map.un('click', clickHandler);
-
         const iconFeature = new this.ol.Feature({
           geometry: new this.ol.geom.Point(know_your_coordinate)
         });
@@ -479,7 +398,6 @@ export default class _2D {
 
         console.log(measurementFormatted);
 
-        //resultElement.html(measurementFormatted + html);
       });
     });
 
@@ -492,7 +410,6 @@ export default class _2D {
       }
 
     });
-    //this.map.addLayer(drawvector);
   }
 
   clearDrawnFeature(){

@@ -78,7 +78,17 @@ const NavigationItems = [
         url: '/surveydetail',
         icon: 'feather icon-home',
         classes: 'nav-item',
+      },
+      {
+
+        id: 'layermanagement',
+        title: 'Layer Management',
+        type: 'item',
+        url: '/layermanagement',
+        icon: 'feather icon-home',
+        classes: 'nav-item',
       }
+
 
     ],
   },

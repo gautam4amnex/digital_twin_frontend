@@ -207,18 +207,48 @@
 
 </kendo-dialog>
 
-<kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="editDialog" [minWidth]="250" [width]="1024" (close)="closeEditDialog()">
+<kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="editDialog" [minWidth]="250" [width]="1024"
+  (close)="closeEditDialog()">
+
   <form [formGroup]="DataFormDetail">
-  <label>Asset Id: </label><br>
-  <input formControlName="cctv_asset_id" type="text" value="" placeholder="Enter Asset Id"><br><br>
-  <label>Location Name: </label><br>
-  <input formControlName="location_name" type="text" value="" placeholder="Enter Location"><br>
-  <label>Junction Type: </label><br>
-  <input formControlName="junction_type" type="text" value="" placeholder="Enter Junction Type"><br>
-  <label>Police Sytation Name: </label><br>
-  <input formControlName="pstation_name" type="text" value="" placeholder="Enter PoliceStation"><br>
-    <button (click)="add_bim_data_to_db($event)" type="button">Submit</button>
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Asset Id:</label>
+      <input class="form-control" formControlName="cctv_asset_id" type="text" value="" placeholder="Enter Asset Id">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Location Name:</label>
+      <input class="form-control" formControlName="location_name" type="text" value="" placeholder="Enter Location">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Junction Type:</label>
+      <input class="form-control" formControlName="junction_type" type="text" value=""
+        placeholder="Enter Junction Type">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col mb-2">
+      <label for="name" class="form-label">Police Sytation Name:</label>
+      <input class="form-control" formControlName="pstation_name" type="text" value=""
+        placeholder="Enter PoliceStation">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col mb-2 d-grid">
+      <button class="btn btn-sm btn-primary" (click)="add_bim_data_to_db($event)" type="button">Submit</button>
+    </div>
+  </div>
   </form>
+
+
 </kendo-dialog>
 
 <!-- <kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="selectFeatureDialog" [minWidth]="250" [width]="1024" (close)="closeFeatureDialog()">
@@ -313,6 +343,7 @@
 <button (click)="rotateEntity(modelEntity, -5);">Rotate Left</button>
 <button (click)="rotateEntity(modelEntity, 5);">Rotate Right</button>
 <button (click)="getFeature()">Done</button>
+<button (click)="UpdateFeature()">Update</button>
 <!-- <mat-form-field class="dd_state">
   <mat-label>Select State Name</mat-label>
   <mat-select (selectionChange)="get_layer_by_state_id($event)">

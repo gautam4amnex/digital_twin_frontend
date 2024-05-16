@@ -51,8 +51,12 @@ export class CommonsService extends BehaviorSubject<any[]> {
     return response;
   }
 
+  // public getLayerAndImagePanel(jsonData){
+  //   return this.http.post( this.url + "get_all_layer_and_image", jsonData, { headers: this.getAccessToken() });
+  // }
+
   public getLayerAndImagePanel(jsonData){
-    return this.http.post( this.url + "get_all_layer_and_image", jsonData, { headers: this.getAccessToken() });
+    return this.http.post( "https://apagri.infinium.management/midcgis/layer/layer_management", jsonData);
   }
   
   public getRoleManagementTableData() {
