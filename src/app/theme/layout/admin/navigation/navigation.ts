@@ -63,10 +63,10 @@ const NavigationItems = [
         classes: 'nav-item',
       },
       {
-        id: 'user-management',
-        title: 'User Management',
+        id: 'user-management-old',
+        title: 'User Management old',
         type: 'item',
-        url: '/user-management',
+        url: '/user-management-old',
         icon: 'feather icon-home',
         classes: 'nav-item',
       },

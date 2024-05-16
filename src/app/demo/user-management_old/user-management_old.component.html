@@ -1,16 +1,17 @@
-<div class="row justify-content-center flex" *ngIf="isLoading">
+<!-- <div class="row justify-content-center flex" *ngIf="isLoading">
   <div class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
-</div>
-<div class="row" *ngIf="!isLoading">
+</div> -->
+<!-- *ngIf="!isLoading" -->
+<div class="row" >
 
   <kendo-grid [kendoGridBinding]="userData" [style.height.%]="100" [pageSize]="10" filterable="menu" [skip]="0"
     [pageable]="true" [sortable]="true">
 
     <ng-template kendoGridToolbarTemplate let-dataItem>
       <div class="export-template">
-        <button kendoGridExcelCommand icon="file-excel" class=" btn btn-dark export-new excel"
+        <button kendoGridExcelCommand  class=" btn btn-dark export-new excel"
           (click)="exportExcel(excelexport)">Export to Excel</button>
       </div>
 
@@ -67,7 +68,7 @@
   (close)="closeEditDialog()">
   <h1>{{btnName}}</h1>
 
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit(btnSubmit)">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit(btnSubmit)"  style="height: 600px; overflow-y: auto;">
     <div class="cross-validation"
       [class.cross-validation-error]="userForm.errors?.['identityRevealed'] && (userForm.touched || userForm.dirty)">
       <div class="form-group">
@@ -88,7 +89,7 @@
           <div *ngIf="contact_no.errors?.['required']">
             contactno is required.
           </div>
-          <div *ngIf="userForm.get('contact_no').errors['invalidContactNumber']">Invalid contact number (should be a
+          <div *ngIf="userForm.get('contact_no').errors['pattern']">Invalid contact number (should be a
             10-digit number)</div>
         </div>
       </div>
@@ -98,33 +99,31 @@
         <div class="form-group">
           <label>Password</label>
           <input type="password" formControlName="password" class="form-control">
-
-          <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
-
-            <div *ngIf="password.errors?.['required']">
-              password is required.
+          <div *ngIf="userForm.get('password').invalid && (userForm.get('password').dirty || userForm.get('password').touched)" class="alert alert-danger">
+            <div *ngIf="userForm.get('password').errors['required']">
+              Password is required.
             </div>
-            <div *ngIf="password.errors?.['minlength']">
-              password must be at least 8 characters long.
-            </div>
+            <!-- <div *ngIf="userForm.errors?.['PasswordNoMatch']">
+              Passwords do not match.
+            </div> -->
+         
           </div>
         </div>
         <br />
         <div class="form-group">
           <label>Confirm Password</label>
           <input type="password" formControlName="confirmPassword" class="form-control">
-
-          <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)"
-            class="alert alert-danger">
-
-            <div *ngIf="confirmPassword.errors?.['required']">
-              confirmPassword is required.
-            </div>
-            <div *ngIf="confirmPassword.errors?.['minlength']">
-              confirmPassword must with Password
-            </div>
-          </div>
+          <div *ngIf="(userForm.get('confirmPassword').invalid && (userForm.get('confirmPassword').dirty || userForm.get('confirmPassword').touched)) && (password.invalid && (password.dirty || password.touched))"
+          class="alert alert-danger">
+          <div *ngIf="userForm.get('confirmPassword').errors?.['required']">
+            Confirm Password is required.
+          </div>          
         </div>
+        <div class="alert alert-danger" *ngIf=passwordHandler>
+          Passwords do not match.
+        </div>
+        </div>
+        
       </div>
       <br>
       <div class="form-group">
@@ -134,7 +133,7 @@
           *ngIf="userForm.get('email_id').invalid && (userForm.get('email_id').dirty || userForm.get('email_id').touched)"
           class="alert alert-danger">
           <div *ngIf="userForm.get('email_id').errors['required']">Email is required</div>
-          <div *ngIf="userForm.get('email_id').errors['pattern']">Email format is required</div>
+                
           <div *ngIf="userForm.get('email_id').errors['email']">Please enter a valid email address</div>
         </div>
       </div>
@@ -165,7 +164,7 @@
       </div>
     </div>
     <!--  -->
-    <button [disabled]="!userForm.valid" class="btn btn-dark" type="submit">{{btnSubmit}}</button>
+    <button class="btn btn-dark" type="submit">{{btnSubmit}}</button>
     <button class="btn btn-dark" (click)="closeEditDialog()">close</button>
   </form>
 

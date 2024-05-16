@@ -17,22 +17,22 @@ import { MonitoringService } from 'src/app/services/monitoring.service';
 import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { PasswordValidator } from 'src/app/theme/shared/password.validator';
-import { ForbiddenNameValidator } from 'src/app/theme/shared/user-name.validator';
+import { confirmPasswordValidator } from 'src/app/theme/shared/password.validator';
 import { ToastrService, ToastNoAnimation } from 'ngx-toastr';
 
 @Component({
   standalone: true,
   selector: 'app-user-management',
-  templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.scss'],
+  templateUrl: './user-management_old.component.html',
+  styleUrls: ['./user-management_old.component.scss'],
   imports: [
     SharedModule, GridModule, ExcelModule, PDFModule, DialogModule, LabelModule, DropDownsModule, DateInputsModule, TreeViewModule, MatTooltipModule
   ]
 })
 export class UserManagementComponent implements OnInit {
   isLoading: boolean = true; // Initialize as true to show loader by default
-  emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
+  // emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
+
   userForm: FormGroup;
   roles: any[] = []; // Array to store roles
   public editDialog: any = false;
@@ -41,6 +41,7 @@ export class UserManagementComponent implements OnInit {
   public editData: any;
   public formdata: any;
   isAdd: boolean = false; // Added flag for controlling add mode
+  passwordHandler: any = false;
 
   constructor(private commonService: CommonsService, private fb: FormBuilder, private toastr: ToastrService) { }
 
@@ -51,17 +52,17 @@ export class UserManagementComponent implements OnInit {
       role_id: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
       confirmPassword: new FormControl('', [Validators.required]),
-      contact_no: new FormControl('', [Validators.required, this.validateContactNumber]),
-      email_id: new FormControl('', [Validators.required, Validators.email, Validators.pattern(this.emailPattern)]),
+      contact_no: new FormControl('', [Validators.required, Validators.pattern("^[0-9]{10}$")]),
+      email_id: new FormControl('', [Validators.required, Validators.email]),
       status: new FormControl('false', [Validators.required]),
-    }, { validators: PasswordValidator });
+    }, { validators: confirmPasswordValidator });
 
   }
-  validateContactNumber(control: FormControl) {
-    const contactNumber = control.value;
-    const isValid = /^\d{10}$/.test(contactNumber); // Validate 10-digit number
-    return isValid ? null : { invalidContactNumber: true };
-  }
+  // validateContactNumber(control: FormControl) {
+  //   const contactNumber = control.value;
+  //   const isValid = /^\d{10}$/.test(contactNumber); // Validate 10-digit number
+  //   return isValid ? null : { invalidContactNumber: true };
+  // }
 
   get user_name() {
     return this.userForm.get('user_name');
@@ -94,7 +95,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   public grid_fields = [
-    { 'fields': 'user_id', 'title': 'User Id', 'hide': false },
+    { 'fields': 'user_id', 'title': 'User Id', 'hide':true },
     { 'fields': 'role_id', 'title': 'role Id', 'hide': true },
     { 'fields': 'user_name', 'title': 'User Name', 'hide': false },
     { 'fields': 'role_name', 'title': 'Role Name', 'hide': false },
@@ -105,6 +106,7 @@ export class UserManagementComponent implements OnInit {
 
   loadData() {
     this.commonService.userCrudManagement({ "flag": "fetch" }).subscribe((data: any) => {
+      console.log("load user data",data)
       this.isLoading = true;
       if (data.responseCode === 200) {
         this.userData = data.data;
@@ -112,12 +114,14 @@ export class UserManagementComponent implements OnInit {
       }
     }, (error) => {
       this.isLoading = false; // Set loading to false if error occurs
-      this.toastr.success('Something Happened Wrong.');
+      this.toastr.error('Something Happened Wrong.');
     });
   }
 
   loadRoles() {
-    this.commonService.getAllRoles().subscribe((data: any) => {
+    const jsonData={"flag":"fetch"}
+    this.commonService.userCrudManagement(jsonData).subscribe((data: any) => {
+      console.log("load roles",data)
       if (data.responseCode === 200) {
         // Assuming roles are returned in the 'data' property
         this.roles = data.data.map((role: any) => {
@@ -145,10 +149,11 @@ export class UserManagementComponent implements OnInit {
       this.isAdd = false; // Set flag to false for edit mode
       this.btnName = "Edit User";
       this.btnSubmit = "UPDATE"
-      this.formdata = { "flag": "fetch_id", "user_id": userId };
+      // this.formdata = { "flag": "fetch_id", "user_id": userId };
 
-      this.commonService.userCrudManagement(this.formdata).subscribe((data: any) => {
-        if (data.responseCode === 200) {
+      this.commonService.getUserBYId(userId).subscribe((data: any) => {
+        console.log("get user by id",data)
+        if (data) {
           this.editData = data.data[0];
           console.log("Fetched edit data:", this.editData);
           this.userForm.patchValue({
@@ -157,7 +162,8 @@ export class UserManagementComponent implements OnInit {
             contact_no: this.editData.contact_no,
             email_id: this.editData.email_id,
             status: this.editData.status,
-            role_id: this.editData.role_id
+            role_id: this.editData.role_id,
+            role_name: this.editData.role_name
 
           });
         } else {
@@ -188,6 +194,7 @@ export class UserManagementComponent implements OnInit {
 
   delete(id: any) {
     this.commonService.userCrudManagement({ "flag": "delete", "user_id": id }).subscribe((data: any) => {
+      console.log("data delete id",data,id)
       if (data.responseCode === 200) {
 
         this.toastr.success("user deleted");
@@ -202,10 +209,19 @@ export class UserManagementComponent implements OnInit {
     });
   }
   onSubmit(mode: any) {
+
+    
+
     if (mode == "ADD") {
+
+      if(this.userForm.controls['password'].value != this.userForm.controls['confirmPassword'].value){
+        this.passwordHandler = true;
+        return;
+      }
       this.userForm.value['flag'] = 'create';
       delete this.userForm.value["user_id"];
       this.commonService.userCrudManagement(this.userForm.value).subscribe((data: any) => {
+        console.log("adding user data",this.userForm.value,data)
         if (data.responseCode === 200) {
           this.loadData(); // Reload data after adding user
           this.toastr.success("user added");
@@ -219,6 +235,7 @@ export class UserManagementComponent implements OnInit {
     else {
       this.userForm.value['flag'] = 'update';
       this.commonService.userCrudManagement(this.userForm.value).subscribe((data: any) => {
+         console.log("load user data",data)
         if (data.responseCode === 200) {
           this.loadData(); // Reload data after adding user
           this.toastr.success("user updated");
@@ -229,6 +246,8 @@ export class UserManagementComponent implements OnInit {
         }
       });
     }
+    this.passwordHandler = false;
     console.log('submit data', this.userForm.value);
   }
+  
 }
