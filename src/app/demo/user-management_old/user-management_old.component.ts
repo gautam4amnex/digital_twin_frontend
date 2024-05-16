@@ -64,28 +64,6 @@ export class UserManagementComponent implements OnInit {
   //   return isValid ? null : { invalidContactNumber: true };
   // }
 
-  get user_name() {
-    return this.userForm.get('user_name');
-  }
-  get confirmPassword() {
-    return this.userForm.get('password');
-  }
-  get password() {
-    return this.userForm.get('confirmPassword');
-  }
-  get email_id() {
-    return this.userForm.get('email_id');
-  }
-  get status() {
-    return this.userForm.get('status');
-  }
-  get contact_no() {
-    return this.userForm.get('contact_no');
-  }
-  get role_id() {
-    return this.userForm.get('role_id');
-  }
-
   userData: any
   ngOnInit(): void {
 
@@ -210,7 +188,11 @@ export class UserManagementComponent implements OnInit {
   }
   onSubmit(mode: any) {
 
-    
+    if (this.userForm.invalid) {
+      const controls = this.userForm.controls;
+      Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
+      
+  }else{
 
     if (mode == "ADD") {
 
@@ -248,6 +230,6 @@ export class UserManagementComponent implements OnInit {
     }
     this.passwordHandler = false;
     console.log('submit data', this.userForm.value);
-  }
+  }}
   
 }

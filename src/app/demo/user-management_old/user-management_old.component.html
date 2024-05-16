@@ -74,8 +74,8 @@
       <div class="form-group">
         <label for="first-name">UserName</label>
         <input type="text" id="username" class="form-control" formControlName="user_name">
-        <div *ngIf="user_name.invalid && (user_name.dirty || user_name.touched)" class="alert alert-danger">
-          <div *ngIf="user_name.errors?.['required']">
+        <div *ngIf="userForm.get('user_name').invalid && (userForm.get('user_name').dirty ||userForm.get('user_name').touched)" class="alert alert-danger">
+          <div *ngIf="userForm.get('user_name').errors?.['required']">
             user_name is required.
           </div>
         </div>
@@ -85,8 +85,8 @@
         <label for="contact_no">contact no</label>
         <input type="text" id="" class="form-control" formControlName="contact_no">
 
-        <div *ngIf="contact_no.invalid && (contact_no.dirty || contact_no.touched)" class="alert alert-danger">
-          <div *ngIf="contact_no.errors?.['required']">
+        <div *ngIf="userForm.get('contact_no').invalid && (userForm.get('contact_no').dirty || userForm.get('contact_no').touched)" class="alert alert-danger">
+          <div *ngIf="userForm.get('contact_no').errors?.['required']">
             contactno is required.
           </div>
           <div *ngIf="userForm.get('contact_no').errors['pattern']">Invalid contact number (should be a
@@ -113,7 +113,7 @@
         <div class="form-group">
           <label>Confirm Password</label>
           <input type="password" formControlName="confirmPassword" class="form-control">
-          <div *ngIf="(userForm.get('confirmPassword').invalid && (userForm.get('confirmPassword').dirty || userForm.get('confirmPassword').touched)) && (password.invalid && (password.dirty || password.touched))"
+          <div *ngIf="(userForm.get('confirmPassword').invalid && (userForm.get('confirmPassword').dirty || userForm.get('confirmPassword').touched))"
           class="alert alert-danger">
           <div *ngIf="userForm.get('confirmPassword').errors?.['required']">
             Confirm Password is required.
