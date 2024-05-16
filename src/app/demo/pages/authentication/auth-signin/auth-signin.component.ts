@@ -69,8 +69,7 @@ export default class AuthSigninComponent implements OnInit {
       console.log(data);
       
       if(data.responseCode == 200){
-        if(data.data[0].captcha == this.loginForm.controls.captcha.value){
-          this.toastr.success('Login Success');
+        if(data.data[0].captcha == this.loginForm.controls.captcha.value){          
           this.loginUser("");
         }
         else{
@@ -120,15 +119,16 @@ export default class AuthSigninComponent implements OnInit {
           localStorage.setItem('modules', data.data[0].modules);
           localStorage.setItem('token', data.data[0].accessToken);
           this.authorizationCheckService.modules = data.data[0].modules;
+          this.toastr.success('Login Success');
 		  
           //this.utilModule.notify(this.utilModule.SUCCESS_TAG, 'Login Successfull.');
         } else{
-          alert(data.responseMessage);
+          this.toastr.error(data.responseMessage);
           //this.utilModule.notify(this.utilModule.ERROR_TAG, data.responseMessage);
         }
         
-      }, (error) => {
-        alert('Something Happend Wrong.');
+      }, (error) => {        
+        this.toastr.error('Something Happend Wrong');
         //this.utilModule.notify(this.utilModule.ERROR_TAG, 'Something Happend Wrong.');
       });
     this.user = new User();

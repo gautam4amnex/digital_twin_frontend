@@ -52,8 +52,12 @@ export class CommonsService extends BehaviorSubject<any[]> {
     return response;
   }
 
+  // public getLayerAndImagePanel(jsonData){
+  //   return this.http.post( this.url + "get_all_layer_and_image", jsonData, { headers: this.getAccessToken() });
+  // }
+
   public getLayerAndImagePanel(jsonData){
-    return this.http.post( this.url + "get_all_layer_and_image", jsonData, { headers: this.getAccessToken() });
+    return this.http.post( "https://apagri.infinium.management/midcgis/layer/layer_management", jsonData);
   }
 
   public getStateName(){
@@ -65,12 +69,13 @@ export class CommonsService extends BehaviorSubject<any[]> {
   //     }
 
   userCrudManagement(jsonData:any){
-    return this.http.post( this.url + "crud_user_management", jsonData);
+    //return this.http.post( this.url + "crud_user_management", jsonData);
+    return this.http.post( this.url_midc + "crud_user_management", jsonData);
   }
 
-  // getUserBYId(roll_id:any){
-  //   return this.http.get(`${this.url_midc}` + `getUserDetailsById/${roll_id}`);
-  // }
+  get_all_role(jsonData:any){
+    return this.http.post( this.url_midc + "role_management", jsonData);
+  }
 
   getUserBYId(roll_id:any){
     return this.http.get(`${this.url}` + `getUserDetailsById/${roll_id}`);

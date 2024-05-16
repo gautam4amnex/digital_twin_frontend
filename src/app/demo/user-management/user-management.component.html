@@ -1,0 +1,144 @@
+<div class="row">
+
+    <kendo-grid [kendoGridBinding]="userData" [style.height.%]="100" [pageSize]="10" filterable="menu" [skip]="0" [pageable]="true" [sortable]="true">
+  
+      <ng-template kendoGridToolbarTemplate>
+        <div class="export-template">
+            <button type="button" kendoGridExcelCommand icon="file-excel" class="export-new excel" (click)="exportExcel(excelexport)">Export to Excel</button>
+        </div>
+        <div class="export-template">
+          <button class="export-new excel btn btn-dark" (click)="openEditDialog('add','')">Add New User</button>
+        </div>
+      </ng-template>
+  
+      <ng-container *ngFor="let data of grid_fields">
+          <kendo-grid-column field="{{data.fields}}" title="{{data.title}}" [hidden]="data.hide" [width]="250"></kendo-grid-column>
+      </ng-container>        
+      
+      <kendo-grid-column field="Action" title="Action" [width]="80" [sticky]="true" [columnMenu]="false">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div class="d-flex gap-2">
+            <button kendoButton size="small" class="d-flex align-items-center" size="small" rounded="small" fillMode="outline"
+              themeColor="base" (click)="openEditDialog('edit',dataItem)">
+              Edit
+            </button>
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+        
+      <!-- <kendo-grid-command-column title="View">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button kendoButton size="small" class="d-flex align-items-center" rounded="small" fillMode="outline" 
+                      themeColor="base" (click)="openEditDialog(dataItem)"><span class="k-i-edit k-i-pencil k-icon"></span>
+                    </button>
+        </ng-template>
+      </kendo-grid-command-column> -->
+    
+       <!-- Excel -->
+      <kendo-excelexport fileName="Reports.xlsx" [data]="userData" #excelexport>
+        <ng-container *ngFor="let data of grid_fields">
+            <kendo-excelexport-column field="{{data.fields}}" title="{{data.title}}"></kendo-excelexport-column>
+        </ng-container>
+      </kendo-excelexport>
+  
+    </kendo-grid>
+  
+  </div>
+
+
+
+  <kendo-dialog class="custom-dialog handler-dialog" title="User Details" *ngIf="userDetailDialog" [height]="700" [minWidth]="250" [width]="1024" (close)="closeUserDetailDialog()">
+
+    <form [formGroup]="userForm">
+      
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">User Name:</label>
+          <input type="text" id="user_name" name="user_name" formControlName="user_name" placeholder="User Name" required minlength="1" maxlength="250" class="form-control form-control-sm" [class.is-invalid]="this.userForm.controls.user_name.invalid && (this.userForm.controls.user_name.dirty || this.userForm.controls.user_name.touched)">
+          <div *ngIf="this.userForm.controls.user_name.invalid && (this.userForm.controls.user_name.dirty || this.userForm.controls.user_name.touched)" class="invalid-feedback">
+            <div *ngIf="this.userForm.controls.user_name.errors?.['required']">
+              This field is required.
+            </div>
+            <div *ngIf="this.userForm.controls.user_name.errors?.['minlength']">
+              This field must have at least 1 character.
+            </div>
+            <div *ngIf="this.userForm.controls.user_name.errors?.['maxlength']">
+              This field must have at most 250 characters.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Email Id:</label>
+          <input type="text" id="email_id" name="email_id" formControlName="email_id" placeholder="Email Id" required minlength="1" maxlength="250" class="form-control form-control-sm" [class.is-invalid]="this.userForm.controls.email_id.invalid && (this.userForm.controls.email_id.dirty || this.userForm.controls.email_id.touched)">
+          <div *ngIf="this.userForm.controls.email_id.invalid && (this.userForm.controls.email_id.dirty || this.userForm.controls.email_id.touched)" class="invalid-feedback">
+            <div *ngIf="this.userForm.controls.email_id.errors?.['required']">
+              This field is required.
+            </div>
+            <div *ngIf="this.userForm.controls.email_id.errors?.['minlength']">
+              This field must have at least 1 character.
+            </div>
+            <div *ngIf="this.userForm.controls.email_id.errors?.['maxlength']">
+              This field must have at most 250 characters.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Contact No:</label>
+          <input type="text" id="contact_no" name="contact_no" formControlName="contact_no" placeholder="Contact No" required minlength="1" maxlength="250" class="form-control form-control-sm" [class.is-invalid]="this.userForm.controls.contact_no.invalid && (this.userForm.controls.contact_no.dirty || this.userForm.controls.contact_no.touched)">
+          <div *ngIf="this.userForm.controls.contact_no.invalid && (this.userForm.controls.contact_no.dirty || this.userForm.controls.contact_no.touched)" class="invalid-feedback">
+            <div *ngIf="this.userForm.controls.contact_no.errors?.['required']">
+              This field is required.
+            </div>
+            <div *ngIf="this.userForm.controls.contact_no.errors?.['minlength']">
+              This field must have at least 1 character.
+            </div>
+            <div *ngIf="this.userForm.controls.contact_no.errors?.['maxlength']">
+              This field must have at most 250 characters.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col mb-2">
+          <label for="name" class="form-label">Role Name:</label>
+          <select class="form-control" formControlName="role_id" required [class.is-invalid]="this.userForm.controls.role_id.invalid && (this.userForm.controls.role_id.dirty || this.userForm.controls.role_id.touched)">
+            <option value="">Select</option>
+            <option value="1">Citizen_Role1</option>
+            <option value="2">Admin</option>
+            <option value="4">RRLE2222</option>
+            <option value="5">CITIZEN_ROLE12</option>
+          </select>      
+          <div *ngIf="this.userForm.controls.role_id.invalid && (this.userForm.controls.role_id.dirty || this.userForm.controls.role_id.touched)" class="invalid-feedback">
+            <div *ngIf="this.userForm.controls.role_id.errors?.['required']">
+              This field is required.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col mb-2">        
+          <label class="form-check-label">
+            Status:
+          </label>    
+          <input class="form-check-input" formControlName="status" type="checkbox" id="status">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col mb-2 d-grid">
+          <button type="button" class="btn btn-sm btn-primary" (click)="validate()">Submit</button>
+        </div>
+      </div>
+    </form>
+    
+  </kendo-dialog>
+    

@@ -20,19 +20,21 @@ declare const AmCharts: any;
 })
 export default class DashboardComponent implements OnInit {
   
-  public mapConroller: any;
+  //public mapConroller: any;
   public viewer: any;
 
-  constructor(private mapConroller1 : MapController){
-    this.mapConroller = mapConroller1;
+  constructor(private mapConroller : MapController){
+    //this.mapConroller = mapConroller1;
   }
 
   ngOnInit() {
     this.mapConroller.initMap();
+
+    this.mapConroller.temp_data_new();
   }
 
 
-
+  
 }
 
 

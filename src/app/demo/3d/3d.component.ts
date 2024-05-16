@@ -127,6 +127,12 @@ export default class _3D implements OnInit {
   feature_name: any;
   selectFeatureDialog: any = false;
 
+  gotopoint: any = null;
+  cctv_entity: any[] = [];
+
+  flag_details: any = null;
+
+
   constructor(private http: HttpClient,
     private commonService: CommonsService,
   ) { }
@@ -153,6 +159,7 @@ export default class _3D implements OnInit {
     this.handler = new Cesium.ScreenSpaceEventHandler(this.viewer.canvas);
 
     this.LineMeasurementhandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
+    
 
     this.addBimDataHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
 
@@ -174,9 +181,10 @@ export default class _3D implements OnInit {
       ])
     );
 
-    this.imageryLayers = this.viewer.imageryLayers;
+    this.imageryLayers = this.viewer.imageryLayers; 
 
   }
+
 
   reactiveForm = new FormGroup({
     layer_name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(250)]),
@@ -283,15 +291,6 @@ export default class _3D implements OnInit {
     this.layerDetailDialog = false;
   }
 
-  formDATTA: any = {
-    layer_name: "",
-    table_name: "",
-    parent_layer_id: "",
-    service_url: ""
-
-
-  }
-
   get_layer_by_state_id(event) {
 
 
@@ -312,41 +311,27 @@ export default class _3D implements OnInit {
 
     if (event.target.checked == true) {
 
+    var form_data = {
+      flag: "fetch"
+    }
 
+    this.http.post("https://apagri.infinium.management/midcgis/layer/crud_cctv_location", form_data).subscribe((data: any) => {
+      this.bimdata = data.data;    
 
-      if (flag_status != "Image") {
-        if (parent_layer == "3D Buildings" || parent_layer == "3D Bridge" || parent_layer == "3D Flyover"
-          || parent_layer == "3D Metro Line" || parent_layer == "3D Metro Station" || parent_layer == "Vector Model") {
-          this.add_remove_3d_data_new(table_name, true);
-        }
-
-
-      } else {
-        this.current_image = new Cesium.WebMapTileServiceImageryProvider({
-          url: service_url,
-          layer: table_name,
-          style: 'default',
-          format: 'image/png',
-          tileMatrixSetID: 'GoogleMapsCompatibleExt2:epsg:3857'
-        });
-
-
-        imageryLayers.addImageryProvider(this.current_image);
-
+      for(var i=0; i< this.bimdata.length; i++){
+        this.add_data_on_click(this.bimdata[i].longitude , this.bimdata[i].latitude , "get" , this.bimdata[i] , table_name);
       }
 
+    });
 
     }
     else {
-      if (flag_status == "Image") {
-        for (var i = 0; i < imageryLayers._layers.length; i++) {
-          if (imageryLayers._layers[i].imageryProvider._layer == table_name) {
-            imageryLayers._layers[i].show = false;
-          }
-        }
-      } else {
-        this.add_remove_3d_data_new(table_name, false);
+
+      for(var i=0; i<this.cctv_entity.length; i++){
+      this.viewer.entities.remove(this.cctv_entity[i]);
       }
+
+
     }
   }
 
@@ -354,7 +339,8 @@ export default class _3D implements OnInit {
   get_layer_panel_data(pageName, stateId) {
     this.data = [];
     var formData = {
-      flag: "fetch_all"
+      flag: "fetch_all",
+      layer_type: "3D"
     }
 
     this.commonService.getLayerAndImagePanel(formData).subscribe((data: any) => {
@@ -416,6 +402,7 @@ export default class _3D implements OnInit {
     this.goto_click = false;
     this.info_click = false;
     this.measureEnabled = false;
+    this.polygonMeasureEnabled = false;
   }
 
   clearMeasurements() {
@@ -597,7 +584,7 @@ export default class _3D implements OnInit {
               backgroundColor: Cesium.Color.BLACK,
               border: 1
 
-            }
+            },
           });
 
 
@@ -613,6 +600,12 @@ export default class _3D implements OnInit {
   getFeature() {
     this.selectFeatureDialog = false;
     this.editDialog = true;
+    this.flag_details = 'create'
+  }
+
+  UpdateFeature(){
+    this.editDialog = true;
+    this.flag_details = 'update'
   }
 
   closeFeatureDialog() {
@@ -766,78 +759,124 @@ export default class _3D implements OnInit {
     }
     else {
 
-      if (Featuretype == "car") {
+      // if (Featuretype == "car") {
 
-        let modelEntity = this.viewer.entities.add({
-          name: "milktruck",
-          position: Cesium.Cartesian3.fromDegrees(long, lat),
-          model: {
-            uri:
-              "../../../assets/3d_data/CesiumMilkTruck.glb",
-            minimumPixelSize: 30,
-            // maximumScale: 20000,
-            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
-          },
+      //   let modelEntity = this.viewer.entities.add({
+      //     name: "milktruck",
+      //     position: Cesium.Cartesian3.fromDegrees(long, lat),
+      //     model: {
+      //       uri:
+      //         "../../../assets/3d_data/CesiumMilkTruck.glb",
+      //       minimumPixelSize: 30,
+      //       // maximumScale: 20000,
+      //       heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+      //     },
 
-        });
+      //   });
 
-        const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
-          modelEntity.position.getValue(this.viewer.clock.currentTime),
-          new Cesium.HeadingPitchRoll(0, 0, 0)
-        );
+      //   const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
+      //     modelEntity.position.getValue(this.viewer.clock.currentTime),
+      //     new Cesium.HeadingPitchRoll(0, 0, 0)
+      //   );
 
-        modelEntity.orientation = initialOrientation;
+      //   modelEntity.orientation = initialOrientation;
 
-        if (response.orientation != null) {
-          var result = JSON.parse(response.orientation);
+      //   if (response.orientation != null) {
+      //     var result = JSON.parse(response.orientation);
 
-          modelEntity.orientation._value.w = result.w
-          modelEntity.orientation._value.x = result.x
-          modelEntity.orientation._value.y = result.y
-          modelEntity.orientation._value.z = result.z
-        }
+      //     modelEntity.orientation._value.w = result.w
+      //     modelEntity.orientation._value.x = result.x
+      //     modelEntity.orientation._value.y = result.y
+      //     modelEntity.orientation._value.z = result.z
+      //   }
 
-        return;
+      //   return;
 
-      }
+      // }
 
-      if (Featuretype == "street_light") {
+      // if (Featuretype == "street_light") {
 
-        let modelEntity = this.viewer.entities.add({
-          name: "milktruck",
-          position: Cesium.Cartesian3.fromDegrees(long, lat),
-          model: {
-            uri:
-              "../../../assets/3d_data/dividerStreetLight.glb",
-            minimumPixelSize: 30,
-            // maximumScale: 20000,
-            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
-          },
+      //   let modelEntity = this.viewer.entities.add({
+      //     name: "milktruck",
+      //     position: Cesium.Cartesian3.fromDegrees(long, lat),
+      //     model: {
+      //       uri:
+      //         "../../../assets/3d_data/dividerStreetLight.glb",
+      //       minimumPixelSize: 30,
+      //       // maximumScale: 20000,
+      //       heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+      //     },
 
-        });
+      //   });
 
-        const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
-          modelEntity.position.getValue(this.viewer.clock.currentTime),
-          new Cesium.HeadingPitchRoll(0, 0, 0)
-        );
+      //   const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
+      //     modelEntity.position.getValue(this.viewer.clock.currentTime),
+      //     new Cesium.HeadingPitchRoll(0, 0, 0)
+      //   );
 
-        modelEntity.orientation = initialOrientation;
+      //   modelEntity.orientation = initialOrientation;
 
-        if (response.orientation != null) {
-          var result = JSON.parse(response.orientation);
+      //   if (response.orientation != null) {
+      //     var result = JSON.parse(response.orientation);
 
-          modelEntity.orientation._value.w = result.w
-          modelEntity.orientation._value.x = result.x
-          modelEntity.orientation._value.y = result.y
-          modelEntity.orientation._value.z = result.z
-        }
+      //     modelEntity.orientation._value.w = result.w
+      //     modelEntity.orientation._value.x = result.x
+      //     modelEntity.orientation._value.y = result.y
+      //     modelEntity.orientation._value.z = result.z
+      //   }
 
-        return;
+      //   return;
 
 
-      }
+      // }
 
-      if (Featuretype == "cctv") {
+      // if (Featuretype == "cctv") {
+
+      //   var propertyBag = new Cesium.PropertyBag();
+      //   propertyBag.addProperty('cctv_asset_id', response.cctv_asset_id);
+      //   propertyBag.addProperty('cctv_id', response.cctv_id);
+      //   propertyBag.addProperty('junction_type', response.junction_type);
+      //   propertyBag.addProperty('latitude', response.latitude);
+      //   propertyBag.addProperty('location_name', response.location_name);
+      //   propertyBag.addProperty('longitude', response.longitude);
+      //   propertyBag.addProperty('police_station_name', response.police_station_name);
+
+      //   console.log(response);
+
+      //   let modelEntity = this.viewer.entities.add({
+      //     name: "milktruck",
+      //     position: Cesium.Cartesian3.fromDegrees(long, lat),
+      //     model: {
+      //       uri:
+      //         "../../../assets/3d_data/cctv.glb",
+      //       minimumPixelSize: 30,
+      //       // maximumScale: 20000,
+      //       heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+      //     },
+      //     properties: propertyBag
+
+      //   });
+
+      //   const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
+      //     modelEntity.position.getValue(this.viewer.clock.currentTime),
+      //     new Cesium.HeadingPitchRoll(0, 0, 0)
+      //   );
+
+      //   modelEntity.orientation = initialOrientation;
+
+      //   if (response.orientation != null) {
+      //     var result = JSON.parse(response.orientation);
+
+      //     modelEntity.orientation._value.w = result.w
+      //     modelEntity.orientation._value.x = result.x
+      //     modelEntity.orientation._value.y = result.y
+      //     modelEntity.orientation._value.z = result.z
+      //   }
+
+      //   return;
+
+
+      // }
 
         var propertyBag = new Cesium.PropertyBag();
         propertyBag.addProperty('cctv_asset_id', response.cctv_asset_id);
@@ -846,7 +885,7 @@ export default class _3D implements OnInit {
         propertyBag.addProperty('latitude', response.latitude);
         propertyBag.addProperty('location_name', response.location_name);
         propertyBag.addProperty('longitude', response.longitude);
-        propertyBag.addProperty('police_station_name', response.police_station_name);
+        propertyBag.addProperty('pstation_name', response.police_station_name);
 
         console.log(response);
 
@@ -855,7 +894,7 @@ export default class _3D implements OnInit {
           position: Cesium.Cartesian3.fromDegrees(long, lat),
           model: {
             uri:
-              "../../../assets/3d_data/cctv.glb",
+              "../../../assets/3d_data/" + Featuretype +".glb",
             minimumPixelSize: 30,
             // maximumScale: 20000,
             heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
@@ -863,6 +902,8 @@ export default class _3D implements OnInit {
           properties: propertyBag
 
         });
+
+        this.cctv_entity.push(modelEntity);
 
         const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
           modelEntity.position.getValue(this.viewer.clock.currentTime),
@@ -881,10 +922,6 @@ export default class _3D implements OnInit {
         }
 
         return;
-
-
-      }
-
 
 
 
@@ -910,7 +947,10 @@ export default class _3D implements OnInit {
 
   add_bim_data_to_db($event) {
 
-    var form_data = {
+    var form_data;
+    if(this.flag_details == 'create'){
+
+      form_data = {
 
       cctv_asset_id: this.DataFormDetail.controls['cctv_asset_id'].value,
       location_name: this.DataFormDetail.controls['location_name'].value,
@@ -923,6 +963,24 @@ export default class _3D implements OnInit {
 
     }
 
+  }
+
+  if(this.flag_details == 'update'){
+
+    form_data = {
+
+      cctv_id: this.gridarr['cctv_id'],
+      cctv_asset_id: this.DataFormDetail.controls['cctv_asset_id'].value,
+      location_name: this.DataFormDetail.controls['location_name'].value,
+      junction_type: this.DataFormDetail.controls['junction_type'].value,
+      police_station_name: this.DataFormDetail.controls['pstation_name'].value,
+      orientation: this.modelEntity.orientation._value,
+      flag: "update"
+
+    }
+
+  }
+
     this.latitude = null;
     this.longitude = null;
 
@@ -931,7 +989,7 @@ export default class _3D implements OnInit {
     this.commonService.crudBimData(form_data).subscribe((data: any) => {
       this.bimdata = data.data;
     });
-
+    this.DataFormDetail.reset();
     this.editDialog = false;
 
   }
@@ -1049,45 +1107,64 @@ export default class _3D implements OnInit {
   infoOf3DData() {
 
     /** BElow Code is to get Info of 3d object plotted by user */
-    // this.goto_click = false;
-    // this.measureEnabled = false;
-    // this.polygonMeasureEnabled = false;
-    // this.info_click = false;
+    this.goto_click = false;
+    this.measureEnabled = false;
+    this.polygonMeasureEnabled = false;
+    this.info_click = false;
 
-    // if (this.propertyDataInfo_click == true) {
-    //   //document.querySelector("#property_tbl").setAttribute("style" , "display: none");
-    //   this.propertyDataInfo_click = false;
-    // }
-    // else {
-    //   this.propertyDataInfo_click = true;
-    // }
-
-
-    // this.propertyDataInfohandler.setInputAction((movement) => {
-
-    //   if (!this.propertyDataInfo_click) {
-    //     return;
-    //   }
-    //   else {
-
-    //     var pickedFeature = this.viewer.scene.pick(movement.position);
-
-    //     for(let i=0; i<Object.values(pickedFeature.id.properties._propertyNames).length; i++){
-    //       var key:any = Object.values(pickedFeature.id.properties._propertyNames)[i];
-
-    //       this.gridarr[key] = pickedFeature.id.properties[key]._value;          
-
-    //   }
-
-    //   this.gridInfoKeys =  pickedFeature.id.properties._propertyNames;
-    //   console.log(this.gridarr);
-
-    //     alert('Clicked');
-
-    //   }
+    if (this.propertyDataInfo_click == true) {
+      //document.querySelector("#property_tbl").setAttribute("style" , "display: none");
+      this.propertyDataInfo_click = false;
+    }
+    else {
+      this.propertyDataInfo_click = true;
+    }
 
 
-    //  }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+    this.propertyDataInfohandler.setInputAction((movement) => {
+
+      if (!this.propertyDataInfo_click) {
+        return;
+      }
+      else {
+
+        var pickedFeature = this.viewer.scene.pick(movement.position);
+        if (Cesium.defined(pickedFeature.id)) {
+        
+        this.gridInfoKeys =  pickedFeature.id.properties._propertyNames;
+
+        
+          this.modelEntity = pickedFeature.id;
+          // const initialOrientation = Cesium.Transforms.headingPitchRollQuaternion(
+          //   this.modelEntity.id.position.getValue(this.viewer.clock.currentTime),
+          //   new Cesium.HeadingPitchRoll(0, 0, 0)
+          // );
+  
+          // this.modelEntity.orientation = initialOrientation;
+          
+        for(let i=0; i<Object.values(pickedFeature.id.properties._propertyNames).length; i++){
+          var key:any = Object.values(pickedFeature.id.properties._propertyNames)[i];
+
+          this.gridarr[key] = pickedFeature.id.properties[key]._value;       
+          
+          if(key != 'latitude' && key != 'longitude' && key!= 'cctv_id'){
+          this.DataFormDetail.controls[key].setValue(this.gridarr[key]);
+          }
+
+      }
+
+      alert('Clicked');
+      this.flag_details = 'update';
+      console.log(this.gridInfoKeys);
+      console.log(this.gridarr);
+      this.selectFeatureDialog = false;
+      this.editDialog = true;
+    }
+
+      }
+
+
+     }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
 
   }
 
@@ -1269,12 +1346,14 @@ export default class _3D implements OnInit {
     this.polygonMeasureEnabled = false;
 
     if (this.goto_click == true) {
+      if(this.gotopoint != null){
+        this.viewer.entities.remove(this.gotopoint);
+      }
       this.goto_click = false;
     }
     else {
       this.goto_click = true;
     }
-
 
     let myMouseHandler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
 
@@ -1284,6 +1363,10 @@ export default class _3D implements OnInit {
         return;
       }
       else {
+
+        if (this.gotopoint != null) {
+          this.viewer.entities.remove(this.gotopoint);
+        }
 
         var scene = this.viewer.scene;
         if (scene.mode !== Cesium.SceneMode.MORPHING) {
@@ -1298,11 +1381,25 @@ export default class _3D implements OnInit {
             this.viewer.camera.flyTo({
               destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, 500),
               orientation: {
-
+                
                 roll: 0.0,
               },
               duration: 3
             });
+
+            this.gotopoint = this.viewer.entities.add({
+              name: "milktruck",
+              position: Cesium.Cartesian3.fromDegrees(longitude, latitude),
+              model: {
+                uri:
+                  "../../../assets/3d_data/location_mark.glb",
+                minimumPixelSize: 30,
+                // maximumScale: 20000,
+                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+              },
+    
+            });
+
           }
         }
 
