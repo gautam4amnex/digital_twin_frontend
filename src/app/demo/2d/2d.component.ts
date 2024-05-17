@@ -93,8 +93,43 @@ export default class _2D {
     },
   });
 
+  gridarr: any[] = [];
+  gridInfoKeys: any;
+
   private baseUrl1 = glob.environment.baseUrl;
   constructor(private http: HttpClient, private commonService: CommonsService) { }
+
+  ngOnInit(): void {
+
+    this.get_layer_panel_data("2D", "");
+
+    this.osm = new this.ol.layer.Tile({
+      source: new this.ol.source.OSM()
+    });
+
+    this.view = new this.ol.View({
+      projection: 'EPSG:3857',
+      center: this.ol.proj.fromLonLat([72.893189, 19.076986]),
+      zoom: 12,
+    });
+
+    this.map = new this.ol.Map({
+      layers: [this.osm],
+      target: 'map',
+      view: this.view
+    });
+
+    this.map.addLayer(this.vector);		
+
+    for (let z = 0; z < 25; ++z) {
+      this.resolutions[z] = this.size / Math.pow(2, z);
+      this.matrixIds[z] = z;
+    }
+    this.map.addOverlay(this.overlay);
+    //this.map.addLayer(this.drawvector);
+
+
+  }
 
 
   toggleCollapse(parentLayerId: number) {
@@ -148,14 +183,19 @@ export default class _2D {
 
     if (event.target.checked == true) {
 
-            let current_layer = new this.ol.layer.Tile({
-                source: new this.ol.source.TileWMS({
-                    url: service_url,
+
+      let curr_layer_source = new this.ol.source.TileWMS({
+        url: service_url,
                     params: { 'LAYERS': "MIDC:" + table_name , 'TILED': true },
                     serverType: 'geoserver',
-                    transition: 0,                   
-                })
-            });
+                    transition: 0, 
+        })
+      
+      this.curr_layer_source_arr.push(curr_layer_source);
+      
+      let current_layer:any = new this.ol.layer.Tile({
+        source: curr_layer_source
+      })
 
             this.map.addLayer(current_layer);
             this.map_layers[table_name] = current_layer;
@@ -260,36 +300,41 @@ export default class _2D {
           clickedFeatures.push(feature);
         });
 
-        if (clickedFeatures.length > 0) {
-
-          var selectedFeature = clickedFeatures[0];
-          var properties = selectedFeature.getProperties();
-
-          var content = "";
-
-          for (let i in properties) {
-            var value = properties[i];
-            content += "<table class='table mb-0' style='font-size:0.8rem'><tbody><tr><td style='padding:0.25rem;;width:230px'><label class='mb-0'><strong> " + i.toUpperCase() + "</strong>: </label></td> <td style='padding:0.25rem'>" + value + "</td></tr></tbody></table>";
-          }
-
-          var name = properties['name'];
-          var e: any = document.getElementById("model-heading");
-          e.innerHTML(name)
-
-          var contentValue: any = document.getElementById("modelContentValue");
-          contentValue.innerHTML(content);
-
-          var commonModalPopup: any = document.getElementById(commonModalPopup);
-          commonModalPopup.show();
-        }
-
         for (let k = 0; k < this.curr_layer_source_arr.length; k++) {
           const viewResolution = /** @type {number} */ (this.view.getResolution());
-          const url = this.curr_layer_source_arr[k].getFeatureInfoUrl(evt.coordinate, viewResolution, 'EPSG:4326', { 'INFO_FORMAT': 'application/json' });
+          const url = this.curr_layer_source_arr[k].getFeatureInfoUrl(evt.coordinate, viewResolution, 'EPSG:3857', { 'INFO_FORMAT': 'application/json' });
           if (url) {
 
             axios.get(url)
               .then(response => {
+
+                if(response.data.features[0].properties != null || response.data.features[0].properties != ""){
+
+                  this.gridInfoKeys = Object.keys(response.data.features[0].properties);
+
+
+                    this.gridarr = response.data.features[0].properties;
+
+                }
+
+                var id = document.querySelectorAll('#tbl_info');
+                id.forEach(e => e.remove());
+
+                var content = '<table id="property_tbl" class="table table-striped ng-tns-c3968409143-0" style="display: block;"><tbody _ngcontent-ng-c3968409143="" class="ng-tns-c3968409143-0">';
+
+                for (var i = 0; i < this.gridInfoKeys.length; i++) {
+
+                  if (this.gridInfoKeys[i] != 'orientation') {
+                    
+                    this.gridInfoKeys[i].replace("/_/g" , " ");
+
+                    content += '<tr><th>' + this.gridInfoKeys[i] + '</th>' + '<td>' + this.gridarr[this.gridInfoKeys[i]] + '</td></tr>';
+                    
+                  }
+
+                }
+
+                this.addPropertyInfoPopup(content , evt.coordinate);
 
                 console.log(response);
               })
@@ -328,40 +373,6 @@ export default class _2D {
   }
 
   /** GOTO ENDS */
-  ngOnInit(): void {
-
-    this.get_layer_panel_data("2D", "");
-
-    this.osm = new this.ol.layer.Tile({
-      source: new this.ol.source.OSM()
-    });
-
-    this.view = new this.ol.View({
-      projection: 'EPSG:3857',
-      center: this.ol.proj.fromLonLat([72.893189, 19.076986]),
-      zoom: 12,
-    });
-
-    this.map = new this.ol.Map({
-      layers: [this.osm],
-      target: 'map',
-      view: this.view
-    });
-
-    this.map.addLayer(this.vector);		
-
-    for (let z = 0; z < 25; ++z) {
-      this.resolutions[z] = this.size / Math.pow(2, z);
-      this.matrixIds[z] = z;
-    }
-    this.map.addOverlay(this.overlay);
-    //this.map.addLayer(this.drawvector);
-
-
-  }
-  
-
-  
 
   addDrawInteraction(geometryType) {   
 
@@ -421,6 +432,9 @@ export default class _2D {
   
     var id = document.querySelectorAll('#ol-popup');
     id.forEach(e => e.remove());
+
+    var id = document.querySelectorAll('#tbl_info');
+    id.forEach(e => e.remove());
    
     console.log(this.vector_arr);
 
@@ -468,6 +482,27 @@ export default class _2D {
       this.map.removeInteraction(this.Measuredraw);
     }
     this.addDrawInteraction('Polygon');
+  }
+
+  addPropertyInfoPopup(content , coordinate){
+
+    const popupElement = document.createElement('div');
+    popupElement.id = 'tbl_info';
+    popupElement.innerHTML = content;
+
+    const popupOverlay = new this.ol.Overlay({
+      element: popupElement,
+      position: coordinate,
+      positioning: 'bottom-center',
+      stopEvent: true,
+    });
+
+    this.map.addOverlay(popupOverlay);
+
+
+    document.getElementById('tbl_info').setAttribute('style' , 'background-color: white;    border-radius: 10px;     border: 1px solid black;      padding: 5px 10px !important;');
+
+
   }
 
 

@@ -259,6 +259,7 @@ export default class _3D implements OnInit {
 
   public closeEditDialog() {
     this.editDialog = false;
+    this.DataFormDetail.reset();
   }
 
   public openEditDialog() {
