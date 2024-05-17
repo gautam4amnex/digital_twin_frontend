@@ -6,6 +6,9 @@
         <div class="export-template">
             <button type="button" kendoGridExcelCommand icon="file-excel" class="export-new excel" (click)="exportExcel(excelexport)">Export to Excel</button>
         </div>
+        <div class="export-template">
+          <button class="export-new excel btn btn-dark" (click)="openEditDialog('add','')">Add New User</button>
+        </div>
       </ng-template>
   
       <ng-container *ngFor="let data of grid_fields">
@@ -16,8 +19,8 @@
         <ng-template kendoGridCellTemplate let-dataItem>
           <div class="d-flex gap-2">
             <button kendoButton size="small" class="d-flex align-items-center" size="small" rounded="small" fillMode="outline"
-              themeColor="base" (click)="openEditDialog(dataItem)">
-              Info
+              themeColor="base" (click)="openEditDialog('edit',dataItem)">
+              Edit
             </button>
           </div>
         </ng-template>

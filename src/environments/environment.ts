@@ -25,7 +25,8 @@ export const environment = {
   //baseUrl:'https://apagri.infinium.management/midcgis/',
 
 
-  baseUrl_midc:'https://apagri.infinium.management/midcgis/',
+  //baseUrl_midc:'https://apagri.infinium.management/midcgis/',
+  baseUrl_midc:'http://localhost:9090/midcgis/',
 
   //MIDC Server
   //baseUrl: 'https://apagri.infinium.management/midcgis'

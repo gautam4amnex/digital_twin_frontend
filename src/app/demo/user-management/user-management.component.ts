@@ -125,15 +125,22 @@ export default class UserManagementComponent implements OnInit {
     this.userDetailDialog = false;
   }
 
-  public openEditDialog(dataitem) {
-    this.getUserDetailsById(dataitem.user_id);
-    this.userDetailDialog = true;
+  public openEditDialog(flag,dataitem) {
+    let userModel = new UserModel();
+    if(flag == 'add'){
+      this.addUserDetails(userModel);
+    }else if(flag == 'edit'){
+      userModel.flag = 'fetch';  
+      this.userDetailDialog = true;
+      this.getUserDetailsById(dataitem.user_id);
+    }else{
+
+    }
+
   }
 
   getUserDetailsById(_id){
     let req = { "id" : _id };
-    let userModel = new UserModel();
-    userModel.flag = 'fetch';
     this.userManagementService.getUserDetailsById(_id).subscribe((res: any) => {
       if (res.responseCode === 200) {
         this.userForm.patchValue({
@@ -150,6 +157,22 @@ export default class UserManagementComponent implements OnInit {
       alert('Something Happend Wrong.');
     });
   }
+
+
+  addUserDetails(userModel){
+    userModel.flag = 'create';
+    this.userManagementService.getUserDetailsService(userModel).subscribe((data: any) => {
+      if (data.responseCode === 200) {
+        this.userData = data.data;
+      } else{
+        alert(data.responseMessage);
+      }
+    }, (error) => {
+      alert('Something Happend Wrong.');
+    });
+  }
+
+
 
 }
 

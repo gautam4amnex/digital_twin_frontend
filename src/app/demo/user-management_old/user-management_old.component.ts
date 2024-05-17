@@ -64,28 +64,6 @@ export class UserManagementComponent implements OnInit {
   //   return isValid ? null : { invalidContactNumber: true };
   // }
 
-  get user_name() {
-    return this.userForm.get('user_name');
-  }
-  get confirmPassword() {
-    return this.userForm.get('password');
-  }
-  get password() {
-    return this.userForm.get('confirmPassword');
-  }
-  get email_id() {
-    return this.userForm.get('email_id');
-  }
-  get status() {
-    return this.userForm.get('status');
-  }
-  get contact_no() {
-    return this.userForm.get('contact_no');
-  }
-  get role_id() {
-    return this.userForm.get('role_id');
-  }
-
   userData: any
   ngOnInit(): void {
 
@@ -120,13 +98,10 @@ export class UserManagementComponent implements OnInit {
 
   loadRoles() {
     const jsonData={"flag":"fetch"}
-    this.commonService.userCrudManagement(jsonData).subscribe((data: any) => {
+    this.commonService.get_all_role(jsonData).subscribe((data: any) => {
       console.log("load roles",data)
       if (data.responseCode === 200) {
-        // Assuming roles are returned in the 'data' property
-        this.roles = data.data.map((role: any) => {
-          return { role_id: role.role_id, role_name: role.role_name };
-        });
+        this.roles = data.data;
       } else {
         console.error("Error fetching roles:", data.responseMessage);
         this.toastr.error('Error fetching roles');
@@ -210,7 +185,11 @@ export class UserManagementComponent implements OnInit {
   }
   onSubmit(mode: any) {
 
-    
+    if (this.userForm.invalid) {
+      const controls = this.userForm.controls;
+      Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
+      
+  }else{
 
     if (mode == "ADD") {
 
@@ -248,6 +227,6 @@ export class UserManagementComponent implements OnInit {
     }
     this.passwordHandler = false;
     console.log('submit data', this.userForm.value);
-  }
+  }}
   
 }

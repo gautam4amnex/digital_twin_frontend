@@ -27,6 +27,7 @@ export class UserService {
     return this.http.get(this.baseUrl1 + "getcaptcha");
   }
 
+  
   public verifyCaptcha(form_data){
     const headers = new HttpHeaders().set('Content-Type','application/json');
     return this.http.post(this.baseUrl1 + "verify_captcha" , JSON.stringify(form_data),{headers: this.headers});
