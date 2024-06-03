@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import * as glob from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
-import { Role } from '../models/role';
+import { Role } from '../models/role'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
  import { Observable } from 'rxjs';
 
@@ -57,7 +57,7 @@ export class CommonsService extends BehaviorSubject<any[]> {
   // }
 
   public getLayerAndImagePanel(jsonData){
-    return this.http.post( "https://apagri.infinium.management/midcgis/layer/layer_management", jsonData);
+    return this.http.post( this.url_midc +  "layer/layer_management", jsonData);
   }
 
   public getStateName(){
@@ -95,11 +95,11 @@ export class CommonsService extends BehaviorSubject<any[]> {
   }            
 
   public crudBimData(jsonData){
-    return this.http.post( "https://apagri.infinium.management/midcgis/layer/crud_cctv_location", jsonData);
+    return this.http.post(this.url_midc +  "layer/crud_cctv_location", jsonData);
   }
 
   public crudLayerManagement(jsonData){
-    return this.http.post( "https://apagri.infinium.management/midcgis/layer/layer_management", jsonData);
+    return this.http.post(this.url_midc +  "layer/layer_management", jsonData);
   }
   projectManagement(jsonData:any){
     return this.http.post( this.url + "dashboard/project_management", jsonData);
