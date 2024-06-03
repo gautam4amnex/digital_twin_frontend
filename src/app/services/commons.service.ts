@@ -101,5 +101,31 @@ export class CommonsService extends BehaviorSubject<any[]> {
   public crudLayerManagement(jsonData){
     return this.http.post( "https://apagri.infinium.management/midcgis/layer/layer_management", jsonData);
   }
+  projectManagement(jsonData:any){
+    return this.http.post( this.url + "dashboard/project_management", jsonData);
+  }
+ 
+  milestoneManagement(jsonData:any){
+    return this.http.post( this.url + "dashboard/crud_milestone_image", jsonData,{headers: {contentType: 'multipart/form-data',
+    responseType: 'json'}});
+  }
+  public getStatusList(){
+    return this.http.get( this.url + "dashboard/milestone_status_list");
+  }
+  getfile(filename:any,foldername:any) {//jsonString={"images":"","directorypath":""}
+    //Make a call to Sprinf Boot to get the Image Bytes.
+    return this.http.get(this.url +`dashboard/get_files/${foldername}/${filename}`);
+   
+  }
+  deletefile(foldername:any, filename:any){
+    return this.http.delete(this.url +`dashboard/delete_files/${foldername}/${filename}`);
+
+  }
+  uploadFile(jsonData:any){
+    return this.http.post(this.url +`dashboard/upload_files`,jsonData,{headers: {contentType: 'multipart/form-data',
+    responseType: 'json'}});
+  }
 
 }
+
+

@@ -113,6 +113,12 @@ const routes: Routes = [
         canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
+      {
+        path: 'project-management',
+        loadComponent: () => import('./demo/project-management/project-management.component').then(module => module.ProjectManagementComponent),
+        // canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
+      },
     ],
   },
   {
