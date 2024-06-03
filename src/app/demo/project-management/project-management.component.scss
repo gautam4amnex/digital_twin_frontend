@@ -1,0 +1,45 @@
+
+.mdc-tab__text-label{
+    color: black !important;
+}
+.mat-mdc-tab-group{
+    --mdc-tab-indicator-active-indicator-color: #48c1f1;
+}
+.mat-mdc-tab-group, .mat-mdc-tab-nav-bar{
+    --mdc-tab-indicator-active-indicator-color:  #48c1f1;
+    --mat-tab-header-disabled-ripple-color: rgba(255, 255, 255, 0.5);
+    --mat-tab-header-pagination-icon-color: #fff;
+    --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.6);
+    --mat-tab-header-active-label-text-color:  #48c1f1;
+    --mat-tab-header-active-ripple-color: #48c1f1;
+    --mat-tab-header-inactive-ripple-color: #48c1f1;
+    --mat-tab-header-inactive-focus-label-text-color: rgba(255, 255, 255, 0.6);
+    --mat-tab-header-inactive-hover-label-text-color: rgba(255, 255, 255, 0.6);
+    --mat-tab-header-active-focus-label-text-color: #48c1f1;
+    --mat-tab-header-active-hover-label-text-color:  #48c1f1;
+    --mat-tab-header-active-focus-indicator-color: #48c1f1;
+    --mat-tab-header-active-hover-indicator-color: #48c1f1;
+}
+.carousel-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Ensures the image covers the container while maintaining aspect ratio */
+  }
+  .carousel-item-wrapper {
+    max-height: 250px;
+    overflow-y: auto; /* Add vertical scrollbar if content exceeds max height */
+  }
+/* Remove the default "No file chosen" text */
+input[type="file"]::-webkit-file-upload-text {
+    // visibility: hidden;
+    color: transparent;
+    width: 0;
+}
+#imageInput { 
+    color: transparent; 
+} 
+#docInput { 
+    color: transparent; 
+} 
+
+

@@ -1,0 +1,523 @@
+<mat-tab-group>
+    <mat-tab md-colors="{color:'#76ee59'}" label="Projects">
+
+        <div class="row">
+            <kendo-grid [kendoGridBinding]="projectData" [style.height.%]="100" [pageSize]="10" filterable="menu"
+                [skip]="0" [pageable]="true" [sortable]="true">
+                <ng-template kendoGridToolbarTemplate>
+                    <div class="export-template">
+                        <button class=" btn btn-dark export-new excel" (click)="exportExcel(excelexport)">Export
+                            toExcel</button>
+                    </div>
+                    <div class="export-template">
+                        <button class="export-new excel btn btn-dark" (click)="openEditDialog('add',0)">Add new
+                            project</button>
+                    </div>
+                </ng-template>
+                <ng-container *ngFor="let data of grid_fields">
+                    <kendo-grid-column *ngFor="let data of grid_fields" field="{{data.fields}}" title="{{data.title}}"
+                        [hidden]="data.hide" [width]="250"></kendo-grid-column>
+                </ng-container>
+                <kendo-grid-column field="Action" title="Action" [width]="200" [sticky]="true" [columnMenu]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <div class="d-flex gap-2">
+                            <button kendoButton size="small" class="d-flex align-items-center btn btn-dark"
+                                rounded="small" fillMode="outline" themeColor="base"
+                                (click)="openEditDialog('edit',dataItem.project_id)">
+                                Edit
+                            </button>
+                            <button class="d-flex align-items-center  btn btn-dark"
+                                (click)="delete(dataItem.project_id)">
+                                delete
+                            </button>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <!-- Excel -->
+                <kendo-excelexport fileName="projects.xlsx" [data]="projectData" #excelexport>
+                    <ng-container *ngFor="let data of grid_fields">
+                        <kendo-excelexport-column field="{{data.fields}}" title="{{data.title}}">
+                        </kendo-excelexport-column>
+                    </ng-container>
+                </kendo-excelexport>
+            </kendo-grid>
+        </div>
+
+        <!-- project form dialog -->
+        <kendo-dialog class="custom-dialog handler-dialog" title="form" *ngIf="editDialog" [minWidth]="250"
+            [width]="1024" (close)="closeEditDialog()">
+            <h1>{{btnName}}</h1>
+
+            <form [formGroup]="projectForm" (ngSubmit)="onSubmit(btnSubmit)" style="height: 600px; overflow-y: auto;"
+                enctype="multipart/form-data">
+                <div>
+                    <div class="form-group">
+                        <label for="first-name"> Project Name</label>
+                        <input type="text" id="username" class="form-control" formControlName="project_name">
+                        <div *ngIf="projectForm.get('project_name').invalid && (projectForm.get('project_name').dirty ||projectForm.get('project_name').touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="projectForm.get('project_name').errors?.['required']">
+                                project name is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label for="first-name">Location Name</label>
+                        <input type="text" id="location_name" class="form-control" formControlName="location_name">
+                        <div *ngIf="projectForm.get('location_name').invalid && (projectForm.get('location_name').dirty ||projectForm.get('location_name').touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="projectForm.get('location_name').errors?.['required']">
+                                location name is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-group">
+                        <label for="first-name">contractor_name</label>
+                        <input type="text" id="contractor_name" class="form-control" formControlName="contractor_name">
+                        <div *ngIf="projectForm.get('contractor_name').invalid && (projectForm.get('contractor_name').dirty ||projectForm.get('contractor_name').touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="projectForm.get('contractor_name').errors?.['required']">
+                                contractor_name is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contractor_number">contractor_number</label>
+                    <input type="text" id="" class="form-control" formControlName="contractor_number">
+
+                    <div *ngIf="projectForm.get('contractor_number').invalid && (projectForm.get('contractor_number').dirty || projectForm.get('contractor_number').touched)"
+                        class="alert alert-danger">
+                        <div *ngIf="projectForm.get('contractor_number').errors?.['required']">
+                            contactno is required.
+                        </div>
+                        <div *ngIf="projectForm.get('contractor_number').errors?.['pattern']">Invalid contact
+                            number (should be a
+                            10-digit number)</div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="form-group">
+                    <label for="contractor_email">Email: </label>
+                    <input type="text" formControlName="contractor_email" class="form-control" autocomplete="noac">
+                    <div *ngIf="projectForm.get('contractor_email').invalid && (projectForm.get('contractor_email').dirty || projectForm.get('contractor_email').touched)"
+                        class="alert alert-danger">
+                        <div *ngIf="projectForm.get('contractor_email').errors['required']">Email is
+                            required
+                        </div>
+
+                        <div *ngIf="projectForm.get('contractor_email').errors['email']">Please enter a
+                            valid email address</div>
+                    </div>
+                </div>
+                <br>
+                <div *ngIf="isAdd">
+
+
+                </div>
+                <br>
+                <div style="display: flex; justify-content: space-between;">
+                    <div class="form-group" style="flex: 1; margin-right: 10px;">
+                        <label>Start Date</label>
+                        <mat-form-field style="width: 100%;">
+                            <input matInput [matDatepicker]="startPicker" formControlName="start_date">
+                            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #startPicker></mat-datepicker>
+                        </mat-form-field>
+                        <div *ngIf="projectForm.get('start_date').invalid && (projectForm.get('start_date').dirty || projectForm.get('start_date').touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="projectForm.get('start_date').errors?.['required']">
+                                start_date is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex: 1; margin-left: 10px;">
+                        <label>End Date</label>
+                        <mat-form-field style="width: 100%;">
+                            <input matInput [matDatepicker]="endPicker" formControlName="end_date">
+                            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #endPicker></mat-datepicker>
+                        </mat-form-field>
+                        <div *ngIf="projectForm.get('end_date').invalid && (projectForm.get('end_date').dirty || projectForm.get('end_date').touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="projectForm.get('end_date').errors?.['required']">
+                                End date is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+
+
+
+                <br>
+                <div>
+                    <div class="form-group">
+                        <label for="first-name">total cost</label>
+                        <input type="text" id="total_cost" class="form-control" formControlName="total_cost">
+                        <div *ngIf="projectForm.get('total_cost').invalid && (projectForm.get('total_cost').dirty ||projectForm.get('total_cost').touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="projectForm.get('total_cost').errors?.['required']">
+                                total_cost is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--  -->
+                <button class="btn btn-dark" type="submit">{{btnSubmit}}</button>
+                <button class="btn btn-dark" (click)="closeEditDialog()">close</button>
+            </form>
+
+            {{this.projectForm.value|json}}
+        </kendo-dialog>
+
+
+
+
+    </mat-tab>
+
+    <mat-tab label="Milestones">
+        <div class="form-group">
+            <label style="color: #48c1f1; font-size: larger;"> select project:</label>
+            <select style="border-color: #48c1f1; " id="project_id" (change)="loadMilestoneOnChange($event)"
+                class="form-control">
+                <option value="">none</option>
+                <option class="form-control" *ngFor="let p of projects" [value]="p.project_id">{{ p.project_name }}
+                </option>
+            </select>
+        </div>
+
+
+        <!-- grid -->
+        <div class="row">
+
+            <!-- <kendo-grid [kendoGridBinding]="milestoneData" [style.height.%]="100" [pageSize]="10" filterable="menu" [skip]="0" [pageable]="true" [sortable]="true">
+  
+        <ng-template kendoGridToolbarTemplate>
+          <div class="export-template">
+              <button type="button" kendoGridExcelCommand svg="file-excel" class="export-new excel" (click)="exportExcel(excelexport)">Export to Excel</button>
+          </div>
+        </ng-template>      
+        <ng-container *ngFor="let data of grid_fields_milestone">
+            <kendo-grid-column field="{{data.fields}}" title="{{data.title}}" [hidden]="data.hide" [width]="250"></kendo-grid-column>
+        </ng-container>        
+        
+        <kendo-grid-column field="Action" title="Action" [width]="200" [columnMenu]="true">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div class="d-flex gap-2">
+              <button kendoButton size="small" class="d-flex align-items-center" size="small" rounded="small" fillMode="outline"
+                themeColor="base">
+                Delete
+              </button>
+              <button kendoButton size="small" class="d-flex align-items-center" id="Edit" size="small" rounded="small" fillMode="outline"
+              themeColor="base">
+              Edit
+            </button>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+      
+      </kendo-grid> -->
+
+
+
+
+            <kendo-grid [kendoGridBinding]="milestoneData" [style.height.%]="100" [pageSize]="10" filterable="menu"
+                [skip]="0" [pageable]="true" [sortable]="true">
+
+                <ng-template kendoGridToolbarTemplate let-dataItem>
+                    <div class="export-template">
+                        <button class=" btn btn-dark export-new excel" (click)="exportExcel(excelexport)">Export to
+                            Excel</button>
+                    </div>
+
+                    <div class="export-template">
+                        <button class="export-new excel btn btn-dark" (click)="openEditDialogMilestone('add','0')">Add
+                            new
+                            Milestone</button>
+                    </div>
+                </ng-template>
+                <ng-container>
+                    <!-- Container element to handle both *ngFor and *ngIf -->
+                    <ng-container *ngFor="let data of grid_fields_milestone">
+                        <kendo-grid-column *ngIf="data.fields !== 'image' && data.fields !== 'document'"
+                            [field]="data.fields" [title]="data.title" [hidden]="data.hide" [width]="250">
+                        </kendo-grid-column>
+                    </ng-container>
+
+                    <!-- Image Column -->
+                    <kendo-grid-column field="image" title="Image" [hidden]="false" [width]="150">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem.image}}
+                            <button kendoButton size="small" class="btn btn-dark"
+                                (click)="fetchImageDocs(dataItem.milestone_id , 'image')">
+                                View Image
+                            </button>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Document Column -->
+                    <kendo-grid-column field="document" title="Document" [hidden]="false" [width]="150">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem.document}}
+                            <button kendoButton size="small" class="btn btn-dark"
+                                (click)="fetchImageDocs(dataItem.milestone_id , 'document')">
+                                View Document
+                            </button>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                    <!-- Action Button Column -->
+                    <kendo-grid-column field="Action" title="Action" [width]="150" [sticky]="true" [columnMenu]="false">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <div class="d-flex gap-2">
+                                <button kendoButton size="small" class="d-flex align-items-center btn btn-dark"
+                                    rounded="small" fillMode="outline" themeColor="base"
+                                    (click)="openEditDialogMilestone('edit', dataItem.milestone_id)">
+                                    Edit
+                                </button>
+                                <button class="d-flex align-items-center btn btn-dark"
+                                    (click)="deleteMilestone(dataItem.milestone_id)">
+                                    Delete
+                                </button>
+                            </div>
+                        </ng-template>
+                    </kendo-grid-column>
+                </ng-container>
+
+
+                <kendo-excelexport fileName="milestones.xlsx" [data]="milestoneData" #excelexport>
+                    <ng-container *ngFor="let data of grid_fields_milestone">
+                        <kendo-excelexport-column field="{{data.fields}}" title="{{data.title}}">
+                        </kendo-excelexport-column>
+                    </ng-container>
+                </kendo-excelexport>
+            </kendo-grid>
+        </div>
+
+    </mat-tab>
+
+
+</mat-tab-group>
+
+<kendo-dialog class="custom-dialog handler-dialog" title="form" *ngIf="editDialogMilestone" [minWidth]="250"
+    [width]="1024" (close)="closeEditDialog()">
+    <h1>{{btnNameMilestone}}</h1>
+
+    <form [formGroup]="milestoneForm" (ngSubmit)="onSubmitMilestone(btnSubmitMilestone)"
+        style="height: 600px; overflow-y: auto;">
+        <div>
+            <div class="form-group">
+                <label for="first-name"> Milestone Name</label>
+                <input type="text" class="form-control" formControlName="milestone_name">
+                <div *ngIf="milestoneForm.get('milestone_name').invalid && (milestoneForm.get('milestone_name').dirty ||milestoneForm.get('milestone_name').touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="milestoneForm.get('milestone_name').errors?.['required']">
+                        milestone is required.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" class="form-control" formControlName="description">
+            <div *ngIf="milestoneForm.get('description').invalid && (milestoneForm.get('description').dirty ||milestoneForm.get('description').touched)"
+                class="alert alert-danger">
+                <div *ngIf="milestoneForm.get('description').errors?.['required']">
+                    Description is required.
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Is Approved: </label>
+            <select formControlName="is_approved" class="form-control">
+                <option value="true">TRUE</option>
+                <option value="false">FALSE</option>
+            </select>
+
+            <!-- <div *ngIf="userForm.get('status').invalid && (userForm.get('status').dirty || userForm.get('status').touched)"
+              class="alert alert-danger">
+              <div *ngIf="userForm.get('status').errors['required']">Status is required</div>
+            </div> -->
+        </div>
+
+        <div class="form-group">
+            <label>Milestone status:</label>
+            <select class="form-control" formControlName="milestone_status">
+                <option value="">Select</option>
+                <option *ngFor="let s of status_list" [value]="s.status_id">{{ s.status_name }}</option>
+            </select>
+            <!-- <div
+              *ngIf="userForm.get('role_id').invalid && (userForm.get('role_id').dirty || userForm.get('role_id').touched)"
+              class="alert alert-danger">
+              <div *ngIf="userForm.get('role_id').errors['required']">role id is required</div>
+            </div> -->
+        </div>
+
+        <div>
+            <div class="form-group">
+                <label>Remarks</label>
+                <input type="text" class="form-control" formControlName="remarks">
+                <!-- <div *ngIf="milestoneForm.get('remarks').invalid && (milestoneForm.get('remarks').dirty ||milestoneForm.get('remarks').touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="milestoneForm.get('remarks').errors?.['required']">
+                        Remark is required.
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+            <div class="form-group" style="flex: 1; margin-right: 10px;">
+                <label>Image</label>
+                <input id="imageInput" type="file" multiple="multiple" accept="image/png,image/jpeg"
+                    (change)="onImageChange($event)">
+                <p *ngIf="isimgVisible">{{ milestoneForm.get('image').value  }}</p>
+                <div *ngIf="milestoneForm.get('image').invalid && (milestoneForm.get('image').dirty ||milestoneForm.get('image').touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="milestoneForm.get('image').errors?.['required']">
+                        Image is required.
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" style="flex: 1; margin-left: 10px;">
+                <label>Document</label>
+                <!-- <input type="text" class="form-control" formControlName="document"> -->
+                <input id="docInput" type="file" multiple="multiple" (change)="onDocumentChange($event)">
+                <p *ngIf="isdocVisible">{{ milestoneForm.get('document').value }}</p>
+                <div *ngIf="milestoneForm.get('document').invalid && (milestoneForm.get('document').dirty ||milestoneForm.get('document').touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="milestoneForm.get('document').errors?.['required']">
+                        Document is required.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div *ngIf="isAdd">
+
+        </div>
+        <br>
+        <div style="display: flex; justify-content: space-between;">
+            <div class="form-group" style="flex: 1; margin-right: 10px;">
+                <label>Start Date</label>
+                <mat-form-field style="width: 100%;">
+                    <input matInput [matDatepicker]="milestoneStartDate" formControlName="start_date">
+                    <mat-datepicker-toggle matSuffix [for]="milestoneStartDate"></mat-datepicker-toggle>
+                    <mat-datepicker #milestoneStartDate></mat-datepicker>
+                </mat-form-field>
+                <div *ngIf="projectForm.get('start_date').invalid && (projectForm.get('start_date').dirty || projectForm.get('start_date').touched)"
+                     class="alert alert-danger">
+                    <div *ngIf="projectForm.get('start_date').errors?.['required']">
+                        Start date is required.
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" style="flex: 1; margin-left: 10px;">
+                <label>End Date</label>
+                <mat-form-field style="width: 100%;">
+                    <input matInput [matDatepicker]="milestoneEndDate" formControlName="end_date">
+                    <mat-datepicker-toggle matSuffix [for]="milestoneEndDate"></mat-datepicker-toggle>
+                    <mat-datepicker #milestoneEndDate></mat-datepicker>
+                </mat-form-field>
+                <div *ngIf="projectForm.get('end_date').invalid && (projectForm.get('end_date').dirty || projectForm.get('end_date').touched)"
+                     class="alert alert-danger">
+                    <div *ngIf="projectForm.get('end_date').errors?.['required']">
+                        End date is required.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!--  -->
+        <button class="btn btn-dark" type="submit">{{btnSubmitMilestone}}</button>
+        <button class="btn btn-dark" (click)="closeEditDialog()">close</button>
+    </form>
+    {{this.milestoneForm.value|json}}
+    {{this.milestoneForm.valid|json}}
+</kendo-dialog>
+<!-- image popup dialog -->
+<div>
+    <kendo-dialog class="custom-dialog handler-dialog" title="Images" *ngIf="ImageDialog" [minWidth]="250"
+        [width]="1024" (close)="closeEditDialog()">
+
+        Image Carousel
+
+
+        <div class="container mt-5">
+            <div>
+                <ngb-carousel (slide)="slideActivate($event)">
+                    <ng-template *ngFor="let item of fetchedImages" ngbSlide>
+                        <div class="picsum-img-wrapper">
+                            <img src="http://localhost:8090/digitaltwin/dashboard/get_files/images/{{item}}"
+                                class="d-block w-100" />
+                            <p>{{item}}</p>
+                        </div>
+                        <div class="carousel-caption">
+                            <h3>Title Goes Here</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
+                    </ng-template>
+
+                </ngb-carousel>
+            </div>
+        </div>
+
+        <kendo-dialog-actions>
+            <button kendoButton (click)="closeEditDialog()">Close</button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
+</div>
+
+<!-- document popup dialog -->
+
+<div>
+    <kendo-dialog class="custom-dialog handler-dialog" *ngIf="documentDialog" title="document" [minWidth]="250"
+        [width]="1024" (close)="closeEditDialog()">
+        <div class="container mt-5">
+            <div>
+                <ngb-carousel (slide)="slideActivate($event)">
+                    <ng-template *ngFor="let item of fetchedDocuments" ngbSlide>
+                        <div class="picsum-img-wrapper">
+                            <img src="http://localhost:8090/digitaltwin/dashboard/get_files/documents/{{item}}"
+                                class="d-block w-100" />
+                            <p>{{item}}</p>
+                        </div>
+                        <div class="carousel-caption">
+                            <h3>Title Goes Here</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
+                    </ng-template>
+
+                </ngb-carousel>
+            </div>
+        </div>
+
+
+
+
+
+
+        <kendo-dialog-actions>
+            <button kendoButton (click)="closeEditDialog()">Close</button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
+</div>
+
+<!-- <img src="http://localhost:8090/digitaltwin/dashboard/get_files/hh.png"> -->
