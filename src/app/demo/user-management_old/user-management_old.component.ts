@@ -98,7 +98,7 @@ export class UserManagementComponent implements OnInit {
 
   loadRoles() {
     const jsonData={"flag":"fetch"}
-    this.commonService.get_all_role(jsonData).subscribe((data: any) => {
+    this.commonService.get_all_role().subscribe((data: any) => {
       console.log("load roles",data)
       if (data.responseCode === 200) {
         this.roles = data.data;

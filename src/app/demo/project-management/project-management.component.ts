@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, Renderer2 } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ViewChild, OnInit, Output, inject } from '@angular/core';
+import { ViewChild, OnInit } from '@angular/core';
 import { CommonsService } from 'src/app/services/commons.service';
 import { ElementRef } from '@angular/core';
 // project import
@@ -8,20 +8,14 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { GridModule, ExcelModule, PDFModule } from '@progress/kendo-angular-grid';
 import { DialogModule } from '@progress/kendo-angular-dialog';
 import { WorkbookSheet, ExcelExportData } from '@progress/kendo-angular-excel-export';
-import { SurveyDetail } from 'src/app/models/surveydetail';
-import { Observable } from 'rxjs';
 // kendo
-import { State, process } from '@progress/kendo-data-query';
 import { LabelModule } from '@progress/kendo-angular-label';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { TreeViewModule } from '@progress/kendo-angular-treeview';
-import { MonitoringService } from 'src/app/services/monitoring.service';
-import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { confirmPasswordValidator } from 'src/app/theme/shared/password.validator';
-import { ToastrService, ToastNoAnimation } from 'ngx-toastr';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';

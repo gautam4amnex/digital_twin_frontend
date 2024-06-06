@@ -1,0 +1,144 @@
+<p>announcement works!</p>
+<div class="row">
+    <kendo-grid [kendoGridBinding]="announcementData" [style.height.%]="100" [pageSize]="10" filterable="menu"
+        [skip]="0" [pageable]="true" [sortable]="true">
+        <ng-template kendoGridToolbarTemplate>
+            <div class="export-template">
+                <button class=" btn btn-dark export-new excel" (click)="exportExcel(excelexport)">Export
+                    toExcel</button>
+            </div>
+            <!-- { -->
+            <div *ngIf="userStatus">
+                <div class="export-template">
+                    <button class="export-new excel btn btn-dark" (click)="openEditDialog('add',0)">Add new
+                        Announcement</button>
+                </div>
+            </div>
+            <!-- }  -->
+        </ng-template>
+        <ng-container *ngFor="let data of grid_fields">
+            <kendo-grid-column field="{{data.fields}}" title="{{data.title}}" [hidden]="data.hide" [width]="250">
+            </kendo-grid-column>
+        </ng-container>
+        <!-- { -->
+            <ng-container  *ngIf="userStatus">
+        
+            <kendo-grid-column  field="Action" title="Action" [width]="200" [sticky]="true" [columnMenu]="false">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div class="d-flex gap-2">
+                        <button kendoButton size="small" class="d-flex align-items-center btn btn-dark" rounded="small"
+                            fillMode="outline" themeColor="base"
+                            (click)="openEditDialog('edit',dataItem.announcement_id)">
+                            Edit
+                        </button>
+                        <button class="d-flex align-items-center  btn btn-dark"
+                            (click)="delete(dataItem.announcement_id)">
+                            delete
+                        </button>
+                    </div>
+                </ng-template>
+            </kendo-grid-column>
+       
+    </ng-container>
+        <!-- } -->
+        <!-- Excel -->
+        <kendo-excelexport fileName="projects.xlsx" [data]="announcementData" #excelexport>
+            <ng-container *ngFor="let data of grid_fields">
+                <kendo-excelexport-column field="{{data.fields}}" title="{{data.title}}">
+                </kendo-excelexport-column>
+            </ng-container>
+        </kendo-excelexport>
+    </kendo-grid>
+</div>
+
+<!-- announcement form dialog -->
+
+<kendo-dialog class="custom-dialog handler-dialog" title="form" *ngIf="editDialog" [minWidth]="250" [width]="1024"
+    (close)="closeEditDialog()">
+    <h1>{{btnName}}</h1>
+
+    <form [formGroup]="announcementForm" (ngSubmit)="onSubmit(btnSubmit)" style="height: 600px; overflow-y: auto;">
+        <div class="form-group">
+            <label for="role_id">Role Name:</label>
+            <select id="role_id" class="form-control" formControlName="role_id">
+                <option value="">Select</option>
+                <option *ngFor="let role of roles" [value]="role.role_id">{{ role.role_name }}</option>
+            </select>
+            <div *ngIf="announcementForm.get('role_id').invalid && (announcementForm.get('role_id').dirty || announcementForm.get('role_id').touched)"
+                class="alert alert-danger">
+                <div *ngIf="announcementForm.get('role_id').errors['required']">role name is required</div>
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" formControlName="announcement_title">
+                <div *ngIf="announcementForm.get('announcement_title').invalid && (announcementForm.get('announcement_title').dirty || announcementForm.get('announcement_title').touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="announcementForm.get('announcement_title').errors['required']">title is required</div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="form-group">
+                <label>Description</label>
+                <input type="text" class="form-control" formControlName="announcement_description">
+                <div *ngIf="announcementForm.get('announcement_description').invalid && (announcementForm.get('announcement_description').dirty || announcementForm.get('announcement_description').touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="announcementForm.get('announcement_description').errors['required']">description is
+                        required</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Address</label>
+            <input type="text" class="form-control" formControlName="address">
+            <div *ngIf="announcementForm.get('address').invalid && (announcementForm.get('address').dirty || announcementForm.get('address').touched)"
+                class="alert alert-danger">
+                <div *ngIf="announcementForm.get('address').errors['required']">address is required</div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="form-group">
+            <label>Latitude: </label>
+            <input type="text" formControlName="latitude" class="form-control">
+            <div *ngIf="announcementForm.get('latitude').invalid && (announcementForm.get('latitude').dirty || announcementForm.get('latitude').touched)"
+                class="alert alert-danger">
+                <div *ngIf="announcementForm.get('latitude').errors['required']">latitude is required</div>
+            </div>
+        </div>
+        <br>
+        <div class="form-group">
+            <label>Longitude: </label>
+            <input type="text" formControlName="longitude" class="form-control">
+            <div *ngIf="announcementForm.get('longitude').invalid && (announcementForm.get('longitude').dirty || announcementForm.get('longitude').touched)"
+                class="alert alert-danger">
+                <div *ngIf="announcementForm.get('longitude').errors['required']">longitude is required</div>
+            </div>
+        </div>
+
+        <br>
+        <div>
+            <div class="form-group">
+                <label>Announcement date and time:</label>
+
+                <kendo-datetimepicker required formControlName="announcement_datetime" [min]="min" class="form-control">
+                </kendo-datetimepicker>
+                <div *ngIf="announcementForm.get('announcement_datetime').invalid && (announcementForm.get('announcement_datetime').dirty || announcementForm.get('role_id').touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="announcementForm.get('announcement_datetime').errors['required']">date is required</div>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="btn btn-dark" type="submit">{{btnSubmit}}</button>
+        <button class="btn btn-dark" (click)="closeEditDialog()">close</button>
+    </form>
+
+    {{this.announcementForm.value|json}}
+</kendo-dialog>

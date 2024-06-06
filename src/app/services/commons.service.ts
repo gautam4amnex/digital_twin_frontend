@@ -69,12 +69,14 @@ export class CommonsService extends BehaviorSubject<any[]> {
   //     }
 
   userCrudManagement(jsonData:any){
-    //return this.http.post( this.url + "crud_user_management", jsonData);
-    return this.http.post( this.url_midc + "crud_user_management", jsonData);
+    return this.http.post( this.url + "crud_user_management", jsonData);
+    // return this.http.post( this.url_midc + "crud_user_management", jsonData);
   }
 
-  get_all_role(jsonData:any){
-    return this.http.post( this.url_midc + "role_management", jsonData);
+  get_all_role(){
+    // return this.http.post( this.url_midc + "role_management", jsonData);
+    return this.http.get( this.url + "get_all_role");
+
   }
 
   getUserBYId(roll_id:any){
@@ -82,16 +84,22 @@ export class CommonsService extends BehaviorSubject<any[]> {
   }
  
   roleCrudManagement(jsonData:any){
-            return this.http.post( this.url_midc + "role_management", jsonData);
+            // return this.http.post( this.url_midc + "role_management", jsonData);
+            return this.http.post( this.url + "role_management", jsonData);
+
           }
+          
   getRoleDataById(roll_id:any){
-    return this.http.get(`${this.url_midc}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
+    // return this.http.get(`${this.url_midc}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
+    return this.http.get(`${this.url}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
             
               } 
             
   getAllModulesname(){
-    return this.http.get( this.url_midc + "get_all_modules",{ headers: this.getAccessToken() });
+    // return this.http.get( this.url_midc + "get_all_modules",{ headers: this.getAccessToken() });
               
+    return this.http.get( this.url + "get_all_modules",{ headers: this.getAccessToken() });
+
   }            
 
   public crudBimData(jsonData){
@@ -125,6 +133,19 @@ export class CommonsService extends BehaviorSubject<any[]> {
     return this.http.post(this.url +`dashboard/upload_files`,jsonData,{headers: {contentType: 'multipart/form-data',
     responseType: 'json'}});
   }
+  // MODULE:Announcement
+  announcementManagement(jsonData:any){
+    return this.http.post( this.url + "dashboard/announcement_management", jsonData);
+  }
+  getRoleByUser(user:any){
+    return this.http.post( this.url + "dashboard/get_role_by_userid", user);
+
+  }
+  getRoleList(){
+    return this.http.get( this.url + "dashboard/get_role_list");
+
+  }
+
 
 }
 

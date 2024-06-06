@@ -93,7 +93,7 @@ const routes: Routes = [
       {
         path: 'role-management',
         loadComponent: () => import('./demo/role-management/role-management.component'),
-        canActivate: [AuthorizationCheckService],
+        // canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
       {
@@ -116,6 +116,12 @@ const routes: Routes = [
       {
         path: 'project-management',
         loadComponent: () => import('./demo/project-management/project-management.component').then(module => module.ProjectManagementComponent),
+        // canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
+      },
+      {
+        path: 'announcement',
+        loadComponent: () => import('./demo/announcement/announcement.component').then(module => module.AnnouncementComponent),
         // canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },

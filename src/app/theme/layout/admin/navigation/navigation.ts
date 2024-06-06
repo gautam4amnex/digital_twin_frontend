@@ -115,15 +115,15 @@ const NavigationItems = [
         url: '/project-management',
         icon: 'feather icon-home',
         classes: 'nav-item',
-      }
-      //  {
-      //   id: 'role-management',
-      //   title: 'Survey Details',
-      //   type: 'item',
-      //   url: '/role-management',
-      //   icon: 'feather icon-home',
-      //   classes: 'nav-item',
-      // },
+      },
+       {
+        id: 'Annoucement',
+        title: 'Announcement',
+        type: 'item',
+        url: '/announcement',
+        icon: 'feather icon-home',
+        classes: 'nav-item',
+      },
     ],
   },
   
