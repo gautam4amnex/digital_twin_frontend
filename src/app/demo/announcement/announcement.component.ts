@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Renderer2 } from '@angular/core';
+import { Component, ViewEncapsulation, Renderer2, AfterViewInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ViewChild, OnInit } from '@angular/core';
 import { CommonsService } from 'src/app/services/commons.service';
@@ -24,13 +24,28 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
-// import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+//openlayer
+import 'ol/style';
+import Map from 'ol/Map.js';
+import OSM from 'ol/source/OSM.js';
+import View from 'ol/View.js';
+import { data } from 'jquery';
+import Feature from 'ol/Feature';
+import { Point } from 'ol/geom';
+import { fromLonLat } from 'ol/proj';
+import { Style, Icon, Fill, Stroke } from 'ol/style';
+import VectorTileLayer from 'ol/layer/VectorTile';
+import VectorSource from 'ol/source/Vector';
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
+import CircleStyle from 'ol/style/Circle';
+import { style } from '@angular/animations';
+
+
 
 @Component({
   selector: 'app-announcement',
   standalone: true,
-  imports: [ 
+  imports: [
     MatInputModule,
     MatNativeDateModule,
     FormsModule,
@@ -39,13 +54,12 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
   templateUrl: './announcement.component.html',
   styleUrl: './announcement.component.scss'
 })
-export class AnnouncementComponent {
+export class AnnouncementComponent  implements OnInit, AfterViewChecked  {
   min: Date;
-  constructor(private renderer: Renderer2, private commonService: CommonsService, private fb: FormBuilder, private toastr: ToastrService, private elementRef: ElementRef<HTMLElement>) {
-  
-   }
-  
-
+  viewDialog: boolean=false;
+  @ViewChild('mapElement') mapElement: ElementRef;
+  renderer: any;
+  element: string | HTMLElement;
   announcementData: any;
   announcementForm: FormGroup;
   editDialog: any = false;
@@ -55,30 +69,45 @@ export class AnnouncementComponent {
   roles:any[];
   currentRoleId:any;
   userStatus:any=false;
+  isDialogInitialized: boolean = false;
+  ol: any = window['ol'];
+  state = "closed";
+  osm: any;
+  map: any;
+  view: any;
+  point:Point;
+  place:any=[];
+  lat: any;
+  long: any;
+  
+  constructor(private cdRef: ChangeDetectorRef,renderer: Renderer2, private commonService: CommonsService, private fb: FormBuilder, private toastr: ToastrService, private elementRef: ElementRef<HTMLElement>) {
+  }
  
-  ngOnInit(): void {
-    this.currentRoleId  =localStorage.getItem('role_id');
-    console.log('currentRoleId',this.currentRoleId)
-
+  ngOnInit() {
+    this.currentRoleId = localStorage.getItem('role_id');
+    console.log('currentRoleId', this.currentRoleId);
     const currentDay = new Date();
     this.min = currentDay;
-
-    if(this.currentRoleId=="1"){
-      this.userStatus=true;
-    }
-    else{
-      this.userStatus=false;
+    if (this.currentRoleId === "1") {
+      this.userStatus = true;
+    } else {
+      this.userStatus = false;
     }
     this.loadData();
     this.initializeForm();
-    this.loadRoles()
-    // this.loadALLProjects();//dropdown
-    // this.initializeMilestoneForm();
-    // // this.loadMilestoneData();
-    // this.loadStatusList();
- 
+    this.loadRoles();
+
   }
-  
+  mapInitialized: boolean = false;
+
+  ngAfterViewChecked() {
+    if (this.viewDialog && this.mapElement && this.mapElement.nativeElement) {
+     this.element = this.mapElement.nativeElement;
+      console.log('Map element:', this.element);
+      this.initializeMap();
+   
+    }
+  }
 
   public grid_fields = [
     { 'fields': 'role_id',                    'title': 'Role id', 'hide': false },
@@ -118,6 +147,8 @@ export class AnnouncementComponent {
       console.log("load announcementt data", data)
       if (data.responseCode === 200) {
         this.announcementData = data.data;
+        let date = this.parseDate(this.announcementData.announcement_datetime);
+        this.announcementData.announcement_datetime = date;
         console.log('announcementt data', this.announcementData);
       }
     }, (error) => {
@@ -142,18 +173,76 @@ export class AnnouncementComponent {
   }
   parseDate(dateString: string): Date {
     return new Date(dateString);
-  }   
+  } 
+
+  initializeMap() {
+    if (this.viewDialog && this.mapElement?.nativeElement && !this.mapInitialized) {
+      const element: HTMLElement = this.mapElement.nativeElement;
+
+      const pointStyle = new this.ol.style.Style({
+        image: new this.ol.style.Icon({
+            anchor: [0.5, 1],
+            src: 'https://apagri.infinium.management/temp/point_icon.png',
+        })
+    });
+
+      const myFeature = new Feature({
+        geometry: new Point(fromLonLat([this.long, this.lat])),
+
+        // style: new Style({
+        //   image: new CircleStyle({
+        //     radius: 10,
+        //     fill: new Fill({ color: 'red' }),
+        //     stroke: new Stroke({ color: 'red', width: 20 })
+        //   })
+        // })
+      });
   
-  openEditDialog(btn: any, id: number) {
-    this.editDialog = true;
+      myFeature.setStyle(pointStyle);
+
+      this.map = new Map({
+        target: element,
+        layers: [
+          new TileLayer({ source: new OSM() }),
+          new VectorLayer({
+            source: new VectorSource({ features: [myFeature] })
+          })
+        ],
+        view: new View({
+          projection: 'EPSG:3857', // Using Web Mercator projection for consistency with OSM tiles
+          center: fromLonLat([this.long, this.lat]),
+          zoom: 20
+        })
+      });
+  
+      this.mapInitialized = true;
+    }
+  }
+  
+
+ 
+
+ 
+  openEditDialog(btn: any, dataItem: any) {
+    
     if (btn == 'add') {
+      this.editDialog = true;
       this.initializeForm();
       this.btnName = "Add New User";
       this.btnSubmit = "ADD"
-    } else {
+    }
+    else if(btn == 'view'){
+      this.viewDialog=true;
+      this.lat =dataItem.latitude;
+      this.long=dataItem.longitude;
+      
+     
+    }
+    else {
+      this.editDialog = true;
       this.btnName = "Edit User";
       this.btnSubmit = "UPDATE"
-      const formdata = { "flag": "fetch_id", "announcement_id": id };
+      const formdata = { "flag": "fetch_id","announcement_id": dataItem.announcement_id  };
       console.log("get announcementt by id", formdata);
       this.commonService.announcementManagement(formdata).subscribe((data: any) => {
         console.log("get announcementt by id", data)
@@ -182,14 +271,14 @@ export class AnnouncementComponent {
       });
     }
   }
-  closeEditDialog() {
-  ;
+  closeDialog() {
     this.editDialog = false;
-   
+    this.viewDialog=false;
+    this.mapInitialized=false;
   }
-  delete(id: any) {
-    this.commonService.announcementManagement({ "flag": "delete", "announcement_id": id }).subscribe((data: any) => {
-      console.log("data delete id", data, id)
+  delete(dataItem: any) {
+    this.commonService.announcementManagement({ "flag": "delete", "announcement_id": dataItem.announcement_id }).subscribe((data: any) => {
+      console.log("data delete id", data, dataItem.announcement_id)
       if (data.responseCode === 200) {
 
         this.toastr.success("announcement deleted");
@@ -204,8 +293,6 @@ export class AnnouncementComponent {
     });
   }
   onSubmit(formType: any) {
-    
-
     if (this.announcementForm.invalid) {
       const controls = this.announcementForm.controls;
       Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());

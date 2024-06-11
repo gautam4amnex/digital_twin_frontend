@@ -21,25 +21,32 @@
             </kendo-grid-column>
         </ng-container>
         <!-- { -->
-            <ng-container  *ngIf="userStatus">
+           
         
-            <kendo-grid-column  field="Action" title="Action" [width]="200" [sticky]="true" [columnMenu]="false">
+            <kendo-grid-column  field="Action" title="Action" [width]="300" [sticky]="true" [columnMenu]="false">
                 <ng-template kendoGridCellTemplate let-dataItem>
                     <div class="d-flex gap-2">
+                        <ng-container  *ngIf="userStatus">
                         <button kendoButton size="small" class="d-flex align-items-center btn btn-dark" rounded="small"
                             fillMode="outline" themeColor="base"
-                            (click)="openEditDialog('edit',dataItem.announcement_id)">
+                            (click)="openEditDialog('edit',dataItem)">
                             Edit
                         </button>
                         <button class="d-flex align-items-center  btn btn-dark"
-                            (click)="delete(dataItem.announcement_id)">
+                            (click)="delete(dataItem)">
                             delete
                         </button>
+                    </ng-container>
+                    <button kendoButton size="small" class="d-flex align-items-center btn btn-dark" rounded="small"
+                    fillMode="outline" themeColor="base"
+                    (click)="openEditDialog('view',dataItem)">
+                   view
+                </button>
                     </div>
                 </ng-template>
             </kendo-grid-column>
        
-    </ng-container>
+    
         <!-- } -->
         <!-- Excel -->
         <kendo-excelexport fileName="projects.xlsx" [data]="announcementData" #excelexport>
@@ -54,7 +61,7 @@
 <!-- announcement form dialog -->
 
 <kendo-dialog class="custom-dialog handler-dialog" title="form" *ngIf="editDialog" [minWidth]="250" [width]="1024"
-    (close)="closeEditDialog()">
+    (close)="closeDialog()">
     <h1>{{btnName}}</h1>
 
     <form [formGroup]="announcementForm" (ngSubmit)="onSubmit(btnSubmit)" style="height: 600px; overflow-y: auto;">
@@ -137,8 +144,16 @@
         </div>
 
         <button class="btn btn-dark" type="submit">{{btnSubmit}}</button>
-        <button class="btn btn-dark" (click)="closeEditDialog()">close</button>
+        <button class="btn btn-dark" (click)="closeDialog()">close</button>
     </form>
 
     {{this.announcementForm.value|json}}
 </kendo-dialog>
+
+<!-- announcement view dialog -->
+
+<kendo-dialog  class="custom-dialog handler-dialog" title="map" *ngIf="viewDialog" [minWidth]="250" [height]="500" [width]="1024" (close)="closeDialog()">
+    <div id="map" #mapElement class="map-container"></div>
+
+</kendo-dialog>
+
