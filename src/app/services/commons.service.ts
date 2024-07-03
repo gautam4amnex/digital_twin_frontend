@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root'
 })
 export class CommonsService extends BehaviorSubject<any[]> {
+  
   private url = glob.environment.baseUrl;
   private url_midc = glob.environment.baseUrl_midc;
 
@@ -57,7 +58,7 @@ export class CommonsService extends BehaviorSubject<any[]> {
   // }
 
   public getLayerAndImagePanel(jsonData){
-    return this.http.post( this.url_midc +  "layer/layer_management", jsonData);
+    return this.http.post("http://localhost:8090/digitaltwin/get_all_layer_and_image", jsonData);
   }
 
   public getStateName(){
@@ -144,6 +145,12 @@ export class CommonsService extends BehaviorSubject<any[]> {
   getRoleList(){
     return this.http.get( this.url + "dashboard/get_role_list");
 
+  }
+  getLayerData(){
+    return this.http.get( this.url + "dashboard/get_point_layers");
+  }
+  searchChildlayer(jsonData:any) {
+    return this.http.post( this.url + "dashboard/search_layer",jsonData);
   }
 
 

@@ -1,9 +1,28 @@
 
-<!-- <div appCesium></div> -->
 
+<!-- <div appCesium></div> -->
+<div style="display:flex; justify-content:left; padding-bottom:8px; width: 40%;">
+  
+  <kendo-dropdownlist rounded="full"
+  defaultItem="Select item..."
+  [data]="listItems"
+  [(ngModel)]="selectedTableName" 
+ 
+>"select"</kendo-dropdownlist>
+<kendo-autocomplete
+  #autocomplete
+  [data]="searchResultNames"
+  (filterChange)="handleFilter($event)"
+  [filterable]="true"
+ 
+  (valueChange)="onValueChange($event)"
+  [(ngModel)]="selectedOption"
+ 
+></kendo-autocomplete>
+</div>
 <div id="map"></div>
 
-<div class="SubCursorBar">
+<!-- <div class="SubCursorBar">
   <div class="content">
     <div class="DisabledContent" is-disabled="false">
       <div class="CursorBarControl" is-disabled="false" is-selected="true" title="Pan">
@@ -20,13 +39,13 @@
       </div>
     </div>
     </div>
-</div>
+</div> -->
 
-<button type="button" (click)="togglePanel()">Layer</button>
+<!-- <button type="button" (click)="togglePanel()" style="position: absolute; left: 30px; top: 50px;">Layer</button> -->
 <div class="row" [@widthGrow]="state">
   <div class="col-sm-12">
 
-    <div class="layer-popup resize-popup" id="layers">
+    <div class="layer-popup resize-popup" style="top: 300px;" id="layers">
       <div class="layers" id="layersheader">
         <div class="layer-title-main w-100 align-items-center">
           <h3 class="layer-title me-auto">
@@ -96,4 +115,7 @@
 
   </div>
 </div>
+
+
+
 

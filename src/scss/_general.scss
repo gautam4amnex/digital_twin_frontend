@@ -5,6 +5,8 @@ body {
   font-weight: 400;
   background: $theme-background;
   position: relative;
+  overflow: hidden;
+  margin-top: 10px;
 }
 
 * {

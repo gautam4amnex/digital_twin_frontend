@@ -124,6 +124,14 @@ const NavigationItems = [
         icon: 'feather icon-home',
         classes: 'nav-item',
       },
+      {
+        id: 'Directions',
+        title: 'Directions',
+        type: 'item',
+        url: '/directions',
+        icon: 'feather icon-home',
+        classes: 'nav-item',
+      }
     ],
   },
   

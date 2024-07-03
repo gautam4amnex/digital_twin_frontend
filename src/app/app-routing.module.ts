@@ -27,7 +27,7 @@ const routes: Routes = [
           import('./demo/ui-elements/ui-basic/ui-basic.module').then(
             (m) => m.UiBasicModule,
           ),
-        canActivate: [AuthorizationCheckService],
+        // canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
       {
@@ -36,7 +36,7 @@ const routes: Routes = [
           import('./demo/pages/form-elements/form-elements.module').then(
             (m) => m.FormElementsModule,
           ),
-        canActivate: [AuthorizationCheckService],
+        // canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
       {
@@ -45,7 +45,7 @@ const routes: Routes = [
           import('./demo/pages/tables/tables.module').then(
             (m) => m.TablesModule,
           ),
-        canActivate: [AuthorizationCheckService],
+        // canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
       {
@@ -66,7 +66,7 @@ const routes: Routes = [
         path: '3d',
         loadComponent: () =>
           import('./demo/3d/3d.component'),
-        canActivate: [AuthorizationCheckService],
+        // canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
       {
@@ -125,6 +125,12 @@ const routes: Routes = [
         // canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
+      {
+        path: 'directions',
+        loadComponent: () => import('./demo/direction/direction.component').then(module => module.DirectionComponent),
+        // canActivate: [AuthorizationCheckService],
+        pathMatch:'full'
+      }
     ],
   },
   {

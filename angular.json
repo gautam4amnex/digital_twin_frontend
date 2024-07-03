@@ -18,6 +18,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
+           
+             
               "apexcharts",
               "dompurify",
               "protobufjs",
@@ -27,7 +29,18 @@
               "urijs",
               "grapheme-splitter",
               "nosleep.js",
-              "bitmap-sdf"
+              "bitmap-sdf",
+              "geojson-equality",
+              "turf-jsts",
+              "density-clustering",
+              "skmeans",
+              "concaveman",
+              "object-assign",
+              "deep-equal",
+              "geojson-rbush",
+              "polygon-clipping",
+              "crypto-js",
+              "html2canvas"
             ],
             "outputPath": "dist",
             "index": "src/index.html",

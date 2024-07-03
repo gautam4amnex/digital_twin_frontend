@@ -63,9 +63,12 @@
     "ngx-scrollbar": "^13.0.3",
     "ngx-toastr": "^18.0.0",
     "ol": "^9.1.0",
+    "openrouteservice-js": "^0.3.2",
     "rxjs": "~7.8.1",
     "screenfull": "^6.0.2",
     "tslib": "^2.6.2",
+    "util": "^0.12.5",
+    "wkx": "^0.5.0",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {

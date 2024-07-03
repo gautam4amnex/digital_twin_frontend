@@ -6,7 +6,7 @@
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "noImplicitOverride": true,
+    "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
@@ -18,12 +18,12 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "useDefineForClassFields": false,
-    "target": "ES2022", // this will auto target to latest by angular cli
-    "module": "ES2022",
+    "target": "es2022",
+    "module": "esnext", 
     "lib": [
-      "ES2022", // this will auto target to latest by angular cli
-      "dom",
-    ],
+      "es2022",
+      "dom"
+    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
