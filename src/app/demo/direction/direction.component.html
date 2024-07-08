@@ -1,21 +1,18 @@
-<div id="map" (click)='findCoords($event)'></div>
+
 <div id="map" (click)="findCoords($event)"></div>
 <div class="card" style="z-index: 100; position: fixed; bottom: 0; right: 0; width: 400px; height: auto; ">
-  <div class="card-header">
-    Directions
+  <div class="card-header" style="background-color:rgb(54, 83, 112);">
+   <h2 style="color: white;">Directions</h2> 
   </div>
   <div class="card-body">
     <form>
       <label>source location</label>
        <div class="form-group d-flex "  >
-            <input type="text" class="form-control" style="width: 70%;"  >
-             
-            
-          
-              <button type="button" class="btn btn-rounded btn-dark circular-btn" >current</button>
-              <button type="button" class="btn-dark circular-btn"
+              <input  [value]="inputValueSource" type="text" class="form-control" style="width: 70%;" >
+              <button type="button" class="btn btn-rounded btn-dark circular-btn feather icon-target" (click)=" getCurrentLocation('start')"  ></button>
+              <button type="button" class="btn-dark circular-btn feather icon-map-pin"
                       [ngClass]="{'btn-dark': !isSourcePickActive, 'btn-success': isSourcePickActive, 'circular-btn': true}" 
-                      (click)="toggleSourcePick()" >
+                      (click)="pickLocation('start',$event)" >
                 
               </button>
         
@@ -23,15 +20,16 @@
       </div>
       <label>destination location</label>
       <div class="form-group d-flex">
-        <input type="text" class="form-control" id="" aria-describedby="" placeholder="" style="width: 70%;">
-        <button type="button" class="btn btn-rounded btn-dark circular-btn">current</button>
-        <button type="button" class="btn btn-rounded btn-dark circular-btn"
+        <input  [value]="inputValueDestination" type="text" class="form-control"  style="width: 70%;">
+        <button type="button" class="btn btn-rounded btn-dark circular-btn feather icon-target" (click)=" getCurrentLocation('end')"></button>
+        <button type="button" class=" btn-dark circular-btn feather icon-map-pin"
                 [ngClass]="{'btn-dark': !isDestinationPickActive, 'btn-success': isDestinationPickActive, 'circular-btn': true}" 
-                (click)="toggleDestinationPick()">
+                (click)="pickLocation('end',$event)">
          
         </button>
       </div>
-      <button type="submit" class="btn btn-dark">search</button>
+      <button type="submit" class="btn btn-dark" (click)=findRoute() >search</button>
+      <button class="btn btn-dark" (click)=clear() >clear</button>
     </form>
     <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
   </div>
