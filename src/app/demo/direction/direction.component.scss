@@ -3,3 +3,18 @@
     height: 900px;
     top:100px;
   }
+  .circular-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: rgb(0, 0, 0) 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-left: 5px; /* Adjust spacing as needed */
+  }
+  
+  .form-group.d-flex {
+    align-items: center;
+  }

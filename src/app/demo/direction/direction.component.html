@@ -1,1 +1,38 @@
-<div id="map"></div>
+<div id="map" (click)='findCoords($event)'></div>
+<div id="map" (click)="findCoords($event)"></div>
+<div class="card" style="z-index: 100; position: fixed; bottom: 0; right: 0; width: 400px; height: auto; ">
+  <div class="card-header">
+    Directions
+  </div>
+  <div class="card-body">
+    <form>
+      <label>source location</label>
+       <div class="form-group d-flex "  >
+            <input type="text" class="form-control" style="width: 70%;"  >
+             
+            
+          
+              <button type="button" class="btn btn-rounded btn-dark circular-btn" >current</button>
+              <button type="button" class="btn-dark circular-btn"
+                      [ngClass]="{'btn-dark': !isSourcePickActive, 'btn-success': isSourcePickActive, 'circular-btn': true}" 
+                      (click)="toggleSourcePick()" >
+                
+              </button>
+        
+      
+      </div>
+      <label>destination location</label>
+      <div class="form-group d-flex">
+        <input type="text" class="form-control" id="" aria-describedby="" placeholder="" style="width: 70%;">
+        <button type="button" class="btn btn-rounded btn-dark circular-btn">current</button>
+        <button type="button" class="btn btn-rounded btn-dark circular-btn"
+                [ngClass]="{'btn-dark': !isDestinationPickActive, 'btn-success': isDestinationPickActive, 'circular-btn': true}" 
+                (click)="toggleDestinationPick()">
+         
+        </button>
+      </div>
+      <button type="submit" class="btn btn-dark">search</button>
+    </form>
+    <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+  </div>
+</div>
