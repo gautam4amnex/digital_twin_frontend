@@ -86,8 +86,19 @@ export class DirectionComponent implements OnInit {
       features.forEach((feature: any) => {
       this.ol.extent.extend(extent, feature.getGeometry().getExtent());
     });
-    this.map.getView().fit(extent, { duration: 2000,  maxZoom: 14 });
+debugger;
+   // Extract coordinates from the JSON response
+  //  const segment =data.features[0].properties.segments;
+  //  const coordinates =data.features[0].geometry.properties.coordinates;
+  
+ // Add intermediate markers
+//  for (let i = 1; i < coordinates.length - 1; i++) {
+//   this.addMarker(coordinates[i]);
+
+// }
+this.map.getView().fit(extent, { duration: 1500,  maxZoom: 14 });
       this.source.addFeatures(features);
+
     },
   (error)=>{
     alert('cant find route');
@@ -196,6 +207,8 @@ async pickLocation(value:any,event:any) {
     if(this.start!=null && this.end!=null){
       console.log('this.start, this.end',this.start, this.end)
       this.getDirections(this.start, this.end);
+    //   this.inputValueSource=['empty'];
+    // this.inputValueSource=['empty'];
     }
     else{
       alert('enter both coords');
@@ -204,8 +217,8 @@ async pickLocation(value:any,event:any) {
     
   }
   clear(){
-    this.start=[''];
-    this.end=[''];
+    this.inputValueSource=['empty'];
+     this.inputValueDestination=['empty'];
     this.source.clear(); 
    
   }
