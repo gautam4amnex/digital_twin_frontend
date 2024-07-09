@@ -1,42 +1,65 @@
-
 <div id="map" (click)="findCoords($event)"></div>
-<div class="card" style="z-index: 100; position: fixed; bottom: 0; right: 0; width: 400px; height: auto; ">
+<div class="card"
+  style="z-index: 100; position: fixed; bottom: 0; right: 0; width: 400px; height:500px; overflow-y: scroll; ">
   <div class="card-header" style="background-color:rgb(54, 83, 112);">
-   <h2 style="color: white;">Directions</h2> 
+    <h2 style="color: white;">Directions</h2>
   </div>
   <div class="card-body">
 
 
 
-      <label>source location</label>
-       <div class="form-group d-flex "  >
-              <input  [value]="inputValueSource" type="text" class="form-control" style="width: 70%;" >
-              <button type="button" class="btn btn-rounded btn-dark circular-btn feather icon-target" (click)=" getCurrentLocation('start')"  ></button>
-              <button type="button" class="btn-dark circular-btn feather icon-map-pin"
-                      [ngClass]="{'btn-dark': !isSourcePickActive, 'btn-success': isSourcePickActive, 'circular-btn': true}" 
-                      (click)="pickLocation('start',$event)" >
-                
-              </button>
-        
-      
-      </div>
-      <label>destination location</label>
-      <div class="form-group d-flex">
-        <input  [value]="inputValueDestination" type="text" class="form-control"  style="width: 70%;">
-        <button type="button" class="btn btn-rounded btn-dark circular-btn feather icon-target" (click)=" getCurrentLocation('end')"></button>
-        <button type="button" class=" btn-dark circular-btn feather icon-map-pin"
-                [ngClass]="{'btn-dark': !isDestinationPickActive, 'btn-success': isDestinationPickActive, 'circular-btn': true}" 
-                (click)="pickLocation('end',$event)">
-         
-        </button>
-      </div>
+    <label>source location</label>
+    <div class="form-group d-flex ">
+      <input [value]="inputValueSource" type="text" class="form-control" style="width: 70%;">
+      <button type="button" class="btn btn-rounded btn-dark circular-btn feather icon-target"
+        (click)=" getCurrentLocation('start')"></button>
+      <button type="button" class="btn-dark circular-btn feather icon-map-pin"
+        [ngClass]="{'btn-dark': !isSourcePickActive, 'btn-success': isSourcePickActive, 'circular-btn': true}"
+        (click)="pickLocation('start',$event)">
+
+      </button>
 
 
-   
+    </div>
+    <label>destination location</label>
+    <div class="form-group d-flex">
+      <input [value]="inputValueDestination" type="text" class="form-control" style="width: 70%;">
+      <button type="button" class="btn btn-rounded btn-dark circular-btn feather icon-target"
+        (click)=" getCurrentLocation('end')"></button>
+      <button type="button" class=" btn-dark circular-btn feather icon-map-pin"
+        [ngClass]="{'btn-dark': !isDestinationPickActive, 'btn-success': isDestinationPickActive, 'circular-btn': true}"
+        (click)="pickLocation('end',$event)">
 
-      <button  class="btn btn-dark" (click)=findRoute() >search</button>
-      <button class="btn btn-dark" (click)=clear() >clear</button>
+      </button>
+    </div>
+
+
+
+
+    <button class="btn btn-dark" (click)=findRoute()>search</button>
+    <button class="btn btn-dark" (click)=clear()>clear</button>
 
     <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
   </div>
-</div>
+      <div class="card-footer" style="background-color:rgb(54, 83, 112); ">
+            <div class=" d-flex" style="justify-content: space-between; padding: 4%; margin: 4%;">
+                  <h2 style="color: white;  width: 70%; font-size: x-large;">Steps</h2>
+                  <h4 style="color: white; padding: 0%; font-size:medium;">Road Name</h4>
+            </div>
+<hr>
+            <div class=" d-flex step"  *ngIf="startAddress!=''" style="justify-content: space-between; padding: 4%; margin: 4%;">
+                    <div style="font-size: 150%; font-weight: 700; width: 70%; align-content: center; color:rgb(239, 247, 247);padding: 4%; margin: 4%; ;" >START</div>
+                    <div><p style="color: rgb(40, 54, 68);padding: 4%; margin: 4%; outline-color: honeydew;">{{startAddress  }}</p></div>
+            </div>
+
+            <div *ngFor="let step of routeSteps" class=" d-flex step"style="justify-content: space-between; padding: 4%; margin: 4%;">
+                    <div style="font-size: 150%; font-weight: 700; width: 70%; align-content: center; color: rgb(250, 250, 250);padding: 4%; margin: 4%;">{{ step.instruction }}</div>
+                    <div><p style="color:  rgb(40, 54, 68);padding: 4%; margin: 4%;" *ngIf="step.name!='-'">Address: {{ step.name }}</p></div>
+            </div>
+         
+            <div class=" d-flex step"  *ngIf="endAddress!=''" style="justify-content: space-between; padding: 4%; margin: 4%;">
+              <div style="font-size: 150%; font-weight: 700; width: 70%; align-content: center;color: rgb(255, 255, 255);padding: 4%; margin: 4%;" >END</div>
+              <div><p  style="color:  rgb(40, 54, 68);padding: 4%; margin: 4%;">{{endAddress  }}</p></div>
+           </div>
+        </div>
+    </div>
