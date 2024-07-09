@@ -34,7 +34,6 @@ export class DirectionComponent implements OnInit {
   });
 
   view: any;
-  orsDirections: any;
   pointStyle: any;
   start: any[];
   end: any[];
@@ -73,23 +72,12 @@ export class DirectionComponent implements OnInit {
     });
 
     this.map.addLayer(this.vector);
-
-    this.orsDirections = new Openrouteservice.Directions({
-      api_key: "5b3ce3597851110001cf624837d0d92fba7048cd85a8893a7148bfdb",
-      host: "https://api.openrouteservice.org"
-    });
-
-   
-    // this.getDirections([72.474672,23.001824], [72.471732,22.987879]);
-
-    
   }
 
   getDirections(start: number[], end: number[]): void {
 
     this.http.get(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf624837d0d92fba7048cd85a8893a7148bfdb&start=${start}&end=${end}`).subscribe(
       (data)=>{
-      // let json = new this.ol.format.GeoJSON();
      
       let features = new this.ol.format.GeoJSON().readFeatures(data, {
         featureProjection: 'EPSG:3857'
@@ -98,51 +86,12 @@ export class DirectionComponent implements OnInit {
       features.forEach((feature: any) => {
       this.ol.extent.extend(extent, feature.getGeometry().getExtent());
     });
-
-    // Get the center of the extent
-    // let center = this.ol.extent.getCenter(extent);
-
-    // Zoom the map to the center of the extent
     this.map.getView().fit(extent, { duration: 2000,  maxZoom: 14 });
-    // this.map.getView().setZoom(14); 
       this.source.addFeatures(features);
-      this.map.addLayer(this.vector);
-    })
-    // .catch((error: any) => {
-    //   console.error(error);
-    //   alert('route not available');
-    // });
-
-
-    // this.orsDirections.calculate({
-    //   coordinates: [start, end],
-    //   profile: 'driving-car',
-    //   format: 'geojson'
-    // })
-    // .then((json: any) => {
-    //   console.log(json);
-
-    //   let features = new this.ol.format.GeoJSON().readFeatures(json, {
-    //     featureProjection: 'EPSG:3857'
-    //   });
-    //   let extent = this.ol.extent.createEmpty();
-    //   features.forEach((feature: any) => {
-    //   this.ol.extent.extend(extent, feature.getGeometry().getExtent());
-    // });
-
-    // // Get the center of the extent
-    // // let center = this.ol.extent.getCenter(extent);
-
-    // // Zoom the map to the center of the extent
-    // this.map.getView().fit(extent, { duration: 2000,  maxZoom: 14 });
-    // // this.map.getView().setZoom(14); 
-    //   this.source.addFeatures(features);
-    
-    // })
-    // .catch((error: any) => {
-    //   console.error(error);
-    //   alert('route not available');
-    // });
+    },
+  (error)=>{
+    alert('cant find route');
+  });
   }
 
   findCoords(evt: any) {
@@ -193,22 +142,11 @@ addMarker(geo_coords){
     featureProjection: 'EPSG:3826',
 });
 
-  var vector_layer = new this.ol.layer.Vector({
-    source: new this.ol.source.Vector({ features: [addMarkserFeature] })
-  });
-
-  addMarkserFeature.setStyle(this.pointStyle);
-  this.map.addLayer(vector_layer);
-  
+ 
+addMarkserFeature.setStyle(this.pointStyle);
+this.source.addFeature(addMarkserFeature);
 
 }
-
-// this.Map.cal{
-
-//   if(this.isSourcePickActive){
-//     this.findCoords(event);
-//   }
-// }
 
 
 async pickLocation(value:any,event:any) {
