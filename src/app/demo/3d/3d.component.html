@@ -1,5 +1,5 @@
 <div id="cesiumContainer"></div>
-<button type="button" (click)="openLayerDetailDialog()">GET CCTV</button>
+<!-- <button type="button" (click)="openLayerDetailDialog()">GET CCTV</button>
 
 <kendo-dialog class="custom-dialog handler-dialog" title="Layer Details" *ngIf="layerDetailDialog" [height]="700" [minWidth]="250" [width]="1024" (close)="closeLayerDetailDialog()">
 
@@ -251,21 +251,21 @@
 
 </kendo-dialog>
 
-<!-- <kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="selectFeatureDialog" [minWidth]="250" [width]="1024" (close)="closeFeatureDialog()">
+<kendo-dialog class="custom-dialog handler-dialog" title="Edit" *ngIf="selectFeatureDialog" [minWidth]="250" [width]="1024" (close)="closeFeatureDialog()">
   <h4>Select Feature</h4>
-</kendo-dialog> -->
+</kendo-dialog>
 
- <!-- <button type="button" (click)="openEditDialog()">OPEN</button> -->
+ <button type="button" (click)="openEditDialog()">OPEN</button>
 <button type="button" (click)="getBimData()">GET</button>
 <div class="SubCursorBar">
   <div class="content">
     <div class="DisabledContent" is-disabled="false">
       <div class="CursorBarControl" is-disabled="false" is-selected="true" title="Pan">
-        <!-- <div class="icon">
+        <div class="icon">
           <svg class="" width="42" height="42" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M15.5652 6C14.9172 6 14.3913 6.51692 14.3913 7.15385V14.4615H13.6087V8.69231C13.6087 8.05538 13.0828 7.53846 12.4348 7.53846C11.7868 7.53846 11.2609 8.05538 11.2609 8.69231V14.4615V16.7692V19.6734C11.2609 19.6734 9.0069 18.2402 7.87211 17.7548C7.55594 17.6194 7.22575 17.5385 6.89079 17.5385C5.1401 17.5385 5 19.0769 5 19.0769L8.13043 21.3846L10.6357 24.3398C11.5279 25.3922 12.85 26 14.243 26H19.8696C21.5983 26 23 24.6223 23 22.9231V14.4615V11C23 10.3631 22.4741 9.84615 21.8261 9.84615C21.1781 9.84615 20.6522 10.3631 20.6522 11V14.4615H19.8696V8.69231C19.8696 8.05538 19.3437 7.53846 18.6957 7.53846C18.0477 7.53846 17.5217 8.05538 17.5217 8.69231V14.4615H16.7391V7.15385C16.7391 6.51692 16.2132 6 15.5652 6Z" fill="white"></path>
           </svg>
-        </div> -->
+        </div>
         <mat-button-toggle-group name="ingredients" aria-label="Ingredients">
           <mat-button-toggle (click)="goto_location()" title="Pan"><i class="fas fa-map-marker-alt fa-2x"></i></mat-button-toggle>
           <mat-button-toggle (click)="measurementType($event)" title="Measure polyline"><mat-icon>timeline</mat-icon></mat-button-toggle>
@@ -288,7 +288,7 @@
                 </mat-form-field>
               </form>
             </mat-menu>
-            <!-- <mat-button-toggle title="Download Image" ><i class="fas fa-camera fa-2x"></i></mat-button-toggle> -->
+            <mat-button-toggle title="Download Image" ><i class="fas fa-camera fa-2x"></i></mat-button-toggle>
         </mat-button-toggle-group>
       </div>
     </div>
@@ -313,7 +313,7 @@
   </tbody>
 </table>
 
-<!-- <table id="property_tbl" class="table table-striped" style="display: block;">
+<table id="property_tbl" class="table table-striped" style="display: block;">
   <tbody>
     @for (property of gridInfoKeys; track gridInfoKeys; let i = $index) {
     <tr>
@@ -322,20 +322,20 @@
     </tr>
     }
   </tbody>
-</table> -->
+</table>
 
 <button type="button" class="cesium-button">
   <label>
     <input type="checkbox" id="per_selection" (click)="per_selection()">Per-feature selection </label>
 </button>
-<!-- <mat-form-field>
+<mat-form-field>
   <mat-label>Favorite food</mat-label>
   <mat-select>
     @for (food of foods; track food) {
     <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
     }
   </mat-select>
-</mat-form-field> -->
+</mat-form-field>
 
 <mat-slide-toggle (change)="changeBaseLayer()" id="slider" color="#76ee59"> 
   {{galleryImg}} 
@@ -344,7 +344,7 @@
 <button (click)="rotateEntity(modelEntity, 5);">Rotate Right</button>
 <button (click)="getFeature()">Done</button>
 <button (click)="UpdateFeature()">Update</button>
-<!-- <mat-form-field class="dd_state">
+<mat-form-field class="dd_state">
   <mat-label>Select State Name</mat-label>
   <mat-select (selectionChange)="get_layer_by_state_id($event)">
 
@@ -355,9 +355,9 @@
 
 
   </mat-select>
-</mat-form-field> -->
+</mat-form-field> 
 
-<!-- <button type="button" (click)="togglePanel()">Layer</button> -->
+ <button type="button" (click)="togglePanel()">Layer</button>--> 
 
 <div class="row closed-panel" [@widthGrow]="state">
   <div class="col-sm-12">

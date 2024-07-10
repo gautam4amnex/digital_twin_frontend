@@ -1,124 +1,25 @@
+#map {
+  width: 100%;
+  height: 900px;
+  top:100px;
+}
+.pcoded-content{
+  padding-top: 0px;
+}
 
+
+html,
+body,
+div[appCesium] {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
 
 .layer-popup.resize-layer .side-layer-resize svg {
   transform: rotate(180deg);
-}
-
-.closed-panel {
-  overflow-y: hidden;
-} 
-
-
-// .CursorBarControl {
-//   background-color: #ffffff; /* Set the default background color */
-//   cursor: pointer; /* Change cursor to pointer on hover */
-//   padding: 10px;
-//   margin: 5px;
-//   border-radius: 5px;
-// }
-.CursorBarControl.clicked {
-  background-color: #ff0000; /* Set the background color when clicked */
-}
-
-#per_selection{
-  position: relative;
-  bottom: 2px;
-  right: 4px;
-}
-
-// .mat-button-toggle{
-//   background-color: #306cee;
-//   color: #ffffff;
-// }
-
-#slider{
-  position: relative;
-  bottom: 818px;
-  right: 163px;
-}
-
-
-.mat-slide-toggle:checked{
-
-  background-color: green;
-
-}
-
-
-
-.mat-button-toggle:hover {
-  background-color: transparent;
-  color: #1dd9cd !important;    
-}
-
-.mat-button-toggle-checked {
-  //background-color: #ec2c4c;
-  color: #1dd9cd !important;
-}
-
-
-.cesium-button{
-  top: -853px;
-  left: 8px;
-  border-radius: 3px;
-}
-
-.cesium-viewer-bottom{
-  display: none;
-}
-
-#mat-mdc-slide-toggle-1-label {
-  color: black;
-  font-weight: 500;
-}
-
-::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-  background-color: #76ee59 !important;
-}
-
-.dd_state{
-  position: relative;
-  bottom: 772px;
-  right: 287px;
-}
-.mdc-text-field--filled:not(.mdc-text-field--disabled) {
-  background-color: #3f4d67 !important;
-}
-
-.SubCursorBar{
-  position: relative;
-    top: -786px;
-    left: 10px;
-
-}
-
-#popupBox {
-  background-color: #333;
-  border: 1px solid #fff;
-  padding: 10px;
-  color: #fff;
-}
-
-.doc-title {
-  text-align: center;
-  border-top: 1px solid #e0e0e0;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 2rem 0;
-  margin: 5rem 0 2rem;
-  text-transform: uppercase;
- }
-
-.SubCursorBar>.content {
-  align-items: center;
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  background: rgba(33, 39, 42, .8);
-  border-radius: 9px;
-  box-shadow: 0 0 1px rgba(18,22,25,.36), 0 18px 36px -4px rgba(18,22,25,.36);
-  display: flex;
-  pointer-events: auto;
-  width: -webkit-max-content;
-  width: max-content;
 }
 
 .layer-popup {
@@ -165,25 +66,295 @@
   bottom: 1px;
 }
 
-.cesium-infoBox{
-  display: none !important;
-}
 
-#property_tbl{
-  position: relative;
-  
-    // display: block;
-    // bottom: 836px;
-    // left: 1386px;
 
-}
-
-@media only screen and (min-width: 320px) and (max-width: 620px) {
+@media only screen {
   .layer-popup {
     bottom: 0;
     position: absolute; /* Change to absolute */
     right: 0; /* Position on the right side */
-    height: calc(100vh - 150px);
+    height: 800px;
     z-index: 12;
   }
 }
+
+
+// .mat-button-toggle{
+//   background-color: #306cee;
+//   color: #ffffff;
+// }
+
+.mat-button-toggle:hover {
+  background-color: transparent;
+  color: #1dd9cd !important;    
+}
+
+
+.mat-button-toggle-checked {
+  color: #1dd9cd !important;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #3f4d67 !important;
+}
+
+.SubCursorBar{
+  position: relative;
+    top: -888px;
+    left: 13px;
+
+
+}
+
+.SubCursorBar>.content {
+  align-items: center;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  background: rgba(33, 39, 42, .8);
+  border-radius: 9px;
+  box-shadow: 0 0 1px rgba(18,22,25,.36), 0 18px 36px -4px rgba(18,22,25,.36);
+  display: flex;
+  pointer-events: auto;
+  width: -webkit-max-content;
+  width: max-content;
+
+}
+
+
+
+#ol-popup{
+  background-color: white !important;
+   border-radius: 10px !important;
+    border: 1px solid black !important;
+     padding: 5px 10px !important;
+}
+
+// .ol-popup {
+//   position: absolute;
+//   background-color: white;
+//   box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+//   padding: 15px;
+//   border-radius: 10px;
+//   border: 1px solid #cccccc;
+//   bottom: 12px;
+//   left: -50px;
+//   min-width: 280px;
+// }
+// .ol-popup:after, .ol-popup:before {
+//   top: 100%;
+//   border: solid transparent;
+//   content: " ";
+//   height: 0;
+//   width: 0;
+//   position: absolute;
+//   pointer-events: none;
+// }
+// .ol-popup:after {
+//   border-top-color: white;
+//   border-width: 10px;
+//   left: 48px;
+//   margin-left: -10px;
+// }
+// .ol-popup:before {
+//   border-top-color: #cccccc;
+//   border-width: 11px;
+//   left: 48px;
+//   margin-left: -11px;
+// }
+// .ol-popup-closer {
+//   text-decoration: none;
+//   position: absolute;
+//   top: 2px;
+//   right: 8px;
+// }
+// .ol-popup-closer:after {
+//   content: "✖";
+// }
+
+// .layer-popup.resize-layer .side-layer-resize svg {
+//   transform: rotate(180deg);
+// }
+
+// .closed-panel {
+//   overflow-y: hidden;
+// } 
+
+
+// // .CursorBarControl {
+// //   background-color: #ffffff; /* Set the default background color */
+// //   cursor: pointer; /* Change cursor to pointer on hover */
+// //   padding: 10px;
+// //   margin: 5px;
+// //   border-radius: 5px;
+// // }
+// .CursorBarControl.clicked {
+//   background-color: #ff0000; /* Set the background color when clicked */
+// }
+
+// #per_selection{
+//   position: relative;
+//   bottom: 2px;
+//   right: 4px;
+// }
+
+// // .mat-button-toggle{
+// //   background-color: #306cee;
+// //   color: #ffffff;
+// // }
+
+// #slider{
+//   position: relative;
+//   bottom: 818px;
+//   right: 163px;
+// }
+
+
+// .mat-slide-toggle:checked{
+
+//   background-color: green;
+
+// }
+
+
+
+// .mat-button-toggle:hover {
+//   background-color: transparent;
+//   color: #1dd9cd !important;    
+// }
+
+// .mat-button-toggle-checked {
+//   //background-color: #ec2c4c;
+//   color: #1dd9cd !important;
+// }
+
+
+// .cesium-button{
+//   top: -853px;
+//   left: 8px;
+//   border-radius: 3px;
+// }
+
+// .cesium-viewer-bottom{
+//   display: none;
+// }
+
+// #mat-mdc-slide-toggle-1-label {
+//   color: black;
+//   font-weight: 500;
+// }
+
+// ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+//   background-color: #76ee59 !important;
+// }
+
+// .dd_state{
+//   position: relative;
+//   bottom: 772px;
+//   right: 287px;
+// }
+// .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+//   background-color: #3f4d67 !important;
+// }
+
+// .SubCursorBar{
+//   position: relative;
+//     top: -786px;
+//     left: 10px;
+
+// }
+
+// #popupBox {
+//   background-color: #333;
+//   border: 1px solid #fff;
+//   padding: 10px;
+//   color: #fff;
+// }
+
+// .doc-title {
+//   text-align: center;
+//   border-top: 1px solid #e0e0e0;
+//   border-bottom: 1px solid #e0e0e0;
+//   padding: 2rem 0;
+//   margin: 5rem 0 2rem;
+//   text-transform: uppercase;
+//  }
+
+// .SubCursorBar>.content {
+//   align-items: center;
+//   -webkit-backdrop-filter: blur(20px);
+//   backdrop-filter: blur(20px);
+//   background: rgba(33, 39, 42, .8);
+//   border-radius: 9px;
+//   box-shadow: 0 0 1px rgba(18,22,25,.36), 0 18px 36px -4px rgba(18,22,25,.36);
+//   display: flex;
+//   pointer-events: auto;
+//   width: -webkit-max-content;
+//   width: max-content;
+// }
+
+// .layer-popup {
+//   width: 320px;
+//   position: absolute; /* Change to absolute */
+//   bottom: 33px;
+//   right: 0; /* Position on the right side */
+//   z-index: 10;
+//   background: #fff;
+//   transition: all .8s ease-in-out;
+//   /**/
+//   height: 450px;
+// }
+
+// .layer-popup.active {
+//   right: 0;
+// }
+
+// .layer-popup.resize-layer {
+//   height: 45px;
+// }
+
+// .layer-popup.resize-layer .side-layer-resize img {
+//   transform: rotate(180deg);
+// }
+
+// .layer-title{
+//   background-color: #3F4D67;
+//   height: 38px;
+// }
+
+// .accordion-button{
+//   height: 40px;
+// }
+
+// .layer-content {
+//   width: 100%;
+//   height: calc(100% - 45px);
+//   overflow-y: auto;
+//   padding: 10px;
+//   position: absolute;
+//   border-bottom: 1px solid #f3f3f3;
+//   border-left: 1px solid #f3f3f3;
+//   bottom: 1px;
+// }
+
+// .cesium-infoBox{
+//   display: none !important;
+// }
+
+// #property_tbl{
+//   position: relative;
+  
+//     // display: block;
+//     // bottom: 836px;
+//     // left: 1386px;
+
+// }
+
+// @media only screen and (min-width: 320px) and (max-width: 620px) {
+//   .layer-popup {
+//     bottom: 0;
+//     position: absolute; /* Change to absolute */
+//     right: 0; /* Position on the right side */
+//     height: calc(100vh - 150px);
+//     z-index: 12;
+//   }
+// }

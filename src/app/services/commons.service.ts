@@ -60,6 +60,9 @@ export class CommonsService extends BehaviorSubject<any[]> {
   public getLayerAndImagePanel(jsonData){
     return this.http.post("http://localhost:8090/digitaltwin/get_all_layer_and_image", jsonData);
   }
+  public getLayerAndImagePanel3D(jsonData){
+    return this.http.post("http://localhost:8090/digitaltwin/get_all_layer_and_image", jsonData);
+  }
 
   public getStateName(){
     return this.http.get( this.url + "get_state_name", { headers: this.getAccessToken() });
