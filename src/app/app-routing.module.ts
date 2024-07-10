@@ -110,7 +110,7 @@ const routes: Routes = [
       {
         path: 'layermanagement',
         loadComponent: () => import('./demo/layer-management/layer-management.component').then(module => module.LayerManagementComponent),
-        canActivate: [AuthorizationCheckService],
+        // canActivate: [AuthorizationCheckService],
         pathMatch:'full'
       },
       {

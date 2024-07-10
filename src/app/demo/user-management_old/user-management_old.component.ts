@@ -83,6 +83,7 @@ export class UserManagementComponent implements OnInit {
   ];
 
   loadData() {
+    debugger
     this.commonService.userCrudManagement({ "flag": "fetch" }).subscribe((data: any) => {
       console.log("load user data",data)
       this.isLoading = true;
@@ -97,6 +98,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   loadRoles() {
+    debugger
     const jsonData={"flag":"fetch"}
     this.commonService.get_all_role().subscribe((data: any) => {
       console.log("load roles",data)
@@ -185,16 +187,14 @@ export class UserManagementComponent implements OnInit {
   }
   onSubmit(mode: any) {
 
-    if (this.userForm.invalid) {
-      const controls = this.userForm.controls;
-      Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
-      
-  }else{
+  
 
     if (mode == "ADD") {
 
-      if(this.userForm.controls['password'].value != this.userForm.controls['confirmPassword'].value){
+      if(this.userForm.invalid && this.userForm.controls['password'].value != this.userForm.controls['confirmPassword'].value){
         this.passwordHandler = true;
+        const controls = this.userForm.controls;
+        Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
         return;
       }
       this.userForm.value['flag'] = 'create';
@@ -212,21 +212,24 @@ export class UserManagementComponent implements OnInit {
       });
     }
     else {
-      this.userForm.value['flag'] = 'update';
-      this.commonService.userCrudManagement(this.userForm.value).subscribe((data: any) => {
-         console.log("load user data",data)
-        if (data.responseCode === 200) {
-          this.loadData(); // Reload data after adding user
-          this.toastr.success("user updated");
-          this.editDialog = false;
-        }
-        else {
-          this.toastr.error('Something Happened Wrong.');
-        }
-      });
+      if(this.userForm.controls['user_name'] &&this.userForm.controls['role_id'] &&this.userForm.controls['contact_no'] &&this.userForm.controls['email_id'] &&this.userForm.controls['status']){
+        this.userForm.value['flag'] = 'update';
+        this.commonService.userCrudManagement(this.userForm.value).subscribe((data: any) => {
+           console.log("load user data",data)
+          if (data.responseCode === 200) {
+            this.loadData(); // Reload data after adding user
+            this.toastr.success("user updated");
+            this.editDialog = false;
+          }
+          else {
+            this.toastr.error('Something Happened Wrong.');
+          }
+        });
+      }
+    
     }
     this.passwordHandler = false;
     console.log('submit data', this.userForm.value);
-  }}
+  }
   
 }

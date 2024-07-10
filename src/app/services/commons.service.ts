@@ -87,24 +87,44 @@ export class CommonsService extends BehaviorSubject<any[]> {
     return this.http.get(`${this.url}` + `getUserDetailsById/${roll_id}`);
   }
  
-  roleCrudManagement(jsonData:any){
-            // return this.http.post( this.url_midc + "role_management", jsonData);
-            return this.http.post( this.url + "role_management", jsonData);
+  // roleCrudManagement(jsonData:any){
+  //           // return this.http.post( this.url_midc + "role_management", jsonData);
+  //           return this.http.post( this.url + "role_management", jsonData);
 
-          }
+  //         }
           
-  getRoleDataById(roll_id:any){
-    // return this.http.get(`${this.url_midc}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
-    return this.http.get(`${this.url}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
+  // getRoleDataById(roll_id:any){
+  //   // return this.http.get(`${this.url_midc}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
+  //   return this.http.get(`${this.url}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
             
-              } 
+  //             } 
             
-  getAllModulesname(){
-    // return this.http.get( this.url_midc + "get_all_modules",{ headers: this.getAccessToken() });
-              
-    return this.http.get( this.url + "get_all_modules",{ headers: this.getAccessToken() });
+    getAllRoles(){//fn_web_get_all_role();
+        return this.http.get(`${this.url}` + 'get_all_role',{ headers: this.getAccessToken() });
+      }
+    
+      roleCrudManagement(jsonData:any){//.fn_web_add_or_update_role()
+        return this.http.post( this.url + "add_update_role", jsonData, { headers: this.getAccessToken() });
+      }
+      deleteRole(jsonData:any){//fn_web_delete_role(?)
+        return this.http.post( this.url + "delete_role", jsonData, { headers: this.getAccessToken() });
+    
+      }
+      getRoleDataById(roll_id:any){
+        return this.http.get(`${this.url}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
+    
+      }
+      getAllModulesname(){
+        return this.http.get(`${this.url}` + 'dashboard/get_all_modules',{ headers: this.getAccessToken() });
+    
+       }
 
-  }            
+  // getAllModulesname(){
+  //   // return this.http.get( this.url_midc + "get_all_modules",{ headers: this.getAccessToken() });
+              
+  //   return this.http.get( this.url + "get_all_modules",{ headers: this.getAccessToken() });
+
+  // }            
 
   public crudBimData(jsonData){
     return this.http.post(this.url_midc +  "layer/crud_cctv_location", jsonData);

@@ -414,7 +414,8 @@
                           [attr.layer_name]="childLayer.layer_name"
                           [attr.combined_service]="childLayer.is_combined_service"
                           [attr.service-url]="childLayer.service_url" [attr._id]="childLayer.geometry_type"
-                          data-id="Image" type="checkbox" [attr.value]="childLayer.layer_id"
+                          data-id="Image" type="checkbox" 
+                          [attr.value]="childLayer.layer_id"
                           [attr.Id]="'flexCheckDefault' + childLayer.layer_id"
                           [attr.layer_name]="childLayer.layer_name">
                         <label class="form-check-label">{{ childLayer.layer_name }}</label>

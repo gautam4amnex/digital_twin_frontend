@@ -81,7 +81,7 @@ export default class RoleManagementComponent implements OnInit {
 
   loadGridData() 
   { const jsondata={"flag": "fetch"}
-    this.commonService.roleCrudManagement(jsondata).subscribe((data: any) => {
+    this.commonService.getAllRoles().subscribe((data: any) => {
       this.isLoading = true;
       // Set loading to true before API call
       if (data) {
@@ -294,8 +294,8 @@ export default class RoleManagementComponent implements OnInit {
  
 
   delete(id: any) {
-    const jsondata={"role_id": id,"flag":"delete"}
-    this.commonService.roleCrudManagement(jsondata).subscribe((data: any) => {
+    const jsondata={"role_id": id}
+    this.commonService.deleteRole(jsondata).subscribe((data: any) => {
       if (data.responseCode === 200) {
         this.toastr.success("user deleted successfully");
         this.loadGridData();
