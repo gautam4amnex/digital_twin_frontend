@@ -11,9 +11,11 @@
 
     <ng-template kendoGridToolbarTemplate let-dataItem>
       <div class="export-template">
-        <button kendoGridExcelCommand  class=" btn btn-dark export-new excel"
+        <button   class=" btn btn-dark export-new excel"
           (click)="exportExcel(excelexport)">Export to Excel</button>
       </div>
+
+      
 
       <div class="export-template">
         <button class="export-new excel btn btn-dark" (click)="openEditDialog('add','1')">add new user</button>
@@ -25,7 +27,7 @@
       <kendo-grid-column *ngFor="let data of grid_fields" field="{{data.fields}}" title="{{data.title}}"
         [hidden]="data.hide" [width]="250">
       </kendo-grid-column>
-      <kendo-grid-column field="Action" title="Action" [width]="150" [sticky]="true" [columnMenu]="false">
+      <kendo-grid-column field="Action" title="Action"  [width]="200" [sticky]="true" [columnMenu]="false">
         <ng-template kendoGridCellTemplate let-dataItem>
           <div class="d-flex gap-2">
             <button kendoButton size="small" class="d-flex align-items-center btn btn-dark" size="small" rounded="small"
