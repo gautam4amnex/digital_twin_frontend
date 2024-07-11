@@ -110,8 +110,8 @@ export class CommonsService extends BehaviorSubject<any[]> {
         return this.http.post( this.url + "delete_role", jsonData, { headers: this.getAccessToken() });
     
       }
-      getRoleDataById(roll_id:any){
-        return this.http.get(`${this.url}` + `getRollDetailsById/${roll_id}`,{ headers: this.getAccessToken() });
+      getRoleDataById(json:any){
+        return this.http.post(`http://localhost:8090/digitaltwin/dashboard/get_role_by_id`,json);
     
       }
       getAllModulesname(){

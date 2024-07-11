@@ -59,7 +59,8 @@ export class ProjectManagementComponent implements OnInit {
   uploadedImages: string[] = []; // Array to hold image URLs
   imageFiles: File[] = []; // Array to hold image files
   milestoneformdata: any;
-  isimgVisible: boolean;
+  isimgVisible=true;
+  projectName: any;
 
 
   constructor(private renderer: Renderer2, private commonService: CommonsService, private fb: FormBuilder, private toastr: ToastrService, private elementRef: ElementRef<HTMLElement>) { }
@@ -159,7 +160,7 @@ export class ProjectManagementComponent implements OnInit {
       description: new FormControl('', [Validators.required]),
       milestone_status: new FormControl('', Validators.required),
       image: new FormControl(''),
-      document: new FormControl(''),
+      // document: new FormControl(''),
       remarks: new FormControl('', Validators.required),
       start_date: new FormControl('', Validators.required),
       end_date: new FormControl('', Validators.required),
@@ -190,6 +191,7 @@ export class ProjectManagementComponent implements OnInit {
     this.loadALLProjects() 
     this.projectSelected = true;
     this.current_project_id = event.target.value;
+    this.projectName=event.target.getAttribute("name")
     if (this.current_project_id) {
       this.loadMilestoneData()
     } else {
@@ -220,13 +222,13 @@ export class ProjectManagementComponent implements OnInit {
     if (btn == 'add') {
       this.isAdd = true; // Set flag to true for add mode
       this.initializeForm(); // Call to initialize the form
-      this.btnName = "Add New User";
+      this.btnName = "Add New Project";
       this.btnSubmit = "ADD"
 
 
     } else {
       this.isAdd = false; // Set flag to false for edit mode
-      this.btnName = "Edit User";
+      this.btnName = "Edit Project";
       this.btnSubmit = "UPDATE"
       const formdata = { "flag": "fetch_id", "project_id": id };
       this.commonService.projectManagement(formdata).subscribe((data: any) => {
@@ -294,6 +296,7 @@ export class ProjectManagementComponent implements OnInit {
               remarks: this.editDataMilestone.remarks,
               document: this.editDataMilestone.document,
             });
+            
          
             console.log(this.milestoneForm);
 
@@ -368,7 +371,8 @@ export class ProjectManagementComponent implements OnInit {
         this.commonService.projectManagement(formdata).subscribe((data: any) => {
           console.log("response of addform", data)
           if (data.responseCode === 200) {
-            this.loadData(); // Reload data after adding user
+            this.loadData(); 
+            this.loadALLProjects()
             this.toastr.success("project added successfully");
             this.editDialog = false;
           }
@@ -582,6 +586,8 @@ export class ProjectManagementComponent implements OnInit {
       Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
       this.toastr.error('milestone cant be added');
     } 
+
+
       if (formType == "ADD") {
         this.milestoneformdata['flag'] = 'create';
         this.milestoneformdata['project_id'] = this.current_project_id;
@@ -613,7 +619,7 @@ export class ProjectManagementComponent implements OnInit {
             this.editDialogMilestone = false;
           }
           else {
-            this.toastr.error('milestone cant be added');
+            // this.toastr.error('milestone cant be added');
           }
         });
       }
