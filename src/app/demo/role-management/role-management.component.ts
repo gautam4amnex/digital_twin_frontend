@@ -61,6 +61,7 @@ export default class RoleManagementComponent implements OnInit {
   isAdd: boolean = false;
 
   public editDialog: any = false;
+  editRoleId: any;
 
 
   constructor(private commonService: CommonsService, private fb: FormBuilder, private toastr: ToastrService) { }
@@ -168,22 +169,25 @@ export default class RoleManagementComponent implements OnInit {
     if (btn === 'add') {
       this.isAdd = true; // Set flag to true for add mode
       this.initializeForm(); // Call to initialize the form
-      this.btnName = "Add New User";
+      this.btnName = "Add New Role";
       this.btnSubmit = "ADD";
       this.initializeForm();
     } else {
       this.isAdd = false; // Set flag to false for edit mode
-      this.btnName = "Edit User";
+      this.btnName = "Edit Role";
       this.btnSubmit = "UPDATE";
-      
-      this.commonService.getRoleDataById(roleId).subscribe((data: any) => {
+    
+      this.editRoleId=roleId;
+      this.commonService.getRoleDataById({"role_id": roleId}).subscribe((data: any) => {
         if (data) {
           this.editData = data.data[0];
+          console.log(' this.editData', this.editData);
+
           const selectedModules = this.editData.assign_permission
           ;
           console.log("Fetched edit data:", selectedModules);
           this.roleForm.patchValue({
-            role_id: this.editData.role_id,
+            role_id: roleId,
             role_name: this.editData.role_name,
             role_desc: this.editData.description,
             status: this.editData.status,
@@ -253,19 +257,20 @@ export default class RoleManagementComponent implements OnInit {
      
       role_id:formValue.role_id,
       role_name: formValue.role_name,
-      description: formValue.role_desc,
+      role_desc: formValue.role_desc,
       status: formValue.status,
-      assign_permission: checkedModulesData
+      web_permissions: checkedModulesData
     };
   
     // Log or use the JSON data as required
     console.log('JSON Data:', jsonData);
   
       if (this.isAdd) {
-       jsonData['flag']='insert';
+      //  jsonData['flag']='insert';
         delete jsonData.role_id;
         this.commonService.roleCrudManagement(jsonData).subscribe((data: any) => {
           if (data) {
+            console.log('useraddapi',data);
             this.loadGridData(); // Reload data after adding user
             this.toastr.success("user added successfully");
             this.editDialog = false;
@@ -275,9 +280,19 @@ export default class RoleManagementComponent implements OnInit {
         });
   
       } else {
-        jsonData['flag']='update';
-        this.commonService.roleCrudManagement(jsonData).subscribe((data: any) => {
+
+        let formdata={
+          role_id:this.editRoleId,
+          role_name: formValue.role_name,
+          role_desc: formValue.role_desc,
+          status: formValue.status,
+          web_permissions: checkedModulesData
+
+        }
+        // jsonData['flag']='update';
+        this.commonService.roleCrudManagement(formdata).subscribe((data: any) => {
           if (data) {
+            console.log('userupdateapi',data);
             this.loadGridData(); // Reload data after adding user
             this.toastr.success("user updated successfully");
             this.editDialog = false;

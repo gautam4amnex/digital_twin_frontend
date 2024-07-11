@@ -53,7 +53,7 @@ export class UserManagementComponent implements OnInit {
       password: new FormControl('', [Validators.required]),
       confirmPassword: new FormControl('', [Validators.required]),
       contact_no: new FormControl('', [Validators.required, Validators.pattern("^[0-9]{10}$")]),
-      email_id: new FormControl('', [Validators.required, Validators.email]),
+      email_id: new FormControl(  { value: '', disabled: true }),
       status: new FormControl('false', [Validators.required]),
     }, { validators: confirmPasswordValidator });
 
@@ -126,9 +126,9 @@ export class UserManagementComponent implements OnInit {
       this.isAdd = false; // Set flag to false for edit mode
       this.btnName = "Edit User";
       this.btnSubmit = "UPDATE"
-      // this.formdata = { "flag": "fetch_id", "user_id": userId };
+      this.formdata = { "flag": "fetch_id", "user_id": userId };
 
-      this.commonService.getUserBYId(userId).subscribe((data: any) => {
+      this.commonService.userCrudManagement( { "flag": "fetch_id", "user_id": userId }).subscribe((data: any) => {
         console.log("get user by id",data)
         if (data) {
           this.editData = data.data[0];

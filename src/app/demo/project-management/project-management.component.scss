@@ -42,4 +42,67 @@ input[type="file"]::-webkit-file-upload-text {
     color: transparent; 
 } 
 
+/* styles.css or styles.scss */
+.custom-carousel .carousel-control-prev-icon,
+.custom-carousel .carousel-control-next-icon {
+  background-color: #007bff; /* Replace with your desired color */
+  filter: none; /* Remove default filter to show the background color */
+}
 
+.custom-carousel .carousel-control-prev-icon {
+  border-radius: 50%; /* Optional: Make the icon circular */
+}
+
+.custom-carousel .carousel-control-next-icon {
+  border-radius: 50%; /* Optional: Make the icon circular */
+}
+.carousel-control-next,
+.carousel-control-prev /*, .carousel-indicators */ {
+    filter: invert(100%);
+}
+
+
+
+
+.date-input-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .date-input-container label {
+    margin-bottom: 5px;
+    color: #000;
+  }
+  
+  .date-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .date-input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px; /* Space for the icon */
+    box-sizing: border-box;
+    border: 1px solid rgb(160, 165, 165);
+    border-radius: 5px;
+    background-color: #eaedee;
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+  }
+  
+  .date-input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  .date-icon {
+    position: absolute;
+    right: 10px;
+    font-size: 16px;
+    color: #fff;
+    pointer-events: none;
+  }
+  

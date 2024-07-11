@@ -11,7 +11,7 @@
 
     <ng-template kendoGridToolbarTemplate>
       <div class="export-template">
-        <button type="button" kendoGridExcelCommand class="export-new excel btn btn-dark"
+        <button type="button"  class="export-new excel btn btn-dark"
           (click)="exportExcel(excelexport)">Export to Excel</button>
       </div>
       <div class="export-template">
@@ -34,7 +34,7 @@
         </kendo-grid-column>
       </ng-template>
 
-      <kendo-grid-column field="Action" title="Action" [width]="80" [sticky]="true" [columnMenu]="false">
+      <kendo-grid-column field="Action" title="Action" [width]="200" [sticky]="true" [columnMenu]="false">
         <ng-template kendoGridCellTemplate let-dataItem>
           <div class="d-flex gap-2">
             <button kendoButton size="small" class="d-flex align-items-center btn btn-dark" size="small" rounded="small"
